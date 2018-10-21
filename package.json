@@ -1,0 +1,30 @@
+{
+  "name": "koa-ts-graphql",
+  "version": "1.0.0",
+  "description": "A Koa2 project with ts/graphql",
+  "main": "index.js",
+  "author": "xpioneer",
+  "license": "MIT",
+  "scripts": {
+    "start": "npm run dev",
+    "build-server": "tslint --project . && tsc",
+    "dev": "NODE_ENV=development nodemon ./node_modules/.bin/ts-node conf/server.ts",
+    "build": "NODE_ENV=production tsc ./"
+  },
+  "dependencies": {
+    "@types/ioredis": "^4.0.3",
+    "ioredis": "^4.2.0",
+    "koa": "^2.5.3",
+    "koa-router": "^7.4.0",
+    "mysql2": "^1.6.1",
+    "reflect-metadata": "^0.1.12",
+    "typeorm": "^0.2.8"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.0.46",
+    "@types/koa-router": "^7.0.32",
+    "nodemon": "^1.18.4",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.1.3"
+  }
+}

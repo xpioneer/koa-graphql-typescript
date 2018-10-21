@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "removeComments": false,
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "lib": ["es2015"],
+    "outDir": "./release/",
+    "typeRoots": [
+      "./node_modules/@types/"
+    ],
+    "baseUrl": "./",
+    "paths": {
+      "@src/*": ["src/*"],
+      "@conf/*": ["conf/*"],
+      "@utils/*": ["utils/*"],
+      "@core/*": ["src/core/*"],
+    }
+  },
+  "compileOnSave": false,
+  "exclude": [
+    "node_modules"
+  ]
+}
