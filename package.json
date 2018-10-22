@@ -8,7 +8,7 @@
   "scripts": {
     "start": "npm run dev",
     "build-server": "tslint --project . && tsc",
-    "dev": "NODE_ENV=development nodemon ./node_modules/.bin/ts-node conf/server.ts",
+    "dev": "NODE_ENV=development nodemon --config nodemon.json",
     "build": "NODE_ENV=production tsc ./"
   },
   "dependencies": {

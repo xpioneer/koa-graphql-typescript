@@ -1,9 +1,10 @@
-import {createConnection} from "typeorm";
-import {MySqlConf} from '../../conf/db.conf'
-import {Entities} from '../entities/index'
+import { createConnection } from "typeorm";
+import App from '../src/app'
+import { PORT } from './server.conf'
+import { MySqlConf } from './db.conf'
+import { Entities } from '../src/entities/index'
 
-// connect db
-const connectionDB = (start: Function) => {
+const bootstrap = (): void => {
   createConnection({
     type: "mysql",
     host: MySqlConf.host,
@@ -14,10 +15,10 @@ const connectionDB = (start: Function) => {
     entities: Entities
   }).then((connect) => {
     console.log('db connect success!')
-    start()
+    App.start(PORT)
   }).catch((err) => {
     console.log('db connect fail!', err)
   })  
 }
 
-export default connectionDB
+export default bootstrap

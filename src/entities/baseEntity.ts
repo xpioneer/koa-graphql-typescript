@@ -1,6 +1,6 @@
 import {Entity, Column, PrimaryColumn} from "typeorm";
 
-@Entity()
+@Entity('chat')
 export class BaseEntity {
 
   @PrimaryColumn()
@@ -12,4 +12,15 @@ export class BaseEntity {
   @Column()
   created_at: number;
 
+  // @Column()
+  // updated_by?: string;
+
+  // @Column()
+  // updated_at?: number;
+
+  // @Column()
+  // deleted_by?: string;
+
+  // @Column()
+  // deleted_at?: number;
 }
