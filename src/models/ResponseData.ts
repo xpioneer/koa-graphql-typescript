@@ -6,8 +6,8 @@ export class ResponseData{
   public data: any;
   public msg: string;
   public status: number;
-  public meta?:IPageInfo = new PageInfo();
-  public errors: string[];
+  public meta?:PageInfo;
+  public errors?: string[];
 }
 
 

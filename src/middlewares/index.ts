@@ -6,7 +6,7 @@ import Response from './response';
 // import Routes from './routes';
 
 const Middlewares = (App: Koa) => {
-  App.use(Cors);
+  App.use(Cors({}));
   App.use(Request);
   App.use(Response);
 

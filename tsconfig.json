@@ -14,12 +14,13 @@
     "typeRoots": [
       "./node_modules/@types/"
     ],
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"],
       "@conf/*": ["conf/*"],
-      "@utils/*": ["utils/*"],
+      "@src/*": ["src/*"],
       "@core/*": ["src/core/*"],
+      "@models/*": ["src/models/*"],
+      "@utils/*": ["src/utils/*"]
     }
   },
   "compileOnSave": false,

@@ -1,13 +1,16 @@
 // koa
 import * as Koa from 'koa'
+import { Context } from '@core/koa'
 import Catch from './middlewares/catch'
+import Middlewares from './middlewares/index'
 import CahtCtrl from './controllers/ChatController'
 
 const App: Koa = new Koa();
 
 App.use(Catch)
+Middlewares(App)
 
-App.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
+App.use(async (ctx: Context, next: () => Promise<any>) => {
 	const path = ctx.request.path
 	console.log(`path: ${path}`)
 	if(path === '/') {
@@ -16,7 +19,8 @@ App.use(async (ctx: Koa.Context, next: () => Promise<any>) => {
 	if(path === '/api') {
 		const all = await CahtCtrl.getAll()
 		console.log('all:', all)
-		ctx.body = all
+		// ctx.body = all
+		ctx.Json(all)
 	}
 	
 	await next()
