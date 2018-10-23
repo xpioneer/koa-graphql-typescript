@@ -3,6 +3,7 @@ import * as Koa from 'koa'
 import { Context } from '@core/koa'
 import Catch from './middlewares/catch'
 import Middlewares from './middlewares/index'
+import connectDB from './database/conectDB'
 import CahtCtrl from './controllers/ChatController'
 
 const App: Koa = new Koa();
@@ -28,13 +29,10 @@ App.use(async (ctx: Context, next: () => Promise<any>) => {
 	ctx.set('X-Powered-By', 'Keefe');
 })
 
-const start = (port: number):void => {
+export const start = (port: number):void => {
 	console.log('start app...')
-	App.listen(port, ():void => {
+	App.listen(port, (): void => {
 		console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
+		connectDB() // db start after server running
 	})
-}
-
-export default {
-	start,
 }

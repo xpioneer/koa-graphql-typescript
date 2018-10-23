@@ -1,3 +1,4 @@
-import bootstrap from './bootstrap'
+import * as App from '../src/app'
+import { PORT } from './server.conf'
 
-bootstrap();
+App.start(PORT)
