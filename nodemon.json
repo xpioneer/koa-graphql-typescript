@@ -3,5 +3,5 @@
   "ext": "ts,js",
   "ignore": ["src/**/*.spec.ts"],
   "exec": "ts-node conf/server.ts",
-  "delay": 500
+  "delay": 300
 }

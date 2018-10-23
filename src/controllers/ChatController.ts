@@ -3,8 +3,9 @@ import { Chat } from '../entities/qixi'
 
 export default class ChatController {
 
-  static async getAll() {
-    return await getManager().find(Chat);
+  static async getAll(ctx: any) {
+    const list = await getManager().find(Chat);
+    return ctx.Json(list)
   }
 
 }

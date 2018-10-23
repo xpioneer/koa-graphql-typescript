@@ -4,7 +4,6 @@ import { Context } from '@core/koa'
 import Catch from './middlewares/catch'
 import Middlewares from './middlewares/index'
 import connectDB from './database/conectDB'
-import CahtCtrl from './controllers/ChatController'
 
 const App: Koa = new Koa();
 
@@ -15,13 +14,7 @@ App.use(async (ctx: Context, next: () => Promise<any>) => {
 	const path = ctx.request.path
 	console.log(`path: ${path}`)
 	if(path === '/') {
-		ctx.body = 'Welcome to koa server.'
-	}
-	if(path === '/api') {
-		const all = await CahtCtrl.getAll()
-		console.log('all:', all)
-		// ctx.body = all
-		ctx.Json(all)
+		ctx.body = 'Welcome to koa-graphql server.'
 	}
 	
 	await next()

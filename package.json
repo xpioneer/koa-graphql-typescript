@@ -13,8 +13,6 @@
   },
   "dependencies": {
     "@types/ioredis": "^4.0.3",
-    "apollo-server-koa": "^2.1.0",
-    "graph-tools": "^0.1.2",
     "graphql": "^14.0.2",
     "ioredis": "^4.2.0",
     "koa": "^2.5.3",

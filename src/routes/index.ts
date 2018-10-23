@@ -1,8 +1,11 @@
 import * as Router from 'koa-router'
-import graphql from './graphql'
+import CahtCtrl from '../controllers/ChatController'
+import {world, MyGraphql} from './graphql'
 
 const router = new Router();
 
-router.get('/graphql', graphql)
+router.get('/hello', world)
+  .get('/api', CahtCtrl.getAll)
+  .get('/graphql', MyGraphql)
 
-export default graphql
+export default router
