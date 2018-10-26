@@ -1,8 +1,14 @@
 import {
   GraphQLObjectType,
   GraphQLSchema,
-  GraphQLInt
+  GraphQLInt,
+  GraphQLList,
+  GraphQLString,
+  GraphQLType
 } from 'graphql';
+import * as Koa from '@core/koa'
+import DemoCtrl from '../controllers/DemoController'
+import {Chat} from '@entities/qixi'
 
 let count = 0;
 
@@ -12,7 +18,8 @@ let schema = new GraphQLSchema({
     fields: {
       count: {
         type: GraphQLInt,
-        resolve: function() {
+        resolve: () => {
+          ++count;
           return count;
         }
       }
@@ -20,6 +27,22 @@ let schema = new GraphQLSchema({
   })
 });
 
+let chat = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: 'ChatType',
+    fields: {
+      chats: {
+        type: new GraphQLList(GraphQLString),
+        resolve: async(source: any, ctx: Koa.Context) => {
+          const list = await DemoCtrl.getAll()
+          return list;
+        }
+      }
+    }
+  })
+});
+
 export {
-  schema
+  schema,
+  chat
 };

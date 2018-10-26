@@ -20,6 +20,7 @@
       "@src/*": ["src/*"],
       "@core/*": ["src/core/*"],
       "@models/*": ["src/models/*"],
+      "@entities/*": ["src/entities/*"],
       "@utils/*": ["src/utils/*"]
     }
   },
