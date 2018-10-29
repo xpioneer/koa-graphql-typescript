@@ -1,13 +1,19 @@
 // koa
 import * as Koa from 'koa'
+import * as KoaLogger from 'koa-logger'
 import { Context } from '@core/koa'
-import Catch from './middlewares/catch'
 import Middlewares from './middlewares/index'
 import connectDB from './database/conectDB'
 
+const _DEV_ = process.env.NODE_ENV === 'development'
+
 const App: Koa = new Koa();
 
-App.use(Catch)
+if(_DEV_) {
+	App.use(KoaLogger())
+}
+
+
 Middlewares(App)
 
 App.use(async (ctx: Context, next: () => Promise<any>) => {

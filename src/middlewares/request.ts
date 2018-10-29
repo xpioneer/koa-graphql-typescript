@@ -32,7 +32,7 @@ interface IOrder {
 //   return arr;
 // };
 
-const getParams = (ctx: Koa.Context) => {
+const getParams = (ctx: Koa.Context) => () => {
   const data: any = {};
   let query = ctx.query;
   if (query && Object.keys(query).length>0) {
@@ -87,9 +87,9 @@ const getParams = (ctx: Koa.Context) => {
 };
 
 let requestData = async (ctx: Koa.Context, next: () => Promise<any>) => {
-  if (!ctx.getParams){
-    ctx.getParams = getParams(ctx);
-  }
+  // if (!ctx.getParams){
+  ctx.getParams = getParams(ctx);
+  // }
   await next();
 };
 

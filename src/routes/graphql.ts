@@ -5,7 +5,7 @@ import {
   Source,
   validate
 } from 'graphql'
-import {schema, chat} from '../schema/demo'
+import {schema} from '../schema/demo'
 import {Delay} from '../utils/tools/index'
 
 export const world = async (ctx: Koa.Context) => {

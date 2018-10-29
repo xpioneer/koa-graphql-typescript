@@ -6,57 +6,31 @@ import {
   formatError,
   getOperationAST,
   specifiedRules,
-  GraphQLError, GraphQLSchema
+  GraphQLError, GraphQLSchema,
+  ExecutionResult
 } from 'graphql';
 import { Request, Response } from 'koa';
 import {Context} from '@core/koa'
+import { renderGraphQL } from './renderGraphQL'
 
 interface OptionsData {
   schema: GraphQLSchema
   context?: Context
   rootValue?: any
-  graphiql?: boolean
+  graphql?: boolean
+  formatError?: (error: GraphQLError, context: Context) => any
 }
 
-interface OptionsResult1 {
-
+interface IGraphQLParams {
+  query: string
+  variables?: {[key: string]: any}
+  operationName?: string
+  raw?: boolean
 }
-
-// export type Options =
-//   | ((request: Request, response: Response, ctx: Context) => OptionsResult)
-//   | OptionsResult;
-
-// export type OptionsResult = OptionsData | Promise<OptionsData>;
-
-// export type OptionsData = {
-//   /**
-//    * A GraphQL schema from graphql-js.
-//    */
-//   schema: GraphQLSchema,
-
-//   /**
-//    * A value to pass as the context to the graphql() function.
-//    */
-//   context?: any,
-
-//   /**
-//    * An object to pass as the rootValue to the graphql() function.
-//    */
-//   rootValue?: any,
-//   /**
-//    * A boolean to optionally enable GraphiQL mode.
-//    */
-//   graphiql?: boolean,
-// };
-
-// type Middleware = (ctx: Context) => Promise<void>;
 
 export const KoaGraphql = (
-  options: (
-    request: Request,
-    response: Response,
-    ctx: Context
-    ) => OptionsData | Promise<OptionsData>
+  options: OptionsData | Function
+  // Promise<OptionsData>
   ): (ctx: Context) => Promise<void> => {
     
   return async function middleware (ctx: Context): Promise<any> {
@@ -64,47 +38,168 @@ export const KoaGraphql = (
     const request = ctx.request;
     const response = ctx.response;
 
-    let schema,
-      context,
-      rootValue,
+    let schema: GraphQLSchema,
+      context: Context,
+      rootValue: any,
       pretty,
-      graphiql,
-      formatErrorFn,
+      graphql,
+      formatErrorFn: Function,
       extensionsFn,
-      showGraphiQL,
-      query,
+      showGraphQL: boolean,
+      query: string,
       documentAST,
-      variables,
-      operationName,
-      validationRules;
-    
-    const optionsData: OptionsData = (typeof options === 'function' ? await options(request, response, ctx) : options)
+      variables: {[key: string]: any},
+      operationName: string,
+      validationRules: [any],
+      result: ExecutionResult;
 
-    if (!optionsData || typeof optionsData !== 'object') {
-      throw new Error(
-        'GraphQL middleware option function must return an options object ' +
-          'or a promise which will be resolved to an options object.',
+    try{
+        
+      const optionsData: OptionsData = (typeof options === 'function' ? options(request, response, ctx) : options)
+
+      if (!optionsData || typeof optionsData !== 'object') {
+        throw new Error(
+          'GraphQL middleware option function must return an options object ' +
+            'or a promise which will be resolved to an options object.',
+        );
+      }
+
+      if (!optionsData.schema) {
+        throw new Error('GraphQL middleware options must contain a schema.');
+      }
+
+      schema = optionsData.schema;
+      context = optionsData.context || ctx;
+      rootValue = optionsData.rootValue;
+      graphql = optionsData.graphql;
+      formatErrorFn = optionsData.formatError;
+
+      if(!/^(GET|POST)$/.test(ctx.method)) {
+        response.set('Allow', 'GET, POST');
+        ctx.status = 405;
+        ctx.Json({status: 405, msg: 'GraphQL only supports GET and POST requests.'})
+        // throw new Error('GraphQL only supports GET and POST requests.');
+      }
+
+
+      // ctx.body = ctx.body || ctx.query.query;
+
+      // get graphql params
+      const params: IGraphQLParams = ctx.method === 'GET' ? ctx.query : ctx.fields;
+      query = params.query;
+      variables = params.variables;
+      operationName = params.operationName;
+      showGraphQL = graphql && canDisplayGraphQL(request, params);
+
+      console.log('\n')
+      console.log('ctx graphql params: ', params)
+      console.log('\n')
+
+      result = await new Promise((resolve, reject): void => {
+        if(!query) {
+          if (showGraphQL) {
+            return resolve(null);
+          }
+          ctx.throw(400, `'query' must be required.`)
+        }
+
+        // GraphQL source.
+        const source = new Source(query, 'GraphQL request');
+
+        // Parse source to AST, reporting any syntax error.
+        try {
+          documentAST = parse(source);
+        } catch (syntaxError) {
+          // Return 400: Bad Request if any syntax errors errors exist.
+          response.status = 400;
+          return resolve({ errors: [syntaxError] });
+        }
+        
+        // Validate AST, reporting any errors.
+        const validationErrors = validate(schema, documentAST, validationRules);
+        if (validationErrors.length > 0) {
+          // Return 400: Bad Request if any validation errors exist.
+          response.status = 400;
+          return resolve({ errors: validationErrors });
+        }
+
+        if (request.method === 'GET') {
+          // Determine if this GET request will perform a non-query.
+          const operationAST = getOperationAST(documentAST, operationName);
+          if (operationAST && operationAST.operation !== 'query') {
+            // If GraphQL can be shown, do not perform this query, but
+            // provide it to GraphQL so that the requester may perform it
+            // themselves if desired.
+            if (showGraphQL) {
+              return resolve(null);
+            }
+
+            // Otherwise, report a 405: Method Not Allowed error.
+            response.set('Allow', 'POST');
+            ctx.throw(
+              405,
+              `Can only perform a ${operationAST.operation} operation ` +
+                'from a POST request.',
+            );
+          }
+        }
+
+        try {
+          resolve(
+            execute(
+              schema,
+              documentAST,
+              rootValue,
+              context,
+              variables,
+              operationName,
+            ),
+          );
+        } catch (contextError) {
+          // Return 400: Bad Request if any execution context errors exist.
+          response.status = 400;
+          resolve({ errors: [contextError] });
+        }
+
+      });
+
+    } catch (error) {
+      // If an error was caught, report the httpError status, or 500.
+      response.status = error.status || 500;
+      result = { errors: [error] };
+    }
+    
+    if (result && result.data === null) {
+      response.status = 500;
+    }
+    // Format any encountered errors.
+    if (result && result.errors) {
+      (result as any).errors = result.errors.map(
+        err => (formatErrorFn ? formatErrorFn(err, context) : formatError(err)),
       );
     }
 
-    if (!optionsData.schema) {
-      throw new Error('GraphQL middleware options must contain a schema.');
+    // If allowed to show GraphQL, present it instead of JSON.
+    if (showGraphQL) {
+      const payload = renderGraphQL();
+      response.type = 'text/html';
+      response.body = payload;
+    } else {
+      // Otherwise, present JSON directly.
+      const payload = pretty ? JSON.stringify(result, null, 2) : result;
+      response.type = 'application/json';
+      response.body = payload;
     }
-
-    schema = optionsData.schema;
-    context = optionsData.context || ctx;
-    rootValue = optionsData.rootValue;
-    graphiql = optionsData.graphiql;
-
-    if(!/^(GET|POST)$/.test(ctx.method)) {
-      response.set('Allow', 'GET, POST');
-      ctx.status = 405;
-      ctx.Json({status: 405, msg: 'GraphQL only supports GET and POST requests.'})
-      // throw new Error('GraphQL only supports GET and POST requests.');
-    }
-
-
-    ctx.body = ctx.body || ctx.query.query;
 
   }
+}
+
+/**
+ * Helper function to determine if GraphQL can be displayed.
+ */
+function canDisplayGraphQL(request: Request, params: IGraphQLParams): boolean {
+  // If `raw` exists, GraphQL mode is not enabled.
+  // Allowed to show GraphQL if not requested as raw and this request
+  // prefers HTML over JSON.
+  return !params.raw && request.accepts(['json', 'html']) === 'html';
 }
