@@ -4,10 +4,12 @@ import {
   GraphQLInt,
   GraphQLList,
   GraphQLString,
-  GraphQLType
+  GraphQLType,
+  GraphQLScalarType
 } from 'graphql';
 import * as Koa from '@core/koa'
 import { Chat } from '../entities/qixi'
+import * as Moment from 'moment'
 import DemoCtrl from '../controllers/DemoController'
 
 let count = 0;
@@ -43,11 +45,14 @@ let fields = {
   ip: {
     type: GraphQLString
   },
-  usename: {
+  username: {
     type: GraphQLString
   },
   created_at: {
-    type: GraphQLInt
+    type: GraphQLString,
+    resolve(){
+      return Moment().format('YYYY-MM-DD HH:mm:ss')
+    }
   },
   created_by: {
     type: GraphQLString

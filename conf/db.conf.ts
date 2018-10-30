@@ -12,3 +12,10 @@ export const RedisConf = {
   username: 'root',
   password: 'redis-pwd'
 }
+
+export const MongoConf = {
+  host: 'localhost',
+  port: 27017,
+  username: 'root',
+  password: 'mongo-pwd'
+}

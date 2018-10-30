@@ -17,6 +17,7 @@
     "ioredis": "^4.2.0",
     "koa": "^2.5.3",
     "koa-router": "^7.4.0",
+    "moment": "^2.22.2",
     "mysql2": "^1.6.1",
     "reflect-metadata": "^0.1.12",
     "typeorm": "^0.2.8"

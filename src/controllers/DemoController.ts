@@ -1,7 +1,9 @@
-import {getManager, getRepository} from "typeorm";
+import {getManager, getRepository, Like} from "typeorm";
 import { Context } from '@core/koa'
 import { Chat } from '../entities/qixi'
-import {graphql,} from 'graphql'
+import { Guid } from "../utils/tools";
+import * as ChatModel from '../models/Chat'
+
 
 export default class ChatController {
 
@@ -12,15 +14,34 @@ export default class ChatController {
 
   static async getById(id: string) {
     const chat = await getRepository(Chat).findOne({id})
-    // console.log(ctx.query, ctx.params)
     return chat
   }
 
+  static async pages(args: any) {
+    const pages = await getManager()
+      .createQueryBuilder()
+      .where({
+        username: Like(args.username)
+      })
+      .orderBy({
+        created_at: 'DESC'
+      })
+      .offset(args.cur_page)
+      .limit(args.page_size || 20);
+    return pages
+  }
+
   static async insert(args: any, ctx: Context) {
-    const model = ctx.fields
-    console.log(args, model)
-    const chat = await getRepository(Chat).findOne()
-    return {data: '1111'}
+    console.log('ctx.ip:', ctx.ip, ctx.ips)
+    let guid = Guid()
+    let model = new ChatModel.Chat()
+    model.message = args.message
+    model.ip = ctx.ip
+    model.username = '用户' + guid.substring(10,15)
+    model.created_by = guid
+    const result = await getRepository(Chat).save(model)
+    console.log('result:', result)
+    return result
   }
 
 }
