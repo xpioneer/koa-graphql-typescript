@@ -2,14 +2,13 @@ import * as Koa from '@core/koa'
 import { ResponseData } from '../models/ResponseData'
 
 const json = (ctx: Koa.Context) => (res: any) => {
-  const resData = new ResponseData();
+  let resData = new ResponseData();
   const type = typeof res;
   if(type === 'undefined') {
-    res = {}
-    resData.msg = "return data is undefined";
+    resData = {data: undefined, msg: 'return data is undefined', status: 200}
   } else if (type === 'object' && res !== null) {
     if(res.hasOwnProperty('data')) { // data is the key property
-      resData.data = res.data// === undefined ? 'undefined': res.data;
+      Object.assign(resData, res)
     } else {
       resData.data = res;
     }

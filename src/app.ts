@@ -4,6 +4,7 @@ import * as KoaLogger from 'koa-logger'
 import { Context } from '@core/koa'
 import Middlewares from './middlewares/index'
 import connectDB from './database/conectDB'
+import ConnectionMongo from './database/connectMongo'
 
 const _DEV_ = process.env.NODE_ENV === 'development'
 
@@ -33,5 +34,6 @@ export const start = (port: number):void => {
 	App.listen(port, (): void => {
 		console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
 		connectDB() // db start after server running
+		ConnectionMongo() // connect mongodb
 	})
 }

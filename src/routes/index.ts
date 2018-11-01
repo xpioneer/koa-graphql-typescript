@@ -7,6 +7,7 @@ import {schema, chats} from '../schema/demo'
 const router = new Router();
 
 router.get('/hello', world)
+  .get('/api/testlog', ChatCtrl.testLog)
   .get('/api', ChatCtrl.getAll)
   .get('/api/:id', ChatCtrl.getById)
   .get('/graphql', KoaGraphql({
