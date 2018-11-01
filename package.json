@@ -18,17 +18,17 @@
     "koa": "^2.5.3",
     "koa-router": "^7.4.0",
     "moment": "^2.22.2",
-    "mongoose": "^5.3.7",
+    "mongodb": "^3.1.8",
     "mysql2": "^1.6.1",
     "reflect-metadata": "^0.1.12",
-    "typeorm": "^0.2.8"
+    "remove": "^0.1.5",
+    "typeorm": "^0.3.0-alpha.22"
   },
   "devDependencies": {
     "@types/graphql": "^14.0.3",
     "@types/koa": "^2.0.46",
     "@types/koa-logger": "^3.1.1",
     "@types/koa-router": "^7.0.32",
-    "@types/mongoose": "^5.2.20",
     "koa-logger": "^3.2.0",
     "nodemon": "^1.18.4",
     "ts-node": "^7.0.1",

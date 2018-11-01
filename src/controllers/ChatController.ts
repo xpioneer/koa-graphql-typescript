@@ -1,19 +1,22 @@
-import {getManager, getRepository} from "typeorm";
+import {getManager, getRepository, getMongoManager, getMongoRepository} from "typeorm";
 import { Context } from '@core/koa'
 import { Chat } from '../entities/qixi'
-import { Schema, model } from 'mongoose'
+// import { Schema, model } from 'mongoose'
 import { Guid } from "../utils/tools";
+import { TestMongo } from '../schema/mongo/test_mongo'
 
-const TestSchema = new Schema({
-  name: String,
-  id: String
-})
+// const TestSchema = new Schema({
+//   name: String,
+//   id: String
+// }, {
+//   _id: false
+// })
 
 
-const Test = model('tb_test', TestSchema)
+// const Test = model('tb_test', TestSchema)
 
 const guid = Guid()
-const test = new Test({name: 'test' + guid.substring(0, 5), id: guid})
+// const test = new Test({name: 'test' + guid.substring(0, 5), id: guid})
 
 export default class ChatController {
 
@@ -30,13 +33,20 @@ export default class ChatController {
   }
 
   static async testLog(ctx: Context) {
-    // const r = await test.save()
-    const result = await Test.find({
-      name: {$regex: '08'}
-    }).select('id name').exec()
+    // const result = await test.save()
+    // const result = await Test.find({
+    //   name: {$regex: '08'},
+    //   // _id: false
+    // }).select('id name').exec()
+    const testMongo = new TestMongo()
+    testMongo.name = '日志' + guid.substring(0, 6)
+    testMongo.version = 666
+    testMongo.id = guid
+    testMongo.created_by = guid
+    const result = await getMongoManager().save(testMongo);
     console.log(result)
     // const chat = await getRepository(Chat).findOne()
-    ctx.Json({data: result, r: {r:123}})
+    ctx.Json({data: result})
   }
 
 }

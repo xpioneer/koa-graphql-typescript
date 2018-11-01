@@ -1,7 +1,7 @@
 import { randomBytes } from 'crypto';
 import * as Redis from 'ioredis';
-import { RedisConf } from '@conf/db.conf'
-import TOOLS from '../tools';
+import { RedisConf } from '../../../conf/db.conf'
+import {Guid} from '../tools';
 
 
 // const { Guid } = TOOLS;

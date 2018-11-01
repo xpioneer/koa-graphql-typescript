@@ -1,11 +1,11 @@
 // import * as Koa from '@core/koa'
-import * as Cookies from "cookies";
+// import * as Cookies from "cookies";
 import Store from "./store";
 
 
 
 const Session = (opts: any = {}) => {
-  const { key = "KOA_ID", store = new Store() } = opts;
+  const { key = "SESSION_ID", store = new Store() } = opts;
 
   return async (ctx: any, next: () => Promise<any>) => {
     let id = ctx.cookies.get(key, opts);

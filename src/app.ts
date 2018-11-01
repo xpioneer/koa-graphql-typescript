@@ -3,8 +3,9 @@ import * as Koa from 'koa'
 import * as KoaLogger from 'koa-logger'
 import { Context } from '@core/koa'
 import Middlewares from './middlewares/index'
-import connectDB from './database/conectDB'
-import ConnectionMongo from './database/connectMongo'
+import {connectDB, connectMongo} from './database/conectDB'
+import Session from "./utils/session";
+import Store from "./utils/session/store";
 
 const _DEV_ = process.env.NODE_ENV === 'development'
 
@@ -14,6 +15,13 @@ if(_DEV_) {
 	App.use(KoaLogger())
 }
 
+App.keys = ['APP_Keys'];
+App.use(Session({
+  key: 'SESSION_ID',
+  store: new Store(),
+  signed: true,
+  maxAge: 1000 * 60 * 60,
+}));
 
 Middlewares(App)
 
@@ -34,6 +42,6 @@ export const start = (port: number):void => {
 	App.listen(port, (): void => {
 		console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
 		connectDB() // db start after server running
-		ConnectionMongo() // connect mongodb
+		connectMongo() // connect mongodb
 	})
 }
