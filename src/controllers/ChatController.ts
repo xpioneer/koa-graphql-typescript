@@ -1,22 +1,10 @@
 import {getManager, getRepository, getMongoManager, getMongoRepository} from "typeorm";
 import { Context } from '@core/koa'
 import { Chat } from '../entities/qixi'
-// import { Schema, model } from 'mongoose'
 import { Guid } from "../utils/tools";
 import { TestMongo } from '../schema/mongo/test_mongo'
 
-// const TestSchema = new Schema({
-//   name: String,
-//   id: String
-// }, {
-//   _id: false
-// })
-
-
-// const Test = model('tb_test', TestSchema)
-
 const guid = Guid()
-// const test = new Test({name: 'test' + guid.substring(0, 5), id: guid})
 
 export default class ChatController {
 

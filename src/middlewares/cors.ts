@@ -1,15 +1,24 @@
 import * as Koa from 'koa'
 
-const Cors = (options: any = {})  => {
-  const defaultOptions = {
-    allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']
-  }
+class CORSOptionsData {
+  origin: string | Function
+  credentials: boolean
+  allowMethods: string[] = ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']
+  allowHeaders: Array<string>
+  maxAge: number
+  exposeHeaders: [string]
+}
 
-  for(let key in defaultOptions) {
-    if(!options.hasOwnProperty(key)) {
-      options[key] = defaultOptions[key];
-    }
-  }
+const Cors = (options: CORSOptionsData = new CORSOptionsData())  => {
+  // const defaultOptions = {
+  //   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']
+  // }
+
+  // for(let key in defaultOptions) {
+  //   if(!options.hasOwnProperty(key)) {
+  //     options[key] = defaultOptions[key];
+  //   }
+  // }
 
   return async (ctx: Koa.Context, next: () => Promise<any>): Promise<any> => {
     let origin;
