@@ -5,13 +5,16 @@ import {
   GraphQLList,
   GraphQLString,
   GraphQLType,
-  GraphQLScalarType
+  GraphQLScalarType,
+  Thunk,
+  GraphQLFieldConfigMap,
+  Source
 } from 'graphql';
-import * as Koa from '@core/koa'
+import {Context} from '@core/koa'
 import * as Moment from 'moment'
 import DemoCtrl from '../../controllers/DemoController'
 
-let chatType = new GraphQLObjectType({
+const chatType = new GraphQLObjectType({
   name: 'chatType',
   fields: {
     id: {
@@ -38,7 +41,7 @@ let chatType = new GraphQLObjectType({
   }
 })
 
-const query = {
+const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   chat: {
     type: chatType,
     args: {
@@ -47,7 +50,7 @@ const query = {
         type: GraphQLString
       }
     },
-    resolve: async (obj: any, args: any, ctx: Koa.Context, info: any) => {
+    resolve: async (obj, args, ctx, info) => {
       const {id} = args;
       const article = await DemoCtrl.getById(id)
       return article
@@ -62,7 +65,7 @@ const query = {
   },
 }
 
-const mutation = {
+const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   chat: {
     type: chatType,
     args: {
@@ -70,7 +73,7 @@ const mutation = {
         type: GraphQLString
       }
     },
-    resolve: async (obj: any, args: any, ctx: Koa.Context, info: any) => {
+    resolve: async (obj, args, ctx, info) => {
       const result = await DemoCtrl.insert(args, ctx)
       return result;
     }

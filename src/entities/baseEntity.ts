@@ -1,6 +1,6 @@
 import {Entity, Column, PrimaryColumn} from "typeorm";
 
-@Entity()
+// @Entity()
 export class BaseEntity {
 
   @PrimaryColumn({ unique: true })

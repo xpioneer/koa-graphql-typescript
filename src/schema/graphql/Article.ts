@@ -1,4 +1,3 @@
-import {KoaGraphql} from '@core/graphql/index'
 import {
   GraphQLObjectType,
   GraphQLSchema,
@@ -6,15 +5,14 @@ import {
   GraphQLList,
   GraphQLString,
   GraphQLType,
-  GraphQLScalarType
+  GraphQLScalarType,
+  Thunk,
+  GraphQLFieldConfigMap,
+  Source,
 } from 'graphql';
 import * as Koa from '@core/koa'
 import * as Moment from 'moment'
 import ArticleCtl from '../../controllers/ArticleController'
-
-interface ResolveConfig {
-  [key: string]: any
-}
 
 
 let articleType = new GraphQLObjectType({
@@ -44,7 +42,7 @@ let articleType = new GraphQLObjectType({
   }
 })
 
-const query = {
+const query: Thunk<GraphQLFieldConfigMap<Source, Koa.Context>> = {
   article: {
     type: articleType,
     args: {
@@ -53,8 +51,9 @@ const query = {
         type: GraphQLString
       }
     },
-    resolve: async (obj: any, args: any, ctx: Koa.Context, info: any) => {
+    resolve: async (obj, args, ctx, info) => {
       const {id} = args;
+      console.log('query article')
       const article = await ArticleCtl.getById(id)
       return article
     }
@@ -68,7 +67,7 @@ const query = {
   }
 }
 
-const mutation = {
+const mutation: Thunk<GraphQLFieldConfigMap<Source, Koa.Context>> = {
   article: {
     type: articleType,
     args: {
@@ -82,7 +81,7 @@ const mutation = {
         type: GraphQLString
       }
     },
-    resolve: async (obj: any, args: any, ctx: Koa.Context, info: any) => {
+    resolve: async (obj, args, ctx, info) => {
       return {}
     }
   }

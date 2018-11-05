@@ -13,8 +13,9 @@ export default class ArticleController {
 
 
   static async getById(id: string) {
-    const chat = await getRepository(Article).findOne({id})
-    return chat
+    const article = await getRepository(Article).findOne()
+    console.log('article: ', article)
+    return article
   }
 
   static async pages(args: any) {

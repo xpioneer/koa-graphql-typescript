@@ -2,21 +2,37 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLInt,
-  GraphQLList,
-  GraphQLString,
-  GraphQLType,
-  GraphQLScalarType
+  Thunk,
+  GraphQLFieldConfigMap,
+  Source
 } from 'graphql';
-import * as Koa from '@core/koa'
-import * as Moment from 'moment'
+import {Context} from '@core/koa'
 import Article from './Article'
 import Qixi from './Qixi'
 
-let RootSchema = new GraphQLSchema({
+let count = 0
+const demo: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
+  count: {
+    type: GraphQLInt,
+    args: {
+      id: {
+        name: 'id',
+        type: GraphQLInt // 参数不为空
+      }
+    },
+    resolve: (obj, args, ctx, info) => {
+      ++count;
+      return count;
+    }
+  },
+}
+
+const RootSchema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQuery',
     fields: {
-      ...Article.query,
+      ...demo,
+      // ...Article.query,
       ...Qixi.query
     }
   }),
@@ -24,11 +40,13 @@ let RootSchema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'RootMutation',
     fields: {
-      ...Article.mutation,
+      // ...Article.mutation,
       ...Qixi.mutation
     }
   })
 })
+
+console.log('RootSchema:', RootSchema.getQueryType())
 
 export {
   RootSchema
