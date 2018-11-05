@@ -11,7 +11,8 @@ const connectDB = (): void => {
     username : MySqlConf.username,
     password : MySqlConf.password,
     database : 'qixi',
-    entities : Entities
+    entities : Entities,
+    // logger   : 'simple-console'
   }).then((connect) => {
     console.log('mysql connect success!')
   }).catch((err) => {

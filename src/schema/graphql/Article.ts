@@ -2,6 +2,7 @@ import {
   GraphQLObjectType,
   GraphQLSchema,
   GraphQLInt,
+  GraphQLNullableType,
   GraphQLList,
   GraphQLString,
   GraphQLType,
@@ -10,30 +11,35 @@ import {
   GraphQLFieldConfigMap,
   Source,
 } from 'graphql';
-import * as Koa from '@core/koa'
+import {Context} from '@core/koa'
 import * as Moment from 'moment'
-import ArticleCtl from '../../controllers/ArticleController'
+import ArticleCtrl from '../../controllers/ArticleController'
+import { PageDataType, metaFields, pageArgsFields } from './common'
 
-
-let articleType = new GraphQLObjectType({
-  name: 'articleType',
+// article
+const articleObjectType = new GraphQLObjectType({
+  name: 'article',
   fields: {
     id: {
       type: GraphQLString
     },
-    message: {
+    title: {
       type: GraphQLString
     },
-    ip: {
+    description: {
       type: GraphQLString
     },
-    username: {
+    abstract: {
+      type: GraphQLString
+    },
+    type_id: {
       type: GraphQLString
     },
     created_at: {
       type: GraphQLString,
-      resolve(){
-        return Moment().format('YYYY-MM-DD HH:mm:ss')
+      resolve(obj, args, ctx, info){
+        const created_at = Number(obj.created_at) || Date.now()
+        return Moment(created_at).format('YYYY-MM-DD HH:mm:ss')
       }
     },
     created_by: {
@@ -42,9 +48,23 @@ let articleType = new GraphQLObjectType({
   }
 })
 
-const query: Thunk<GraphQLFieldConfigMap<Source, Koa.Context>> = {
+// article pages type
+const ArticlePagesType = new GraphQLObjectType({
+  name: 'articlePageType',
+  fields: {
+    ...metaFields,
+    list: {
+      type: new GraphQLList(articleObjectType),
+      // resolve(obj, args, ctx, info){
+      //   return obj.list
+      // }
+    }
+  }
+})
+
+const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   article: {
-    type: articleType,
+    type: articleObjectType,
     args: {
       id: {
         name: 'id',
@@ -53,23 +73,35 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Koa.Context>> = {
     },
     resolve: async (obj, args, ctx, info) => {
       const {id} = args;
-      console.log('query article')
-      const article = await ArticleCtl.getById(id)
+      const article = await ArticleCtrl.getById(id)
       return article
     }
   },
   articles: {
-    type: new GraphQLList(articleType),
-    resolve: async (): Promise<any> => {
-      // const list = await DemoCtrl.getAll()
-      return [];
+    type: ArticlePagesType,
+    args: {
+      // page: {type: GraphQLInt},
+      // page_size: {type: GraphQLInt, defaultValue: 5},
+      // total: {type: GraphQLInt},
+      // total_page: {type: GraphQLInt},
+      // cur_size: {type: GraphQLInt},
+      ...pageArgsFields
+    },
+    resolve: async (obj, args, ctx, info): Promise<any> => {
+      const pages = await ArticleCtrl.pages(args)
+      console.log(args, '-------------->args')
+      return Object.assign({
+        list: pages[0],
+        total: pages[1],
+        ...args
+      });
     }
   }
 }
 
-const mutation: Thunk<GraphQLFieldConfigMap<Source, Koa.Context>> = {
+const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   article: {
-    type: articleType,
+    type: articleObjectType,
     args: {
       title: {
         type: GraphQLString

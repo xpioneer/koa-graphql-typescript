@@ -7,28 +7,40 @@ import * as ChatModel from '../models/Chat'
 
 export default class ArticleController {
 
-  static async getAll() {
+  static async getAll(args: any) {
+    console.log(args)
     return await getManager().find(Article);
   }
 
 
   static async getById(id: string) {
-    const article = await getRepository(Article).findOne()
-    console.log('article: ', article)
+    const article = await getRepository(Article).findOne({id})
+    // console.log('article: ', article)
     return article
   }
 
   static async pages(args: any) {
-    const pages = await getManager()
+    console.log(args, 'query args ===================')
+    // const pages = await getManager()
+    //   .createQueryBuilder()
+    //   .where({
+    //     title: Like(args.title)
+    //   })
+    //   .orderBy({
+    //     created_at: 'DESC'
+    //   })
+    //   .offset(args.cur_page)
+    //   .limit(args.page_size || 20);
+    const pages = await getRepository('article')
       .createQueryBuilder()
-      .where({
-        username: Like(args.username)
-      })
-      .orderBy({
-        created_at: 'DESC'
-      })
-      .offset(args.cur_page)
-      .limit(args.page_size || 20);
+    // if(args.title) {
+    //   pageQuery.where({title: Like(args.title)})
+    // }
+    .orderBy({created_at: 'DESC'})
+    .offset(args.page)
+    .limit(args.page_size)
+    .getManyAndCount()
+    console.log(pages[0].length, pages[1])
     return pages
   }
 

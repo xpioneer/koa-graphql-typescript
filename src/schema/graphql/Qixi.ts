@@ -31,8 +31,9 @@ const chatType = new GraphQLObjectType({
     },
     created_at: {
       type: GraphQLString,
-      resolve(){
-        return Moment().format('YYYY-MM-DD HH:mm:ss')
+      resolve(obj, args, ctx, info){
+        const created_at = Number(obj.created_at) || Date.now()
+        return Moment(created_at).format('YYYY-MM-DD HH:mm:ss')
       }
     },
     created_by: {
