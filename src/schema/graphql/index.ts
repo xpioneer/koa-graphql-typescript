@@ -32,7 +32,7 @@ const RootSchema = new GraphQLSchema({
     name: 'RootQuery',
     fields: {
       ...demo,
-      // ...Article.query,
+      ...Article.query,
       ...Qixi.query
     }
   }),
@@ -40,13 +40,12 @@ const RootSchema = new GraphQLSchema({
   mutation: new GraphQLObjectType({
     name: 'RootMutation',
     fields: {
-      // ...Article.mutation,
+      ...Article.mutation,
       ...Qixi.mutation
     }
   })
 })
 
-console.log('RootSchema:', RootSchema.getQueryType())
 
 export {
   RootSchema

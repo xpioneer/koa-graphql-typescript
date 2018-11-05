@@ -21,6 +21,7 @@ const connectDB = (): void => {
 
 const connectMongo = (): void => {
   createConnection({
+    name     : 'mongo',
     type     : 'mongodb',
     host     : MongoConf.host,
     port     : MongoConf.port,

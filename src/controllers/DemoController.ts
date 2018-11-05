@@ -8,8 +8,16 @@ import * as ChatModel from '../models/Chat'
 export default class ChatController {
 
   static async getAll() {
-    console.log('list---------------')
-    return await getManager().find(Chat);
+    try{
+      console.log('list---------------')
+      const list = await getManager().find(Chat);
+      console.log('list after---------------', list)
+      return list
+    }catch(e){
+      console.log(e)
+      return []
+    }
+    
   }
 
 
