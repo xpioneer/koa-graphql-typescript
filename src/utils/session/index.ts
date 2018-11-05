@@ -2,10 +2,16 @@
 // import * as Cookies from "cookies";
 import Store from "./store";
 
+class SessionOptions {
+  key: string = 'SESSION_ID'
+  store: Store = new Store()
+  signed: boolean
+  maxAge: number
+}
 
 
-const Session = (opts: any = {}) => {
-  const { key = "SESSION_ID", store = new Store() } = opts;
+const Session = (opts: SessionOptions = new SessionOptions) => {
+  const { key, store } = opts;
 
   return async (ctx: any, next: () => Promise<any>) => {
     let id = ctx.cookies.get(key, opts);

@@ -1,0 +1,23 @@
+import 'reflect-metadata'
+import {Entity, Column} from "typeorm";
+import { BaseEntity } from './baseEntity'
+
+@Entity('user')
+export class User extends BaseEntity {
+
+  @Column()
+  username: string;
+
+  @Column()
+  password: string;
+
+  @Column()
+  nickname: string;
+
+  @Column()
+  sex: number;
+
+  @Column()
+  remark: string
+
+}

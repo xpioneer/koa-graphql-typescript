@@ -2,7 +2,7 @@ import * as Router from 'koa-router'
 import ChatCtrl from '../controllers/ChatController'
 import {world, MyGraphql} from './graphql'
 import { KoaGraphql } from '../core/graphql'
-import {schema, chats} from '../schema/demo'
+import {RootSchema} from '../schema/graphql/index'
 
 const router = new Router();
 
@@ -11,11 +11,11 @@ router.get('/hello', world)
   .get('/api', ChatCtrl.getAll)
   .get('/api/:id', ChatCtrl.getById)
   .get('/graphql', KoaGraphql({
-    schema: schema,
+    schema: RootSchema,
     graphql: true
   }))
   .post('/graphql', KoaGraphql({
-    schema: chats,
+    schema: RootSchema,
   }))
 
 export default router

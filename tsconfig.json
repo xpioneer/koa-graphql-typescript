@@ -18,6 +18,7 @@
     "paths": {
       "@conf/*": ["conf/*"],
       "@src/*": ["src/*"],
+      "@controllers/*": ["src/controllers/*"],
       "@core/*": ["src/core/*"],
       "@models/*": ["src/models/*"],
       "@entities/*": ["src/entities/*"],
