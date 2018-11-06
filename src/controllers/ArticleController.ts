@@ -13,7 +13,7 @@ export default class ArticleController {
   }
 
 
-  static async getById(id: string) {
+  static async getById(id: string = '') {
     const article = await getRepository(Article).findOne({id})
     // console.log('article: ', article)
     return article
