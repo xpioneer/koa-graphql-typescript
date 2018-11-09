@@ -3,6 +3,8 @@ import { MySqlConf, MongoConf } from '../../conf/db.conf'
 import { Entities } from '../entities/index'
 import { MongoEntities } from '../schema/mongo'
 
+const _PROD_ = process.env.NODE_ENV === 'production'
+
 const connectDB = (): void => {
   createConnection({
     type     : 'mysql',
@@ -12,6 +14,7 @@ const connectDB = (): void => {
     password : MySqlConf.password,
     database : 'qixi',
     entities : Entities,
+    logging  : _PROD_ ? false : true,
     // logger   : 'simple-console'
   }).then((connect) => {
     console.log('mysql connect success!')

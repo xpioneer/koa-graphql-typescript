@@ -34,9 +34,9 @@ export const KoaGraphql = (
   ): (ctx: Context) => Promise<void> => {
     
   return async function middleware (ctx: Context): Promise<any> {
-    const req = ctx.req;
-    const request = ctx.request;
-    const response = ctx.response;
+    const req = ctx.req; // node request
+    const request = ctx.request; // koa request
+    const response = ctx.response; // koa response
 
     let schema: GraphQLSchema,
       context: Context,

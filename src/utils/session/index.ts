@@ -31,14 +31,19 @@ const Session = (opts: SessionOptions = new SessionOptions) => {
 
     // if is an empty object
     if (ctx.session instanceof Object && !Object.keys(ctx.session).length) {
-      ctx.session = null;
+      ctx.session = {};
+      // need clear old session
+      if (id) {
+        await store.destroy(id);
+        return;
+      }
     }
 
     // need clear old session
-    if (id && !ctx.session) {
-      await store.destroy(id);
-      return;
-    }
+    // if (id && !ctx.session) {
+    //   await store.destroy(id);
+    //   return;
+    // }
 
     // set/update session
     const sid = await store.set(ctx.session, Object.assign({}, opts, { sid: id }));

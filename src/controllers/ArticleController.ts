@@ -31,15 +31,14 @@ export default class ArticleController {
     //   })
     //   .offset(args.cur_page)
     //   .limit(args.page_size || 20);
+    console.log(args.title, 'args.title')
     const pages = await getRepository('article')
       .createQueryBuilder()
-    // if(args.title) {
-    //   pageQuery.where({title: Like(args.title)})
-    // }
-    .orderBy({created_at: 'DESC'})
-    .offset(args.page)
-    .limit(args.page_size)
-    .getManyAndCount()
+      // .where({title: Like('官方发布002')})
+      .orderBy({created_at: 'DESC'})
+      .skip(args.page < 0 ? 0 : args.page)
+      .take(args.page_size)
+      .getManyAndCount()
     console.log(pages[0].length, pages[1])
     return pages
   }

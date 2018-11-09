@@ -39,9 +39,6 @@ const articleObjectType = new GraphQLObjectType({
     },
     article_type: {
       type: articleTypeObjectType,
-      // resolve(obj, args, ctx, info) {
-      //   return {id:123, name: 'xxx'}
-      // }
       resolve: async(obj, args, ctx, info) => {
         const articleType = await ArticleTypeCtrl.getById(obj.type_id)
         return articleType
