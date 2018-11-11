@@ -6,16 +6,10 @@ import { BaseEntity } from './baseEntity'
 export class Comment extends BaseEntity {
 
   @Column()
-  username: string;
+  description: string;
 
   @Column()
-  password: string;
-
-  @Column()
-  nickname: string;
-
-  @Column()
-  sex: number;
+  article_id: string;
 
   @Column()
   remark: string

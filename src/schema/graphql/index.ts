@@ -9,6 +9,7 @@ import {
 import {Context} from '@core/koa'
 import Article from './Article'
 import ArticleType from './ArticleType'
+import Comment from './Comment'
 import Qixi from './Qixi'
 
 let count = 0
@@ -35,6 +36,7 @@ const RootSchema = new GraphQLSchema({
       ...demo,
       ...Article.query,
       ...ArticleType.query,
+      ...Comment.query,
       ...Qixi.query
     }
   }),
@@ -44,6 +46,7 @@ const RootSchema = new GraphQLSchema({
     fields: {
       ...Article.mutation,
       ...ArticleType.mutation,
+      ...Comment.mutation,
       ...Qixi.mutation
     }
   })
