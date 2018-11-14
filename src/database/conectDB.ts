@@ -1,7 +1,7 @@
 import { createConnection } from "typeorm";
 import { MySqlConf, MongoConf } from '../../conf/db.conf'
-import { Entities } from '../entities/index'
-import { MongoEntities } from '../schema/mongo'
+import { Entities } from '../entities/mysql'
+import { MongoEntities } from '../entities/mongo'
 
 const _PROD_ = process.env.NODE_ENV === 'production'
 
