@@ -1,8 +1,8 @@
 import {getManager, getRepository, getMongoManager, getMongoRepository} from "typeorm";
 import { Context } from '@core/koa'
-import { Chat } from '../entities/qixi'
+import { Chat } from '../entities/mysql/qixi'
 import { Guid } from "../utils/tools";
-import { TestMongo } from '../schema/mongo/test_mongo'
+import { TestMongo } from '../entities/mongo/test_mongo'
 
 const guid = Guid()
 

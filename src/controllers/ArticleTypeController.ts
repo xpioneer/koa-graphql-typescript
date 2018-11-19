@@ -1,6 +1,6 @@
 import {getManager, getRepository, Like, Equal} from "typeorm";
 import { Context } from '@core/koa'
-import { ArticleType } from '../entities/article_type'
+import { ArticleType } from '../entities/mysql/article_type'
 import { Guid } from "../utils/tools";
 
 

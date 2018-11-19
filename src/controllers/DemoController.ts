@@ -1,6 +1,6 @@
 import {getManager, getRepository, Like} from "typeorm";
 import { Context } from '@core/koa'
-import { Chat } from '../entities/qixi'
+import { Chat } from '../entities/mysql/qixi'
 import { Guid } from "../utils/tools";
 import * as ChatModel from '../models/Chat'
 
