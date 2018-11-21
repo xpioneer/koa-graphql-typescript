@@ -12,7 +12,7 @@ const connectDB = (): void => {
     port     : MySqlConf.port,
     username : MySqlConf.username,
     password : MySqlConf.password,
-    database : 'qixi',
+    database : 'Blog',
     entities : Entities,
     logging  : _PROD_ ? false : true,
     // logger   : 'simple-console'

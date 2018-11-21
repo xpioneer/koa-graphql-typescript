@@ -10,7 +10,6 @@ import {Context} from '@core/koa'
 import Article from './Article'
 import ArticleType from './ArticleType'
 import Comment from './Comment'
-import Qixi from './Qixi'
 
 let count = 0
 const demo: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
@@ -37,7 +36,6 @@ const RootSchema = new GraphQLSchema({
       ...Article.query,
       ...ArticleType.query,
       ...Comment.query,
-      ...Qixi.query
     }
   }),
 
@@ -47,7 +45,6 @@ const RootSchema = new GraphQLSchema({
       ...Article.mutation,
       ...ArticleType.mutation,
       ...Comment.mutation,
-      ...Qixi.mutation
     }
   })
 })

@@ -18,13 +18,13 @@ export default class ArticleController {
   }
 
   static async pages(args: any) {
-    const pages = await getRepository('article_type')
+    const pages = await getRepository('articleType')
       .createQueryBuilder()
-      .orderBy({created_at: 'DESC'})
+      .orderBy({createdAt: 'DESC'})
       .offset(args.page)
-      .limit(args.page_size)
+      .limit(args.pageSize)
       .getManyAndCount()
-    console.log(pages[0].length, pages[1])
+    // console.log(pages[0].length, pages[1])
     return pages
   }
 

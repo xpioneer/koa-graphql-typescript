@@ -34,24 +34,24 @@ const articleObjectType = new GraphQLObjectType({
     abstract: {
       type: GraphQLString
     },
-    type_id: {
+    typeId: {
       type: GraphQLString
     },
-    article_type: {
+    articleType: {
       type: articleTypeObjectType,
       resolve: async(obj, args, ctx, info) => {
-        const articleType = await ArticleTypeCtrl.getById(obj.type_id)
+        const articleType = await ArticleTypeCtrl.getById(obj.typeId)
         return articleType
       }
     },
-    created_at: {
+    createdAt: {
       type: GraphQLString,
       resolve(obj, args, ctx, info){
-        const created_at = Number(obj.created_at) || Date.now()
-        return Moment(created_at).format('YYYY-MM-DD HH:mm:ss')
+        const createdAt = Number(obj.createdAt) || Date.now()
+        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
       }
     },
-    created_by: {
+    createdBy: {
       type: GraphQLString
     }
   }
@@ -89,16 +89,10 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   articles: {
     type: ArticlePagesType,
     args: {
-      // page: {type: GraphQLInt},
-      // page_size: {type: GraphQLInt, defaultValue: 5},
-      // total: {type: GraphQLInt},
-      // total_page: {type: GraphQLInt},
-      // cur_size: {type: GraphQLInt},
       ...pageArgsFields
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
       const pages = await ArticleCtrl.pages(args)
-      console.log(args, '-------------->args')
       return Object.assign({
         list: pages[0],
         total: pages[1],
@@ -118,7 +112,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       description: {
         type: GraphQLString
       },
-      type_id: {
+      typeId: {
         type: GraphQLString
       }
     },

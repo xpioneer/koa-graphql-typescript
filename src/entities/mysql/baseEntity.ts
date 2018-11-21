@@ -7,22 +7,22 @@ export class BaseEntity {
   id?: string;
 
   @Column()
-  created_by?: string;
+  createdBy?: string;
 
   @Column()
-  created_at: number;
+  createdAt: number;
 
   @Column({select: false})
-  updated_by?: string;
+  updatedBy?: string;
 
   @Column({select: false})
-  updated_at?: number;
+  updatedAt?: number;
 
   @Column({select: false})
-  deleted_by?: string;
+  deletedBy?: string;
 
   @Column({select: false})
-  deleted_at?: number;
+  deletedAt?: number;
 
   @Column({
     select: false,

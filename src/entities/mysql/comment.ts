@@ -9,7 +9,7 @@ export class Comment extends BaseEntity {
   description: string;
 
   @Column()
-  article_id: string;
+  articleId: string;
 
   @Column()
   remark: string

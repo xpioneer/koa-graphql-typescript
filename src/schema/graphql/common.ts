@@ -25,7 +25,7 @@ export const PageDataType = new GraphQLObjectType({
     page_size: {
       type: GraphQLInt,
       resolve(obj, args, ctx, info) {
-        return obj['page_size']
+        return obj['pageSize']
       }
     },
     total: {
@@ -37,7 +37,7 @@ export const PageDataType = new GraphQLObjectType({
     total_page: {
       type: GraphQLInt,
       resolve(obj, args, ctx, info) {
-        return Math.ceil((obj['total'] || 0)/(obj['page_size']))
+        return Math.ceil((obj['total'] || 0)/(obj['pageSize']))
       }
     },
     cur_size: {
@@ -52,9 +52,9 @@ export const metaFields: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     resolve(obj, args, ctx, info){
       const pageInfo = {}
       pageInfo['total'] = obj['total']
-      pageInfo['cur_size'] = obj['list'].length
+      pageInfo['curSize'] = obj['list'].length
       pageInfo['page'] = obj['page']
-      pageInfo['page_size'] = obj['page_size']
+      pageInfo['pageSize'] = obj['pageSize']
       return pageInfo
     }
   },
@@ -62,5 +62,5 @@ export const metaFields: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
 
 export const pageArgsFields: GraphQLFieldConfigArgumentMap = {
   page: {type: GraphQLInt, defaultValue: 1},
-  page_size: {type: GraphQLInt, defaultValue: 10}
+  pageSize: {type: GraphQLInt, defaultValue: 10}
 }

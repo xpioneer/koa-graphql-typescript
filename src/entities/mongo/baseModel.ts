@@ -8,12 +8,12 @@ export class BaseEntity {
   id: string;
 
   @Column()
-  created_by?: string;
+  createdBy?: string;
 
   @Column({
     default: Moment().format('YYYY/MM/DD hh:mm:ss.SSS')
   })
-  created_at: string | null;
+  createdAt: string | null;
 
   @VersionColumn({
     default: 0

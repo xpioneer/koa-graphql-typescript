@@ -29,14 +29,14 @@ export const articleTypeObjectType = new GraphQLObjectType({
     remark: {
       type: GraphQLString
     },
-    created_at: {
+    createdAt: {
       type: GraphQLString,
       resolve(obj, args, ctx, info){
-        const created_at = Number(obj.created_at) || Date.now()
-        return Moment(created_at).format('YYYY-MM-DD HH:mm:ss')
+        const createdAt = Number(obj.createdAt) || Date.now()
+        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
       }
     },
-    created_by: {
+    createdBy: {
       type: GraphQLString
     }
   }
@@ -54,7 +54,7 @@ const ArticleTypePagesType = new GraphQLObjectType({
 })
 
 const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
-  article_type: {
+  articleType: {
     type: articleTypeObjectType,
     args: {
       id: {
@@ -68,14 +68,14 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       return article
     }
   },
-  article_types: {
+  articleTypes: {
     type: ArticleTypePagesType,
     args: {
       ...pageArgsFields
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
       const pages = await ArticleTypeCtrl.pages(args)
-      console.log(args, '-------------->args')
+      // console.log(args, '-------------->args')
       return Object.assign({
         list: pages[0],
         total: pages[1],
@@ -86,7 +86,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
 }
 
 const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
-  article_type: {
+  articleType: {
     type: articleTypeObjectType,
     args: {
       name: {

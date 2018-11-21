@@ -17,9 +17,9 @@ export class Article extends BaseEntity {
   abstract: string;
 
   @Column({length: 32})
-  type_id: string
+  typeId: string
 
-  @Column()
-  remark: string
+  // @Column()
+  // remark: string
 
 }

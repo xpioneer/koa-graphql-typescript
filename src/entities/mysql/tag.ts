@@ -9,9 +9,6 @@ export class Tag extends BaseEntity {
   name: string;
 
   @Column()
-  sex: number;
-
-  @Column()
   remark: string
 
 }

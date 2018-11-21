@@ -29,14 +29,14 @@ export const commentObjectType = new GraphQLObjectType({
     remark: {
       type: GraphQLString
     },
-    created_at: {
+    createdAt: {
       type: GraphQLString,
       resolve(obj, args, ctx, info){
-        const created_at = Number(obj.created_at) || Date.now()
-        return Moment(created_at).format('YYYY-MM-DD HH:mm:ss')
+        const createdAt = Number(obj.createdAt) || Date.now()
+        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
       }
     },
-    created_by: {
+    createdBy: {
       type: GraphQLString
     }
   }
