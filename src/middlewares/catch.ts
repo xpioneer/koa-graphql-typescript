@@ -9,16 +9,16 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
     if (status === 404) {
       ctx.throw(404);
     }
-    // APIlogger(ctx, { time: Date.now() - start }) // api log
+    APIlogger(ctx, { time: Date.now() - start }) // api log
   } catch (err) {
     console.log('catch', err, err.status);
     try {
       let status: number = err.status || 500;
-      // ERRlogger(ctx, {
-      //   time: Date.now() - start,
-      //   errors: err.stack.split('\n'),
-      //   msg: err.toString()
-      // }); // error log
+      ERRlogger(ctx, {
+        time: Date.now() - start,
+        errors: err.stack.split('\n'),
+        msg: err.toString()
+      }); // error log
       ctx.status = status;
       if (status === 404) {
         ctx.body = {status: 404, data: null, msg: 'Not Found'};

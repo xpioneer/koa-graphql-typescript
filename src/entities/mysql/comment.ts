@@ -1,4 +1,3 @@
-import 'reflect-metadata'
 import {Entity, Column} from "typeorm";
 import { BaseEntity } from './baseEntity'
 
@@ -10,8 +9,5 @@ export class Comment extends BaseEntity {
 
   @Column()
   articleId: string;
-
-  @Column()
-  remark: string
 
 }

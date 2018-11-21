@@ -1,7 +1,7 @@
 import { Context } from '@core/koa'
 import { getMongoManager, getMongoRepository } from 'typeorm'
 import { Guid } from '../../utils/tools';
-import MongoModel from '../../schema/mongo'
+import MongoModel from '../../entities/mongo'
 import * as Moment from 'moment'
 
 const { API, Errors } = MongoModel
@@ -19,8 +19,8 @@ const APIlogger = async (ctx: Context, options: any): Promise<void> => {
   model.hostname = ctx.header['x-host'];
   model.headers = JSON.stringify(ctx.header)
   model.protocol = ctx.protocol;
-  model.created_at = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
-  model.created_by = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null
+  model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
+  model.createdBy = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null
   
 
   model.method = method
@@ -36,7 +36,7 @@ const APIlogger = async (ctx: Context, options: any): Promise<void> => {
 
   model.time = options.time  // deal time
 
-  const result = await getMongoManager().save(model)
+  const result = await getMongoManager('mongo').save(model)
 
 }
 
@@ -53,8 +53,8 @@ const ERRlogger = async (ctx: Context, options: any): Promise<void> => {
   model.hostname = ctx.header['x-host'];
   model.headers = JSON.stringify(ctx.header)
   model.protocol = ctx.protocol;
-  model.created_at = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
-  model.created_by = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null
+  model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
+  model.createdBy = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null
 
   model.errors = options.errors
   
@@ -72,7 +72,7 @@ const ERRlogger = async (ctx: Context, options: any): Promise<void> => {
 
   model.time = options.time  // deal time
 
-  const result = await getMongoRepository(Errors).save(model)
+  const result = await getMongoRepository(Errors, 'mongo').save(model)
 
 }
 

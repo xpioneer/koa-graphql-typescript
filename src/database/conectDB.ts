@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import { createConnection } from "typeorm";
 import { MySqlConf, MongoConf } from '../../conf/db.conf'
 import { Entities } from '../entities/mysql'

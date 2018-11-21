@@ -2,7 +2,6 @@ import {getManager, getRepository, Like} from "typeorm";
 import { Context } from '@core/koa'
 import { Comment } from '../entities/mysql/comment'
 import { Guid } from "../utils/tools";
-import * as ChatModel from '../models/Chat'
 
 
 export default class CommentController {
@@ -18,13 +17,13 @@ export default class CommentController {
   }
 
   static async pages(args: any) {
-    console.log(args, 'query args ===================')
-    console.log(args.title, 'args.title')
+    // console.log(args, 'query args ===================')
+    // console.log(args.title, 'args.title')
     const pages = await getRepository('comment')
       .createQueryBuilder()
-      .orderBy({created_at: 'DESC'})
+      .orderBy({createdAt: 'DESC'})
       .skip(args.page < 0 ? 0 : args.page)
-      .take(args.page_size)
+      .take(args.pageSize)
       .getManyAndCount()
     console.log(pages[0].length, pages[1])
     return pages
