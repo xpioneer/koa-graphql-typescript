@@ -1,7 +1,7 @@
 import {Entity, Column} from "typeorm";
 import { BaseEntity } from './baseModel'
 
-@Entity()
+@Entity('api')
 export class API extends BaseEntity{
   @Column()
   host: string

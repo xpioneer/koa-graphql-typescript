@@ -34,14 +34,16 @@ const json = (ctx: Koa.Context) => (res: any) => {
 const page = (ctx: Koa.Context) => (data: any) => {
     let resData = new ResponseData();
     if (typeof data === 'object' && data !== null) {
-      resData.data = data.page.rows;
-      let per_page = ctx.query.per_page ? ctx.query.per_page*1 : data.page.rows.length;
+      const total = data.page[1] || 0
+      const count = data.page[0].length || 0
+      resData.data = data.page[0];
+      let perPage = ctx.query.perPage ? ctx.query.perPage*1 : count;
       resData.meta = {
-        total: data.page.count,
-        count: data.page.rows.length,
-        cur_page: ctx.query.cur_page ? ctx.query.cur_page*1 : 1,
-        per_page: per_page,
-        total_page: Math.ceil(data.page.count/per_page)
+        total: total,
+        count: count,
+        curPage: ctx.query.curPage ? ctx.query.curPage*1 : 1,
+        perPage: perPage,
+        totalPage: Math.ceil(count/perPage)
       };
       resData.msg = data.msg||`查询到${resData.meta.count}记录`;
     }
