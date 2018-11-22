@@ -7,36 +7,38 @@ import * as Moment from 'moment'
 const { API, Errors } = MongoModel
 
 const APIlogger = async (ctx: Context, options: any): Promise<void> => {
-  const guid = Guid()
-  const model = new API()
-  const method = ctx.method
-  model.id = guid
-  model.ip = ctx.header['x-real-ip'] || ctx.req.connection.remoteAddress,
-  model.path = ctx.path
-  model.url = ctx.url
-  model.status = ctx.status
-  model.origin = ctx.origin
-  model.hostname = ctx.header['x-host'];
-  model.headers = JSON.stringify(ctx.header)
-  model.protocol = ctx.protocol;
-  model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
-  model.createdBy = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null
-  
+  if(!/^\/api\/log-(api|errors)$/.test(ctx.path)) {
+    const guid = Guid()
+    const model = new API()
+    const method = ctx.method
+    model.id = guid
+    model.ip = ctx.header['x-real-ip'] || ctx.req.connection.remoteAddress,
+    model.path = ctx.path
+    model.url = ctx.url
+    model.status = ctx.status
+    model.origin = ctx.origin
+    model.hostname = ctx.header['x-host'];
+    model.headers = JSON.stringify(ctx.header)
+    model.protocol = ctx.protocol;
+    model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
+    model.createdBy = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null
+    
 
-  model.method = method
-  if(method === 'GET') {
-    model.params = ctx.querystring
-  } else if(/^P(U|OS)T$/.test(method)){
-    let params = JSON.stringify(ctx.fields);
-    if(/^\/api\/login$/.test(ctx.path)){
-      params = params.replace(/"password":".+\b"/, '******');
+    model.method = method
+    if(method === 'GET') {
+      model.params = ctx.querystring
+    } else if(/^P(U|OS)T$/.test(method)){
+      let params = JSON.stringify(ctx.fields);
+      if(/^\/api\/login$/.test(ctx.path)){
+        params = params.replace(/"password":".+\b"/, '******');
+      }
+      model.params = params
     }
-    model.params = params
+
+    model.time = options.time  // deal time
+
+    const result = await getMongoManager('mongo').save(model)
   }
-
-  model.time = options.time  // deal time
-
-  const result = await getMongoManager('mongo').save(model)
 
 }
 

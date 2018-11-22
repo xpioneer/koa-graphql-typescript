@@ -1,4 +1,5 @@
-import {getMongoManager, getMongoRepository, Like} from "typeorm";
+import {getMongoManager, getMongoRepository, Like, FindOptions} from "typeorm";
+import * as Moment from 'moment'
 import { Context } from '@core/koa'
 import { API } from '../entities/mongo/api'
 import { Guid } from "../utils/tools";
@@ -15,9 +16,28 @@ export default class LogsController {
   }
 
   static async pages(ctx: Context) {
+    const params = ctx.getParams
+    const query = ctx.query
+    
     console.log(ctx.query, 'query args ===================')
-    console.log(ctx.getParams(), 'args.title')
-    const pages = await getMongoRepository(API, 'mongo').findAndCount()
+    console.log(ctx.getParams, 'args.title')
+    const options: FindOptions<API> = {
+      skip: params.offset,
+      take: params.limit,
+      order: {
+        createdAt: 'DESC'
+      }
+    }
+    if(query.createdAt) {
+      const dateRange = query.createdAt.split(',').map((d: string) => Moment(d).format('YYYY/MM/DD HH:mm:ss.SSS'))
+      console.log('dateRange---', dateRange)
+      options['where'] = {
+        createdAt: {
+          $between: dateRange
+        }
+      }
+    }
+    const pages = await getMongoRepository(API, 'mongo').findAndCount(options)
     // console.log(pages, pages[0], pages[1])
     ctx.Pages({page: pages})
   }

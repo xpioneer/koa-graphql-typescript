@@ -9,7 +9,10 @@ export interface Context extends KoaContext {
   session?: object
 
   // request
-  getParams?: Function
+  getParams?: {
+    offset: number
+    limit: number
+  }
 
   // response
   Json?: Function

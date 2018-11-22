@@ -37,13 +37,13 @@ const page = (ctx: Koa.Context) => (data: any) => {
       const total = data.page[1] || 0
       const count = data.page[0].length || 0
       resData.data = data.page[0];
-      let perPage = ctx.query.perPage ? ctx.query.perPage*1 : count;
+      let pageSize = ctx.query.pageSize ? ctx.query.pageSize*1 : count;
       resData.meta = {
         total: total,
         count: count,
-        curPage: ctx.query.curPage ? ctx.query.curPage*1 : 1,
-        perPage: perPage,
-        totalPage: Math.ceil(count/perPage)
+        page: ctx.query.page ? ctx.query.page*1 : 1,
+        pageSize: pageSize,
+        totalPage: Math.ceil(total/pageSize)
       };
       resData.msg = data.msg||`查询到${resData.meta.count}记录`;
     }

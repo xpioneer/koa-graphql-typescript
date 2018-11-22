@@ -32,13 +32,13 @@ interface IOrder {
 //   return arr;
 // };
 
-const getParams = (ctx: Koa.Context) => () => {
+const getParams = (ctx: Koa.Context) => {
   const data: any = {};
   let query = ctx.query;
   if (query && Object.keys(query).length>0) {
-    data['limit'] = (query.per_page ? query.per_page : 10) * 1;
-    let cur_page = (query.cur_page ? query.cur_page : 1) - 1;//offset start 0(如果不存在则只返回一条)
-    let offset = (query.cur_page < 1 ? 0 : cur_page) * data['limit'];
+    data['limit'] = (query.pageSize ? query.pageSize : 10) * 1;
+    let page = (query.page ? query.page : 1) - 1;//offset start 0(如果不存在则只返回一条)
+    let offset = (query.page < 1 ? 0 : page) * data['limit'];
     data['offset'] = offset * 1;
     /*filter*/
     if (query['filter'] && query['filter'].length > 0) {
@@ -67,7 +67,7 @@ const getParams = (ctx: Koa.Context) => () => {
             case 'like':
                 data['where'][filter.col] = { $like: `%${filter.val}%` };break;
             case 'between':
-              data['where'][filter.col] = { between: filter.val };break;
+              data['where'][filter.col] = { $between: filter.val };break;
             default: // exp: '='
               data['where'][filter.col] = filter.val;break;
           }

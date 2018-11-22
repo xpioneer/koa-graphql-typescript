@@ -1,17 +1,17 @@
 
 // 分页信息
 export class PageInfo{
-  curPage: number = 1;
+  page: number = 1;
   total: number = 0;
-  perPage: number = 10;
+  pageSize: number = 10;
   totalPage: number = 0;
   count: number = 0;
 }
 
 export interface IPageInfo{
-  curPage: number
+  page: number
   total: number
-  perPage: number 
+  pageSize: number 
   totalPage: number
   count: number
 }
