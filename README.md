@@ -1,4 +1,4 @@
-#koa-graphql-typescript
+# koa-graphql-typescript
 
 ### 项目主要技术结构
 
@@ -11,7 +11,7 @@
 * mongodb
 * koa-router
 
-###安装
+### 安装
 ***
 在终端下操作
 
@@ -29,7 +29,7 @@ yarn #in your command terminal
 ***
 
 
-###运行
+### 运行
 启动开发服务: (http://localhost:8020)
 
 ```
