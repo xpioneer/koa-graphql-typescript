@@ -15,6 +15,7 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
     try {
       let status: number = err.status || 500;
       ERRlogger(ctx, {
+        status: status,
         time: Date.now() - start,
         errors: err.stack.split('\n'),
         msg: err.toString()

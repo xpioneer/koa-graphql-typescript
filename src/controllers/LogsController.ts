@@ -2,6 +2,7 @@ import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equ
 import * as Moment from 'moment'
 import { Context } from '@core/koa'
 import { API } from '../entities/mongo/api'
+import { Errors } from '../entities/mongo/errors'
 import { Guid } from "../utils/tools";
 import * as ChatModel from '../models/Chat'
 
@@ -15,12 +16,10 @@ export default class LogsController {
     return api
   }
 
-  static async pages(ctx: Context) {
+  static async apiPages(ctx: Context) {
     const params = ctx.getParams
     const query = ctx.query
     
-    // console.log(ctx.query, 'query args ===================')
-    // console.log(ctx.getParams, 'args.title')
     const options: FindManyOptions<API> = {
       skip: params.offset,
       take: params.limit,
@@ -37,7 +36,28 @@ export default class LogsController {
       options.where['url'] = query.url
     }
     const pages = await getMongoRepository('API', 'mongo').findAndCount(options)
-    // console.log('pages-------', pages[0].length, pages[1])
+    ctx.Pages({page: pages})
+  }
+
+  static async errorsPages(ctx: Context) {
+    const params = ctx.getParams
+    const query = ctx.query
+    
+    const options: FindManyOptions<Errors> = {
+      skip: params.offset,
+      take: params.limit,
+      order: {
+        createdAt: 'DESC'
+      },
+      where: {}
+    }
+    if(query.path) {
+      options.where['path'] = query.path
+    }
+    if(query.url) {
+      options.where['url'] = query.url
+    }
+    const pages = await getMongoRepository('Errors', 'mongo').findAndCount(options)
     ctx.Pages({page: pages})
   }
 

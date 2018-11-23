@@ -7,7 +7,8 @@ import LogsCtrl from '../controllers/LogsController'
 const router = new Router();
 
 router.get('/hello', world)
-  .get('/api/log-api', LogsCtrl.pages)
+  .get('/api/log-api', LogsCtrl.apiPages)
+  .get('/api/log-errors', LogsCtrl.errorsPages)
   .get('/graphql', KoaGraphql({
     schema: RootSchema,
     graphql: true

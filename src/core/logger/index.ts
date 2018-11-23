@@ -50,7 +50,6 @@ const ERRlogger = async (ctx: Context, options: any): Promise<void> => {
   model.ip = ctx.header['x-real-ip'] || ctx.req.connection.remoteAddress,
   model.path = ctx.path
   model.url = ctx.url
-  model.status = ctx.status
   model.origin = ctx.origin
   model.hostname = ctx.header['x-host'];
   model.headers = JSON.stringify(ctx.header)
@@ -58,7 +57,9 @@ const ERRlogger = async (ctx: Context, options: any): Promise<void> => {
   model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
   model.createdBy = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null
 
+  model.status = options.status
   model.errors = options.errors
+  model.msg = options.msg
   
 
   model.method = method
