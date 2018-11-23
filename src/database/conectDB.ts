@@ -33,7 +33,8 @@ const connectMongo = (): void => {
     // username : MongoConf.username,
     // password : MongoConf.password,
     database : 'test',
-    entities : MongoEntities
+    entities : MongoEntities,
+    logging  : _PROD_ ? false : true,
   }).then((connect) => {
     console.log('mongo connect success!')
   }).catch((err) => {

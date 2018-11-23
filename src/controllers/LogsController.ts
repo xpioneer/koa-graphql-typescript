@@ -26,16 +26,24 @@ export default class LogsController {
       take: params.limit,
       order: {
         createdAt: 'DESC'
+      },
+      where: {
+        path: {
+          $like: '/api/testlog'
+        }
       }
     }
     if(query.createdAt) {
       const dateRange = query.createdAt.split(',').map((d: string) => Moment(d).format('YYYY/MM/DD HH:mm:ss.SSS'))
       console.log('dateRange---', dateRange)
-      options['where'] = {
-        createdAt: {
-          $between: dateRange
-        }
-      }
+      // options['where'] = {
+      //   path: {
+      //     $like: 'testlog'
+      //   }
+      //   // createdAt: {
+      //   //   $between: dateRange
+      //   // }
+      // }
     }
     const pages = await getMongoRepository(API, 'mongo').findAndCount(options)
     // console.log(pages, pages[0], pages[1])
