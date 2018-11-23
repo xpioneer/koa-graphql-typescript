@@ -37,7 +37,7 @@ const page = (ctx: Koa.Context) => (data: any) => {
       const total = data.page[1] || 0
       const count = data.page[0].length || 0
       resData.data = data.page[0];
-      let pageSize = ctx.query.pageSize ? ctx.query.pageSize*1 : count;
+      let pageSize = ctx.query.pageSize ? ctx.query.pageSize*1 : 10;
       resData.meta = {
         total: total,
         count: count,

@@ -1,4 +1,4 @@
-import {getMongoManager, getMongoRepository, Like, FindOptions} from "typeorm";
+import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equal} from "typeorm";
 import * as Moment from 'moment'
 import { Context } from '@core/koa'
 import { API } from '../entities/mongo/api'
@@ -19,34 +19,25 @@ export default class LogsController {
     const params = ctx.getParams
     const query = ctx.query
     
-    console.log(ctx.query, 'query args ===================')
-    console.log(ctx.getParams, 'args.title')
-    const options: FindOptions<API> = {
+    // console.log(ctx.query, 'query args ===================')
+    // console.log(ctx.getParams, 'args.title')
+    const options: FindManyOptions<API> = {
       skip: params.offset,
       take: params.limit,
       order: {
         createdAt: 'DESC'
       },
-      where: {
-        path: {
-          $like: '/api/testlog'
-        }
-      }
+      where: {}
     }
-    if(query.createdAt) {
-      const dateRange = query.createdAt.split(',').map((d: string) => Moment(d).format('YYYY/MM/DD HH:mm:ss.SSS'))
-      console.log('dateRange---', dateRange)
-      // options['where'] = {
-      //   path: {
-      //     $like: 'testlog'
-      //   }
-      //   // createdAt: {
-      //   //   $between: dateRange
-      //   // }
-      // }
+    if(query.path) {
+      // const dateRange = query.createdAt.split(',').map((d: string) => Moment(d).format('YYYY/MM/DD HH:mm:ss.SSS'))
+      options.where['path'] = query.path
     }
-    const pages = await getMongoRepository(API, 'mongo').findAndCount(options)
-    // console.log(pages, pages[0], pages[1])
+    if(query.url) {
+      options.where['url'] = query.url
+    }
+    const pages = await getMongoRepository('API', 'mongo').findAndCount(options)
+    // console.log('pages-------', pages[0].length, pages[1])
     ctx.Pages({page: pages})
   }
 
