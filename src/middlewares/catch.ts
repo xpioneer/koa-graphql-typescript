@@ -9,6 +9,14 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
     if (status === 404) {
       ctx.throw(404);
     }
+    if(ctx.path === '/graphql' && ctx.body.errors) {
+      ERRlogger(ctx, {
+        status: status,
+        time: Date.now() - start,
+        errors: ctx.body.errors,
+        msg: 'graphql error'
+      }); // error log
+    }
     APIlogger(ctx, { time: Date.now() - start }) // api log
   } catch (err) {
     console.log('catch', err, err.status);

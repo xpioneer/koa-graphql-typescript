@@ -22,10 +22,10 @@ export default class ArticleController {
   static async pages(args: any) {
     console.log(args, 'query args ===================')
     console.log(args.title, 'args.title')
-    const pages = await getRepository('article')
+    const pages = await getRepository(Article)
       .createQueryBuilder()
       .orderBy({createdAt: 'DESC'})
-      .skip(args.page < 0 ? 0 : args.page)
+      .skip(args.page < 0 ? 0 : (args.page - 1) * args.pageSize)
       .take(args.pageSize)
       .getManyAndCount()
     console.log(pages[0].length, pages[1])

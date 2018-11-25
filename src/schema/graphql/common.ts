@@ -22,7 +22,7 @@ export const PageDataType = new GraphQLObjectType({
         return obj['page'] || 1
       }
     },
-    page_size: {
+    pageSize: {
       type: GraphQLInt,
       resolve(obj, args, ctx, info) {
         return obj['pageSize']
@@ -34,18 +34,19 @@ export const PageDataType = new GraphQLObjectType({
         return obj['total']
       }
     },
-    total_page: {
+    totalPage: {
       type: GraphQLInt,
       resolve(obj, args, ctx, info) {
         return Math.ceil((obj['total'] || 0)/(obj['pageSize']))
       }
     },
-    cur_size: {
+    curSize: {
       type: GraphQLInt
     }
   }
 })
 
+// 计算返回分页数据
 export const metaFields: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   meta: {
     type: PageDataType,
@@ -60,7 +61,14 @@ export const metaFields: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   },
 }
 
+// 获取参数
 export const pageArgsFields: GraphQLFieldConfigArgumentMap = {
-  page: {type: GraphQLInt, defaultValue: 1},
-  pageSize: {type: GraphQLInt, defaultValue: 10}
+  page: {
+    type: GraphQLInt,
+    defaultValue: 1,
+  },
+  pageSize: {
+    type: GraphQLInt,
+    defaultValue: 10
+  }
 }
