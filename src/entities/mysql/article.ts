@@ -18,7 +18,9 @@ export class Article extends BaseEntity {
   @Column({length: 32})
   typeId: string
 
-  // @Column()
-  // remark: string
+  @Column({
+    default: 0
+  })
+  isTop: number
 
 }

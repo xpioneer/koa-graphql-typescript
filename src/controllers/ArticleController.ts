@@ -28,7 +28,7 @@ export default class ArticleController {
       .skip(args.page < 0 ? 0 : (args.page - 1) * args.pageSize)
       .take(args.pageSize)
       .getManyAndCount()
-    console.log(pages[0].length, pages[1])
+    // console.log(pages[0].length, pages[1])
     return pages
   }
 

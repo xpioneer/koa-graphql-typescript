@@ -5,7 +5,6 @@ import {
   GraphQLNullableType,
   GraphQLList,
   GraphQLString,
-  GraphQLBoolean,
   GraphQLType,
   GraphQLScalarType,
   Thunk,
@@ -14,39 +13,21 @@ import {
 } from 'graphql';
 import {Context} from '@core/koa'
 import * as Moment from 'moment'
-import ArticleCtrl from '../../controllers/ArticleController'
-import ArticleTypeCtrl from '../../controllers/ArticleTypeController'
+import TagCtrl from '../../controllers/TagController'
 import { metaFields, pageArgsFields } from './common'
-import { articleTypeObjectType } from './ArticleType'
 
-// article
-const articleObjectType = new GraphQLObjectType({
-  name: 'article',
+// tag
+const tagObjectType = new GraphQLObjectType({
+  name: 'tag',
   fields: {
     id: {
       type: GraphQLString
     },
-    title: {
+    name: {
       type: GraphQLString
     },
-    description: {
+    remark: {
       type: GraphQLString
-    },
-    abstract: {
-      type: GraphQLString
-    },
-    isTop: {
-      type: GraphQLString
-    },
-    typeId: {
-      type: GraphQLString
-    },
-    articleType: {
-      type: articleTypeObjectType,
-      resolve: async(obj, args, ctx, info) => {
-        const articleType = await ArticleTypeCtrl.getById(obj.typeId)
-        return articleType
-      }
     },
     createdAt: {
       type: GraphQLString,
@@ -61,23 +42,20 @@ const articleObjectType = new GraphQLObjectType({
   }
 })
 
-// article pages type
-const ArticlePagesType = new GraphQLObjectType({
-  name: 'articlePageType',
+// tag pages type
+const TagPagesType = new GraphQLObjectType({
+  name: 'tagPageType',
   fields: {
     ...metaFields,
     list: {
-      type: new GraphQLList(articleObjectType),
-      // resolve(obj, args, ctx, info){
-      //   return obj.list
-      // }
+      type: new GraphQLList(tagObjectType)
     }
   }
 })
 
 const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
-  article: {
-    type: articleObjectType,
+  tag: {
+    type: tagObjectType,
     args: {
       id: {
         name: 'id',
@@ -86,17 +64,17 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     },
     resolve: async (obj, args, ctx, info) => {
       const {id} = args;
-      const article = await ArticleCtrl.getById(id)
-      return article
+      const tag = await TagCtrl.getById(id)
+      return tag
     }
   },
-  articles: {
-    type: ArticlePagesType,
+  tags: {
+    type: TagPagesType,
     args: {
       ...pageArgsFields
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
-      const pages = await ArticleCtrl.pages(args)
+      const pages = await TagCtrl.pages(args)
       return Object.assign({
         list: pages[0],
         total: pages[1],
@@ -107,16 +85,10 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
 }
 
 const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
-  article: {
-    type: articleObjectType,
+  tag: {
+    type: tagObjectType,
     args: {
-      title: {
-        type: GraphQLString
-      },
-      description: {
-        type: GraphQLString
-      },
-      typeId: {
+      name: {
         type: GraphQLString
       }
     },

@@ -21,7 +21,7 @@ export default class ArticleController {
     const pages = await getRepository('articleType')
       .createQueryBuilder()
       .orderBy({createdAt: 'DESC'})
-      .offset(args.page)
+      .offset(args.page < 0 ? 0 : (args.page - 1) * args.pageSize)
       .limit(args.pageSize)
       .getManyAndCount()
     // console.log(pages[0].length, pages[1])
