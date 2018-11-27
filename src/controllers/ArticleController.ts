@@ -50,4 +50,19 @@ export default class ArticleController {
     return result
   }
 
+  static async update(args: any, ctx: Context) {
+    let guid = Guid()
+    const article = new Article
+    article.title = args.title
+    article.abstract = args.abstract
+    article.description =  args.description
+    article.typeId = args.typeId
+    article.isTop = args.isTop
+    article.tag = args.tag
+    // model.updatedBy = guid
+    article.updatedAt = Date.now()
+    const result = await getRepository(Article).update(article, {id: args.id})
+    return result
+  }
+
 }

@@ -24,6 +24,9 @@ const ArticleInputType = new GraphQLInputObjectType({
   name: 'articleInput',
   description: 'input article playload',
   fields: () => ({
+    id: {
+      type: GraphQLString
+    },
     title: {
       type: new GraphQLNonNull(GraphQLString)
     },
@@ -141,6 +144,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
 const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   article: {
     type: ArticleObjectType,
+    description: 'create/update article',
     args: {
       input: {
         type: new GraphQLNonNull(ArticleInputType)

@@ -88,6 +88,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
 const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   articleType: {
     type: articleTypeObjectType,
+    description: 'create articleType',
     args: {
       name: {
         type: GraphQLString
