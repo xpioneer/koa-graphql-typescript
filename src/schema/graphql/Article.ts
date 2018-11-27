@@ -38,6 +38,9 @@ const articleObjectType = new GraphQLObjectType({
     isTop: {
       type: GraphQLString
     },
+    tag: {
+      type: GraphQLString
+    },
     typeId: {
       type: GraphQLString
     },

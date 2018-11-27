@@ -8,7 +8,7 @@ export class Article extends BaseEntity {
   title: string;
 
   @Column({
-    type: 'text'
+    type: 'longtext'
   })
   description: string;
 
@@ -22,5 +22,8 @@ export class Article extends BaseEntity {
     default: 0
   })
   isTop: number
+
+  @Column()
+  tag: string;
 
 }
