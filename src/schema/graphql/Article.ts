@@ -6,11 +6,12 @@ import {
   GraphQLList,
   GraphQLString,
   GraphQLBoolean,
-  GraphQLType,
+  GraphQLNonNull,
   GraphQLScalarType,
   Thunk,
   GraphQLFieldConfigMap,
   Source,
+  GraphQLInputObjectType,
 } from 'graphql';
 import {Context} from '@core/koa'
 import * as Moment from 'moment'
@@ -19,9 +20,36 @@ import ArticleTypeCtrl from '../../controllers/ArticleTypeController'
 import { metaFields, pageArgsFields } from './common'
 import { articleTypeObjectType } from './ArticleType'
 
+const ArticleInputType = new GraphQLInputObjectType({
+  name: 'articleInput',
+  description: 'input article playload',
+  fields: () => ({
+    title: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    description: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    abstract: {
+      type: new GraphQLNonNull(GraphQLString)
+    },
+    isTop: {
+      type: GraphQLString,
+      defaultValue: 0
+    },
+    tag: {
+      type: GraphQLString
+    },
+    typeId: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  })
+})
+
 // article
-const articleObjectType = new GraphQLObjectType({
+const ArticleObjectType = new GraphQLObjectType({
   name: 'article',
+  description: 'an article single model',
   fields: {
     id: {
       type: GraphQLString
@@ -67,10 +95,11 @@ const articleObjectType = new GraphQLObjectType({
 // article pages type
 const ArticlePagesType = new GraphQLObjectType({
   name: 'articlePageType',
+  description: 'article pages query',
   fields: {
     ...metaFields,
     list: {
-      type: new GraphQLList(articleObjectType),
+      type: new GraphQLList(ArticleObjectType),
       // resolve(obj, args, ctx, info){
       //   return obj.list
       // }
@@ -80,7 +109,7 @@ const ArticlePagesType = new GraphQLObjectType({
 
 const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   article: {
-    type: articleObjectType,
+    type: ArticleObjectType,
     args: {
       id: {
         name: 'id',
@@ -111,20 +140,15 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
 
 const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   article: {
-    type: articleObjectType,
+    type: ArticleObjectType,
     args: {
-      title: {
-        type: GraphQLString
-      },
-      description: {
-        type: GraphQLString
-      },
-      typeId: {
-        type: GraphQLString
+      input: {
+        type: new GraphQLNonNull(ArticleInputType)
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      return {}
+      const result = await ArticleCtrl.insert(args.input, ctx)
+      return {id: result.id}
     }
   }
 }

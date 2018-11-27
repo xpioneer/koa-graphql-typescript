@@ -33,15 +33,20 @@ export default class ArticleController {
   }
 
   static async insert(args: any, ctx: Context) {
-    console.log('ctx.ip:', ctx.ip, ctx.ips)
     let guid = Guid()
-    let model = new ChatModel.Chat()
-    model.message = args.message
-    model.ip = ctx.ip
-    model.username = '用户' + guid.substring(10,15)
-    model.created_by = guid
+    let model = new Article()
+    model.id = Guid()
+    model.title = args.title
+    model.abstract = args.abstract
+    model.description =  args.description//'用户' + guid.substring(10,15)
+    model.typeId = args.typeId
+    model.isTop = args.isTop
+    model.tag = args.tag
+    model.createdBy = guid
+    model.createdAt = Date.now()
+    model.updatedBy = guid
+    model.updatedAt = Date.now()
     const result = await getRepository(Article).save(model)
-    console.log('result:', result)
     return result
   }
 

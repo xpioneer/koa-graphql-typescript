@@ -7,13 +7,13 @@ export class Article extends BaseEntity {
   @Column()
   title: string;
 
+  @Column()
+  abstract: string;
+
   @Column({
     type: 'longtext'
   })
   description: string;
-
-  @Column()
-  abstract: string;
 
   @Column({length: 32})
   typeId: string
@@ -22,6 +22,10 @@ export class Article extends BaseEntity {
     default: 0
   })
   isTop: number
+
+
+  @Column()
+  pics: string;
 
   @Column()
   tag: string;

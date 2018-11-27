@@ -16,8 +16,9 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
         errors: ctx.body.errors,
         msg: 'graphql error'
       }); // error log
+    } else {
+      APIlogger(ctx, { time: Date.now() - start }) // api log
     }
-    APIlogger(ctx, { time: Date.now() - start }) // api log
   } catch (err) {
     console.log('catch', err, err.status);
     try {
