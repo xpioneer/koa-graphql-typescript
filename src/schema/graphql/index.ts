@@ -10,7 +10,7 @@ import {Context} from '@core/koa'
 import Article from './Article'
 import ArticleType from './ArticleType'
 import Comment from './Comment'
-import Tag from './tag'
+import Tag from './Tag'
 
 let count = 0
 const demo: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
