@@ -13,7 +13,7 @@ const connectDB = (): void => {
     port     : MySqlConf.port,
     username : MySqlConf.username,
     password : MySqlConf.password,
-    database : 'Blog',
+    database : MySqlConf.database,
     entities : Entities,
     logging  : _PROD_ ? false : true,
     // logger   : 'simple-console'
@@ -32,7 +32,7 @@ const connectMongo = (): void => {
     port     : MongoConf.port,
     // username : MongoConf.username,
     // password : MongoConf.password,
-    database : 'test',
+    database : MongoConf.database,
     entities : MongoEntities,
     logging  : _PROD_ ? false : true,
   }).then((connect) => {
