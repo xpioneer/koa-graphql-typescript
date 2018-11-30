@@ -31,6 +31,9 @@ export class Errors extends BaseEntity{
   responseHeaders: any
 
   @Column()
+  responseData: any
+
+  @Column()
   time: number
 
   @Column()

@@ -20,6 +20,7 @@ const APIlogger = async (ctx: Context, options: any): Promise<void> => {
     model.hostname = ctx.header['x-host'];
     model.headers = ctx.header
     model.responseHeaders = ctx.response.header
+    model.responseData = ctx.body
     model.protocol = ctx.protocol;
     model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
     // model.createdBy = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null
@@ -55,6 +56,7 @@ const ERRlogger = async (ctx: Context, options: any): Promise<void> => {
   model.hostname = ctx.header['x-host'];
   model.headers = ctx.header
   model.responseHeaders = ctx.response.header
+  model.responseData = ctx.body
   model.protocol = ctx.protocol;
   model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
   // model.createdBy = ctx.session['CUR_USER'] ? ctx.session['CUR_USER'].id : null

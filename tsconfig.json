@@ -12,7 +12,8 @@
     "lib": ["es2015"],
     "outDir": "./release/",
     "typeRoots": [
-      "./node_modules/@types/"
+      "./node_modules/@types/",
+      "./src/@types/"
     ],
     "baseUrl": ".",
     "paths": {

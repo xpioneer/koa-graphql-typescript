@@ -1,24 +1,25 @@
 import { Context } from '@core/koa'
-import axios from 'axios'
+import $http from '../utils/http'
 
 
 export default class ServerAPIController {
 
   static async KDJZ (ctx: Context) {
-    const HOST = 'http://www.google.com'
+    const HOST = 'http://pre-deposit.koudailc.com'
     const token = ctx.header['token']
     const UA = ctx.header['user-agent']
     let path = ctx.path
     const input  = ctx.fields
 
     if(/^\/platform/.test(path)) {
-      const result = await axios.post(HOST + path, input, {
+      const result = await $http.post(HOST + path, input, {
         headers: {
           'token': token,
           'User-Agent': UA
         }
       })
-      ctx.body = result.data
+      // console.log(result)
+      ctx.body = result
     } else {
       ctx.body = { data: {}, msg: 'empty' }
     } 
@@ -32,7 +33,7 @@ export default class ServerAPIController {
     let path = ctx.path
     const input  = ctx.fields
     if(/^\/platform/.test(path)) {
-      const result = await axios.post(HOST + path, input, {
+      const result = await $http.post(HOST + path, input, {
         headers: {
           'token': token,
           'User-Agent': UA

@@ -31,6 +31,9 @@ export class API extends BaseEntity{
   responseHeaders: any
 
   @Column()
+  responseData: any
+
+  @Column()
   time: number
 
   @Column()
