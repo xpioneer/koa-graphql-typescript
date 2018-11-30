@@ -9,7 +9,7 @@ import {connectDB, connectMongo} from './database/conectDB'
 const _DEV_ = process.env.NODE_ENV === 'development'
 
 class Application {
-	app: Koa
+	private app: Koa
 	
 	constructor(){
 		this.app = new Koa()
@@ -17,7 +17,7 @@ class Application {
 	}
 
 	// init middlewares
-	init(){
+	private init(){
 		if(_DEV_) {
 			this.app.use(KoaLogger())
 		}
@@ -37,7 +37,7 @@ class Application {
 	}
 
 	// start app
-	start(port: number) {
+	public start(port: number) {
 		this.app.listen(port, (): void => {
 			console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
 			connectDB() // db start after server running

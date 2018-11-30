@@ -4,7 +4,7 @@ import { Context } from '@core/koa'
 import { API } from '../entities/mongo/api'
 import { Errors } from '../entities/mongo/errors'
 import { Guid } from "../utils/tools";
-import * as ChatModel from '../models/Chat'
+
 
 
 export default class LogsController {

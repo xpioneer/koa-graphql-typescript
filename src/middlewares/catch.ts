@@ -2,6 +2,7 @@ import * as Koa from 'koa'
 import {APIlogger, ERRlogger} from '../core/logger'
 
 export default async (ctx: Koa.Context, next: () => Promise<any>) => {
+  // console.log('ctx-----------', ctx.header)
   const start = Date.now()
   try {
     await next();
@@ -20,7 +21,7 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
       APIlogger(ctx, { time: Date.now() - start }) // api log
     }
   } catch (err) {
-    console.log('catch', err, err.status);
+    // console.log('catch', err, err.status);
     try {
       let status: number = err.status || 500;
       ERRlogger(ctx, {

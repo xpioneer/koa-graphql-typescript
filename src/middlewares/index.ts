@@ -8,14 +8,14 @@ import Response from './response';
 import Routes from '../routes';
 
 const Middlewares = (App: Koa) => {
-  App.use(Session({
-    key: 'SESSION_ID',
-    store: new Store(),
-    signed: true,
-    maxAge: 1000 * 60 * 60,
-  }))
+  // App.use(Session({
+  //   key: 'SESSION_ID',
+  //   store: new Store(),
+  //   signed: true,
+  //   maxAge: 1000 * 60 * 60,
+  // }))
   App.use(KoaBody)
-  // App.use(Cors({}));
+  App.use(Cors);
   App.use(Request);
   App.use(Response);
 

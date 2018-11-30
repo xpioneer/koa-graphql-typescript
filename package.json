@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@types/ioredis": "^4.0.3",
+    "axios": "^0.18.0",
     "graphql": "^14.0.2",
     "ioredis": "^4.2.0",
     "koa": "^2.5.3",

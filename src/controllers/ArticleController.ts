@@ -51,7 +51,7 @@ export default class ArticleController {
   }
 
   static async update(args: any, ctx: Context) {
-    let guid = Guid()
+    // let guid = Guid()
     const article = new Article
     article.title = args.title
     article.abstract = args.abstract
@@ -62,6 +62,7 @@ export default class ArticleController {
     // model.updatedBy = guid
     article.updatedAt = Date.now()
     const result = await getRepository(Article).update(article, {id: args.id})
+    console.log('----result', result)
     return result
   }
 
