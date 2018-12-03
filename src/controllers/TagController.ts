@@ -21,7 +21,7 @@ export default class TagController {
     const pages = await getRepository(Tag)
       .createQueryBuilder()
       .orderBy({createdAt: 'DESC'})
-      .skip(args.page < 0 ? 0 : (args.page - 1) * args.pageSize)
+      .skip(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
       .take(args.pageSize)
       .getManyAndCount()
     return pages

@@ -11,6 +11,7 @@ import Article from './Article'
 import ArticleType from './ArticleType'
 import Comment from './Comment'
 import Tag from './Tag'
+import User from './User'
 
 let count = 0
 const demo: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
@@ -37,7 +38,8 @@ const RootSchema = new GraphQLSchema({
       ...Article.query,
       ...ArticleType.query,
       ...Comment.query,
-      ...Tag.query
+      ...Tag.query,
+      ...User.query
     }
   }),
 
@@ -47,7 +49,8 @@ const RootSchema = new GraphQLSchema({
       ...Article.mutation,
       ...ArticleType.mutation,
       ...Comment.mutation,
-      ...Tag.mutation
+      ...Tag.mutation,
+      ...User.mutation
     }
   })
 })

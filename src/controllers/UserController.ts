@@ -1,28 +1,25 @@
 import {getManager, getRepository, Like} from "typeorm";
 import { Context } from '@core/koa'
-import { Article } from '../entities/mysql/article'
+import { User } from '../entities/mysql/user'
 import { Guid } from "../utils/tools";
-import * as ChatModel from '../models/Chat'
 
 
-export default class ArticleController {
+export default class UserController {
 
   static async getAll(args: any) {
-    console.log(args)
-    return await getManager().find(Article);
+    return await getManager().find(User);
   }
 
 
   static async getById(id: string = '') {
-    const article = await getRepository(Article).findOne({id})
+    const article = await getRepository(User).findOne({id})
     // console.log('article: ', article)
     return article
   }
 
   static async pages(args: any) {
     console.log(args, 'query args ===================')
-    console.log(args.title, 'args.title')
-    const pages = await getRepository(Article)
+    const pages = await getRepository(User)
       .createQueryBuilder()
       .orderBy({createdAt: 'DESC'})
       .skip(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
@@ -34,34 +31,29 @@ export default class ArticleController {
 
   static async insert(args: any, ctx: Context) {
     let guid = Guid()
-    let model = new Article()
+    let model = new User()
     model.id = Guid()
-    model.title = args.title
-    model.abstract = args.abstract
-    model.description =  args.description//'用户' + guid.substring(10,15)
-    model.typeId = args.typeId
-    model.isTop = args.isTop
-    model.tag = args.tag
+    model.username = args.username
+    model.nickName = args.nickName
+    model.remark =  args.remark
+    model.sex =  args.sex
     model.createdBy = guid
     model.createdAt = Date.now()
     model.updatedBy = guid
     model.updatedAt = Date.now()
-    const result = await getRepository(Article).save(model)
+    const result = await getRepository(User).save(model)
     return result
   }
 
   static async update(args: any, ctx: Context) {
     // let guid = Guid()
-    const article = new Article
-    article.title = args.title
-    article.abstract = args.abstract
-    article.description =  args.description
-    article.typeId = args.typeId
-    article.isTop = args.isTop
-    article.tag = args.tag
+    const user = new User
+    user.nickName = args.nickName
+    user.sex = args.sex
+    user.remark =  args.remark
     // model.updatedBy = guid
-    article.updatedAt = Date.now()
-    const result = await getRepository(Article).update(article, {id: args.id})
+    user.updatedAt = Date.now()
+    const result = await getRepository(User).update(user, {id: args.id})
     console.log('----result', result)
     return result
   }
