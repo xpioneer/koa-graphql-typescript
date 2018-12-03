@@ -28,7 +28,7 @@ const KoaBody = async (ctx: Context, next: () => Promise<any>) => {
   if(/^(POST|PUT)$/.test(ctx.method)) {
     ctx.fields = await getPostData(ctx)
   }
-  console.log('ctx.fields,', ctx.fields)
+  // console.log('ctx.fields,', ctx.fields)
   await next()
 }
 

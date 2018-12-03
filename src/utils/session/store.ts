@@ -24,15 +24,13 @@ class RedisStore {
  
   public async set(obj: any, { sid =  this.getID(32), maxAge }: any = {}): Promise<string> {
     try {
-      this.redis.set(sid, JSON.stringify(obj), 'PX', maxAge)
-      // await this.redis.set(session['CUR_USER'].id, sid, 'PX', maxAge);
-      // await this.redis.set(sid, JSON.stringify(session), 'PX', maxAge);
+      await this.redis.set(sid, JSON.stringify(obj), 'PX', maxAge)
     } catch (e) {}
     return sid;
   }
 
-  public async destroy(sid: string) {
-    return await this.redis.del(sid);
+  public async destroy(sid: string): Promise<void> {
+    await this.redis.del(sid);
   }
 
   public async checkLogin(userId: string): Promise<string> {

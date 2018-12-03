@@ -1,6 +1,5 @@
 import * as Koa from 'koa'
-import Session from '../utils/session'
-import Store from "../utils/session/store";
+import Auth from './auth'
 import KoaBody from '../core/postData'
 import Cors from './cors';
 import Request from './request';
@@ -9,14 +8,9 @@ import Routes from '../routes';
 import JWT from './jwt'
 
 const Middlewares = (App: Koa) => {
-  // App.use(Session({
-  //   key: 'SESSION_ID',
-  //   store: new Store(),
-  //   signed: true,
-  //   maxAge: 1000 * 60 * 60,
-  // }))
-  App.use(JWT)
   App.use(KoaBody)
+  App.use(Auth)
+  App.use(JWT)
   App.use(Cors);
   App.use(Request);
   App.use(Response);
