@@ -6,6 +6,7 @@ import Cors from './cors';
 import Request from './request';
 import Response from './response';
 import Routes from '../routes';
+import JWT from './jwt'
 
 const Middlewares = (App: Koa) => {
   // App.use(Session({
@@ -14,6 +15,7 @@ const Middlewares = (App: Koa) => {
   //   signed: true,
   //   maxAge: 1000 * 60 * 60,
   // }))
+  App.use(JWT)
   App.use(KoaBody)
   App.use(Cors);
   App.use(Request);

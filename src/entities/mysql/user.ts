@@ -14,6 +14,9 @@ export class User extends BaseEntity {
   nickName: string;
 
   @Column()
+  userType: number;
+
+  @Column()
   sex: number;
 
   @Column()
