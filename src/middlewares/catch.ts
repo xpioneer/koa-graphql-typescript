@@ -34,12 +34,12 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
       if (status === 404) {
         ctx.body = {status: 404, data: null, msg: 'Not Found'};
       } else {
-        let msg: string = err.message ? err.message : err.toString();
+        let msg: string = err.message || err.toString();
         let errors: string = err.stack ? err.stack.split('\n') : err.toString();
         ctx.body = {status: status, data: null, msg: msg, errors: errors};
       }
     } catch (e) {
-      let msg: string = e.message ? e.message : e.toString();
+      let msg: string = e.message || e.toString();
       let errors: string = e.stack ? e.stack.split('\n') : e.toString();
       ctx.body = {status: 500, data: null, msg: msg, errors: errors};
     }

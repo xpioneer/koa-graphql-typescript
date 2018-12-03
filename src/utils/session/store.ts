@@ -22,10 +22,11 @@ class RedisStore {
     return JSON.parse(data);
   }
  
-  public async set(session: object, { sid =  this.getID(32), maxAge }: any = {}): Promise<string> {
+  public async set(obj: any, { sid =  this.getID(32), maxAge }: any = {}): Promise<string> {
     try {
-      await this.redis.set(session['CUR_USER'].id, sid, 'PX', maxAge);
-      await this.redis.set(sid, JSON.stringify(session), 'PX', maxAge);
+      this.redis.set(sid, JSON.stringify(obj), 'PX', maxAge)
+      // await this.redis.set(session['CUR_USER'].id, sid, 'PX', maxAge);
+      // await this.redis.set(sid, JSON.stringify(session), 'PX', maxAge);
     } catch (e) {}
     return sid;
   }

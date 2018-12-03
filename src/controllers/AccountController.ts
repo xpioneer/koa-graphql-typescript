@@ -6,6 +6,7 @@ import { Guid } from "../utils/tools";
 
 const jwt = require('jsonwebtoken')
 const Secret = 'koa-grapqhql-secret'
+const EXP_TIME = Date.now() + 10 * 60 * 1000
 
 const cryptoPwd = (pwd: string, key: string) => {
   return Crypto.createHmac('sha256', key).update(pwd).digest('hex');
@@ -30,24 +31,14 @@ export default class AccountController {
       });
       if(result) {
         const token = jwt.sign({
-          data: result,
-          exp: 1000 * 60
-        }, Secret)
-        console.log(result, '----', token)
+          data: result
+        }, Secret, {
+          expiresIn: EXP_TIME
+        })
         ctx.Json({ data: result, token });
       } else {
         ctx.throw(400, '用户名或密码错误！');
       }
-      
-      // if (result > 0) {
-      //   const user = await UserService.getByName(username);
-      //   await store.checkLogin(user.id);
-      //   ctx.session['CUR_USER'] = user;
-      //   ctx.session['AUTH_TOKEN'] = Crypto.randomBytes(32).toString('hex');
-      //   ctx.Json({ data: user, msg: ctx.session['AUTH_TOKEN'] });
-      // } else {
-      //   ctx.Json({ data: result, status: 400, msg: '用户名或密码错误！' });
-      // }
     } else {
       ctx.throw(400, '用户名或密码错误！');
     }
@@ -55,6 +46,8 @@ export default class AccountController {
 
   //POST
   static async logout(ctx: Context) {
+    console.log(ctx.state)
+    ctx.state['koa-grapqhql-key'] = {}
     // await store.destroy(ctx.session['CUR_USER'].id);
     // delete ctx.session['CUR_USER'];
     // delete ctx.session['AUTH_TOKEN'];
