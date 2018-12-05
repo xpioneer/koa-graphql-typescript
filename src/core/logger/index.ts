@@ -30,11 +30,11 @@ const APIlogger = async (ctx: Context, options: any): Promise<void> => {
     if(method === 'GET') {
       model.params = ctx.querystring
     } else if(/^P(U|OS)T$/.test(method)){
-      let params = JSON.stringify(ctx.fields);
       if(/^\/api\/login$/.test(ctx.path)){
-        params = params.replace(/"password":".+\b"/, '******');
+        let params = ctx.fields;
+        params['password'] = '******';
       }
-      model.params = params
+      model.params = ctx.fields
     }
 
     model.time = options.time  // deal time
@@ -70,11 +70,11 @@ const ERRlogger = async (ctx: Context, options: any): Promise<void> => {
   if(method === 'GET') {
     model.params = ctx.querystring
   } else if(/^P(U|OS)T$/.test(method)){
-    let params = JSON.stringify(ctx.fields);
     if(/^\/api\/login$/.test(ctx.path)){
-      params = params.replace(/"password":".+\b"/, '******');
+      let params = ctx.fields;
+      params['password'] = '******';
     }
-    model.params = params
+    model.params = ctx.fields
   }
 
   model.time = options.time  // deal time

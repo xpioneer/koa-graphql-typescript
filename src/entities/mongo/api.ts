@@ -13,7 +13,7 @@ export class API extends BaseEntity{
   url: string
 
   @Column()
-  params: string
+  params: any
 
   @Column()
   method: string

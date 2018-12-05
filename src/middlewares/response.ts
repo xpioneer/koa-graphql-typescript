@@ -24,9 +24,9 @@ const json = (ctx: Koa.Context) => (res: any) => {
   }
   resData.status = res.status || 200; // resData status code
   let status = resData.status; // http status code
-  if (status == 200 && ctx.method === 'POST' || ctx.method === 'PUT' || ctx.method === 'DELETE') {
-    status = 201;
-  }
+  // if (status == 200 && ctx.method === 'POST' || ctx.method === 'PUT' || ctx.method === 'DELETE') {
+  //   status = 201;
+  // }
   ctx.status = status;
   return ctx.body = resData;
 };

@@ -23,7 +23,7 @@ export default class AccountController {
     let password = inputs.password;
     if ((username && username.length > 0) && (password && password.length > 5)) {
       const result = await getManager().findOne(User, {
-        select: ['username', 'nickName', 'sex', 'userType'],
+        select: ['id', 'username', 'nickName', 'sex', 'userType'],
         where: {
           username: username,
           password: cryptoPwd(password, username)
@@ -31,7 +31,7 @@ export default class AccountController {
       });
       if(result) {
         const token = jwt.sign({
-          data: result,
+          ...result,
           exp: Math.ceil((Date.now() + EXP_TIME)/1000) // second
         }, Secret)
         await store.set('true', {
