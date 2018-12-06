@@ -3,10 +3,10 @@ import {getManager, getRepository, Like, Equal} from "typeorm";
 import { Context } from '@core/koa'
 import { User } from '../entities/mysql/user'
 import Store from "../utils/session/store";
+import { JWT_SECRET, EXP_TIME } from '../constants'
+import { sign } from '../core/jwt/sign'
 
-const jwt = require('jsonwebtoken')
-const Secret = 'koa-grapqhql-secret'
-const EXP_TIME = 10 * 60 * 1000
+// const jwt = require('jsonwebtoken')
 
 const store = new Store
 
@@ -30,15 +30,12 @@ export default class AccountController {
         }
       });
       if(result) {
-        const token = jwt.sign({
-          ...result,
-          exp: Math.ceil((Date.now() + EXP_TIME)/1000) // second
-        }, Secret)
+        const token = sign({ ...result, exp: EXP_TIME }, JWT_SECRET)
         await store.set('true', {
           sid: token,
           maxAge: EXP_TIME // millisecond
         })
-        ctx.Json({ data: result, token });
+        ctx.Json({ data: token });
       } else {
         ctx.throw(400, '用户名或密码错误！');
       }

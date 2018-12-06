@@ -5,11 +5,11 @@ import Cors from './cors';
 import Request from './request';
 import Response from './response';
 import Routes from '../routes';
-import JWT from './jwt'
+import JWT from './xJwt'
 
 const Middlewares = (App: Koa) => {
   App.use(KoaBody)
-  App.use(Auth)
+  // App.use(Auth)
   App.use(JWT)
   App.use(Cors);
   App.use(Request);

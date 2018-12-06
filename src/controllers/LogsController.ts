@@ -17,6 +17,7 @@ export default class LogsController {
   }
 
   static async apiPages(ctx: Context) {
+    console.log('log-----', ctx.state)
     const params = ctx.getParams
     const query = ctx.query
     
