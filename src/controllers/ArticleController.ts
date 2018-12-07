@@ -1,8 +1,8 @@
-import {getManager, getRepository, Equal, Like, Not, FindManyOptions} from "typeorm";
+import {getManager, getRepository, Equal, Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { Article } from '../entities/mysql/article'
 import { Guid } from "../utils/tools";
-import * as ChatModel from '../models/Chat'
+import * as Moment from 'moment'
 
 
 export default class ArticleController {
@@ -21,17 +21,26 @@ export default class ArticleController {
 
   static async pages(args: any) {
     console.log(args, 'query args ===================')
-    console.log(args.title, 'args.title')
     const options: FindManyOptions<Article> = {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
       take: args.pageSize,
       order: {},
       where: {
-        deletedAt: Equal(null)
+        deletedAt: null
       }
     }
     if(args.title) {
-      options.where['title'] = Like(args.title)
+      options.where['title'] = Like(`%${args.title}%`)
+    }
+    if(args.abstract) {
+      options.where['abstract'] = Like(`%${args.abstract}%`)
+    }
+    if(args.tag) {
+      options.where['tag'] = Like(`%${args.tag}%`)
+    }
+    if(args.createdAt) {
+      const date = args.createdAt.map((c: string) => (Moment(c)).valueOf())
+      options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
@@ -41,11 +50,12 @@ export default class ArticleController {
     const pages = await getRepository(Article).findAndCount(options)
       // .createQueryBuilder()
       // .where({
-      //   title: Like(args.title)
+      //   // title: Like(args.title)
       // })
       // .orderBy({createdAt: 'DESC'})
       // .skip(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
       // .take(args.pageSize)
+      // .cache(10000)
       // .getManyAndCount()
     // console.log(pages[0].length, pages[1])
     return pages

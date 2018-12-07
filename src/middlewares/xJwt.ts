@@ -6,5 +6,5 @@ export default JWT({
   debug: true,
   secret: JWT_SECRET,
   key: JWT_KEY,
-  unless: [/\/api\/login/]
+  unless: [/\/api\/login/, /\/graphql/]
 })

@@ -91,5 +91,8 @@ export const pageArgsFields: GraphQLFieldConfigArgumentMap = {
   order: {
     type: PageOrderType,
     defaultValue: {'createdAt': 'DESC'}
+  },
+  createdAt: {
+    type: new GraphQLList(GraphQLString)
   }
 }

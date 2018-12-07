@@ -10,9 +10,6 @@ class CORSOptionsData {
 }
 
 const Cors = (options: CORSOptionsData = new CORSOptionsData())  => {
-  // const defaultOptions = {
-  //   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'HEAD', 'OPTIONS']
-  // }
 
   return async (ctx: Koa.Context, next: () => Promise<any>): Promise<any> => {
     let origin;
@@ -21,7 +18,7 @@ const Cors = (options: CORSOptionsData = new CORSOptionsData())  => {
     } else {
       origin = options.origin || ctx.get('Origin') || '*';
     }
-    if (!origin) {
+    if (!origin || origin === ctx.origin) {
       return await next();
     }
 

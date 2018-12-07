@@ -1,8 +1,6 @@
 import { randomBytes } from 'crypto';
 import * as Redis from 'ioredis';
 import { RedisConf } from '../../../conf/db.conf'
-import {Guid} from '../tools';
-
 
 // const { Guid } = TOOLS;
 
@@ -13,7 +11,7 @@ class RedisStore {
     this.redis = new Redis(RedisConf);
   }
 
-  public getID(length: number): string {
+  private getID(length: number): string {
     return randomBytes(length).toString('hex');
   }
 

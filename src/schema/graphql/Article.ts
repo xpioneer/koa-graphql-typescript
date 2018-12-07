@@ -131,6 +131,12 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       ...pageArgsFields,
       title: {
         type: GraphQLString
+      },
+      abstract: {
+        type: GraphQLString
+      },
+      tag: {
+        type: GraphQLString
       }
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
