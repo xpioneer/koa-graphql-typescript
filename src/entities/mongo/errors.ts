@@ -28,10 +28,10 @@ export class Errors extends BaseEntity{
   headers: string
 
   @Column()
-  responseHeaders: any
+  resHeaders: any
 
   @Column()
-  responseData: any
+  resData: any
 
   @Column()
   time: number

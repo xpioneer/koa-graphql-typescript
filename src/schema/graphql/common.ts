@@ -5,6 +5,7 @@ import {
   GraphQLList,
   GraphQLString,
   GraphQLType,
+  GraphQLInputObjectType,
   GraphQLScalarType,
   Thunk,
   GraphQLFieldConfigMap,
@@ -16,6 +17,12 @@ import {Context} from '@core/koa'
 export const PageDataType = new GraphQLObjectType({
   name: 'pageData',
   fields: {
+    current: {
+      type: GraphQLInt,
+      resolve(obj, args, ctx, info) {
+        return obj['page'] || 1
+      }
+    },
     page: {
       type: GraphQLInt,
       resolve(obj, args, ctx, info) {
@@ -39,12 +46,22 @@ export const PageDataType = new GraphQLObjectType({
       resolve(obj, args, ctx, info) {
         return Math.ceil((obj['total'] || 0)/(obj['pageSize']))
       }
-    },
-    curSize: {
-      type: GraphQLInt
     }
   }
 })
+
+export const PageOrderType = new GraphQLInputObjectType({
+  name: 'pageOrder',
+  fields: {
+    createdAt: {
+      type: GraphQLString
+    },
+    id: {
+      type: GraphQLString
+    },
+  }
+})
+
 
 // 计算返回分页数据
 export const metaFields: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
@@ -70,5 +87,9 @@ export const pageArgsFields: GraphQLFieldConfigArgumentMap = {
   pageSize: {
     type: GraphQLInt,
     defaultValue: 10
+  },
+  order: {
+    type: PageOrderType,
+    defaultValue: {'createdAt': 'DESC'}
   }
 }

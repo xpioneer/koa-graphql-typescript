@@ -1,4 +1,4 @@
-import {getManager, getRepository, Like} from "typeorm";
+import {getManager, getRepository, Equal, Like, Not, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { Article } from '../entities/mysql/article'
 import { Guid } from "../utils/tools";
@@ -22,12 +22,31 @@ export default class ArticleController {
   static async pages(args: any) {
     console.log(args, 'query args ===================')
     console.log(args.title, 'args.title')
-    const pages = await getRepository(Article)
-      .createQueryBuilder()
-      .orderBy({createdAt: 'DESC'})
-      .skip(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
-      .take(args.pageSize)
-      .getManyAndCount()
+    const options: FindManyOptions<Article> = {
+      skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
+      take: args.pageSize,
+      order: {},
+      where: {
+        deletedAt: Equal(null)
+      }
+    }
+    if(args.title) {
+      options.where['title'] = Like(args.title)
+    }
+    if(args.order) {
+      options.order = Object.assign(options.order, args.order)
+    }
+    console.log(options, '----options')
+
+    const pages = await getRepository(Article).findAndCount(options)
+      // .createQueryBuilder()
+      // .where({
+      //   title: Like(args.title)
+      // })
+      // .orderBy({createdAt: 'DESC'})
+      // .skip(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
+      // .take(args.pageSize)
+      // .getManyAndCount()
     // console.log(pages[0].length, pages[1])
     return pages
   }

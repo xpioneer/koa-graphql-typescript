@@ -17,7 +17,7 @@ export default class LogsController {
   }
 
   static async apiPages(ctx: Context) {
-    console.log('log-----', ctx.state)
+    // console.log('log-----', ctx.state)
     const params = ctx.getParams
     const query = ctx.query
     
@@ -62,17 +62,78 @@ export default class LogsController {
     ctx.Pages({page: pages})
   }
 
-  static async insert(args: any, ctx: Context) {
-    // console.log('ctx.ip:', ctx.ip, ctx.ips)
-    // let guid = Guid()
-    // let model = new ChatModel.Chat()
-    // model.message = args.message
-    // model.ip = ctx.ip
-    // model.username = '用户' + guid.substring(10,15)
-    // model.created_by = guid
-    // const result = await getMongoRepository(Article).save(model)
-    // console.log('result:', result)
-    return {}
+  // api log insert
+  static async APIlogger (ctx: Context, options: any): Promise<void> {
+    if(!/^\/api\/log-(api|errors)$/.test(ctx.path)) {
+      const guid = Guid()
+      const model = new API()
+      const method = ctx.method
+      model.id = guid
+      model.ip = ctx.header['x-real-ip'] || ctx.req.connection.remoteAddress,
+      model.path = ctx.path
+      model.url = ctx.url
+      model.status = ctx.status
+      model.origin = ctx.origin
+      model.hostname = ctx.header['x-host'];
+      model.headers = ctx.header
+      model.resHeaders = ctx.response.header
+      model.resData = ctx.body
+      model.protocol = ctx.protocol;
+      model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
+      model.createdBy = ctx.state['CUR_USER'] ? ctx.state['CUR_USER'].id : model.ip
+
+      model.method = method
+      if(method === 'GET') {
+        model.params = ctx.querystring
+      } else if(/^P(U|OS)T$/.test(method)){
+        if(/^\/api\/login$/.test(ctx.path)){
+          let params = ctx.fields;
+          params['password'] = '******';
+        }
+        model.params = ctx.fields
+      }
+
+      model.time = options.time  // deal time
+      const result = await getMongoManager('mongo').save(model)
+    }
+
+  }
+
+  // errors log insert
+  static async ERRlogger (ctx: Context, options: any): Promise<void> {
+    const guid = Guid()
+    const model = new Errors()
+    const method = ctx.method
+    model.id = guid
+    model.ip = ctx.header['x-real-ip'] || ctx.req.connection.remoteAddress,
+    model.path = ctx.path
+    model.url = ctx.url
+    model.origin = ctx.origin
+    model.hostname = ctx.header['x-host'];
+    model.headers = ctx.header
+    model.resHeaders = ctx.response.header
+    model.resData = ctx.body
+    model.protocol = ctx.protocol;
+    model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
+    model.createdBy = ctx.state['CUR_USER'] ? ctx.state['CUR_USER'].id : model.ip
+
+    model.status = options.status
+    model.errors = options.errors
+    model.msg = options.msg
+
+    model.method = method
+    if(method === 'GET') {
+      model.params = ctx.querystring
+    } else if(/^P(U|OS)T$/.test(method)){
+      if(/^\/api\/login$/.test(ctx.path)){
+        let params = ctx.fields;
+        params['password'] = '******';
+      }
+      model.params = ctx.fields
+    }
+
+    model.time = options.time  // deal time
+    const result = await getMongoRepository(Errors, 'mongo').save(model)
   }
 
 }

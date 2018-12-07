@@ -6,8 +6,6 @@ import Store from "../utils/session/store";
 import { JWT_SECRET, EXP_TIME } from '../constants'
 import { sign } from '../core/jwt/sign'
 
-// const jwt = require('jsonwebtoken')
-
 const store = new Store
 
 const cryptoPwd = (pwd: string, key: string) => {

@@ -28,10 +28,10 @@ export class API extends BaseEntity{
   headers: any
 
   @Column()
-  responseHeaders: any
+  resHeaders: any
 
   @Column()
-  responseData: any
+  resData: any
 
   @Column()
   time: number

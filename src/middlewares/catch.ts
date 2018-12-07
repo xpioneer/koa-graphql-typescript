@@ -1,5 +1,5 @@
 import * as Koa from 'koa'
-import {APIlogger, ERRlogger} from '../core/logger'
+import LogCtrl from '../controllers/LogsController'
 
 export default async (ctx: Koa.Context, next: () => Promise<any>) => {
   // console.log('ctx-----------', ctx.header)
@@ -11,20 +11,20 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
       ctx.throw(404);
     }
     if(ctx.path === '/graphql' && ctx.body.errors) {
-      ERRlogger(ctx, {
+      LogCtrl.ERRlogger(ctx, {
         status: status,
         time: Date.now() - start,
         errors: ctx.body.errors,
         msg: 'graphql error'
       }); // error log
     } else {
-      APIlogger(ctx, { time: Date.now() - start }) // api log
+      LogCtrl.APIlogger(ctx, { time: Date.now() - start }) // api log
     }
   } catch (err) {
     // console.log('catch', err, err.status);
     try {
       let status: number = err.status || 500;
-      ERRlogger(ctx, {
+      LogCtrl.ERRlogger(ctx, {
         status: status,
         time: Date.now() - start,
         errors: err.stack.split('\n'),
