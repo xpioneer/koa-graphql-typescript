@@ -1,6 +1,7 @@
 import * as Router from 'koa-router'
 import { KoaGraphql } from '../core/graphql'
 import { RootSchema } from '../schema/graphql/index'
+import DemoCtrl from '../controllers/DemoController'
 import AccountCtrl from '../controllers/AccountController'
 import LogsCtrl from '../controllers/LogsController'
 import ServerAPI from '../controllers/ServerAPIController'
@@ -10,6 +11,7 @@ const router = new Router();
 router
   .post('/api/login', AccountCtrl.login)
   .post('/api/logout', AccountCtrl.logout)
+  .get('/view/:site', DemoCtrl.views)
   .post('/platform/*', ServerAPI.KDJZ)
   .get('/api/log-api', LogsCtrl.apiPages)
   .get('/api/log-errors', LogsCtrl.errorsPages)
