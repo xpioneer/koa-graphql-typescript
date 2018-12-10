@@ -12,6 +12,7 @@ router
   .post('/api/login', AccountCtrl.login)
   .post('/api/logout', AccountCtrl.logout)
   .get('/view/:site', DemoCtrl.views)
+  .post('/api/compose', DemoCtrl.compose)
   .post('/platform/*', ServerAPI.KDJZ)
   .get('/api/log-api', LogsCtrl.apiPages)
   .get('/api/log-errors', LogsCtrl.errorsPages)

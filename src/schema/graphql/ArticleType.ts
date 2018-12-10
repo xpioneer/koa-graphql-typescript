@@ -71,7 +71,10 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   articleTypes: {
     type: ArticleTypePagesType,
     args: {
-      ...pageArgsFields
+      ...pageArgsFields,
+      name: {
+        type: GraphQLString
+      }
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
       const pages = await ArticleTypeCtrl.pages(args)
