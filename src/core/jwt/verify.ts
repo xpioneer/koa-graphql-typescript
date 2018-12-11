@@ -12,14 +12,14 @@ class JsonWebTokenError extends Error {
 // verify is equal
 function verifyEqual (thing: string, sig: string, secrect: string | Buffer): boolean {
   const computeSig = createHmacSigner(thing, secrect)
-  console.log('verifyEqual--', computeSig, secrect)
+  // console.log('verifyEqual--', computeSig, secrect)
   return computeSig === sig
 }
 
 export const verify = (jwtStr: string, opts: Options): [boolean, any] => {
 
   let jwtToken = jwtStr.split(' ')[1]  // "Bearer jwtToken"
-  console.log(jwtStr, '-------',jwtToken)
+  // console.log(jwtStr, '-------',jwtToken)
   if(!/^[a-zA-Z0-9\-_]+?\.[a-zA-Z0-9\-_]+?\.([a-zA-Z0-9\-_]+){1}$/.test(jwtToken)) {
     throw new JsonWebTokenError('jwt js error format')
   }

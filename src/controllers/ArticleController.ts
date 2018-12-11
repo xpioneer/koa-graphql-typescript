@@ -71,9 +71,9 @@ export default class ArticleController {
     model.typeId = args.typeId
     model.isTop = args.isTop
     model.tag = args.tag
-    model.createdBy = guid
+    model.createdBy = ctx.state['CUR_USER'].id
     model.createdAt = Date.now()
-    model.updatedBy = guid
+    model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
     const result = await getRepository(Article).save(model)
     return result

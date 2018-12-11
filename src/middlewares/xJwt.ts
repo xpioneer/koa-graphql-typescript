@@ -1,5 +1,4 @@
-import { Context } from '@core/koa'
-import JWT, { Options } from '../core/jwt/index'
+import JWT from '../core/jwt/index'
 import { JWT_SECRET, JWT_KEY } from '../constants'
 
 const _PROD_ = process.env.NODE_ENV === 'production'

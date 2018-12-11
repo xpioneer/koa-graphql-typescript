@@ -24,9 +24,6 @@ const ArticleInputType = new GraphQLInputObjectType({
   name: 'articleInput',
   description: 'input article playload',
   fields: () => ({
-    id: {
-      type: GraphQLString
-    },
     title: {
       type: new GraphQLNonNull(GraphQLString)
     },

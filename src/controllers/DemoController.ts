@@ -22,14 +22,7 @@ export default class LogsController {
 
   static async compose(ctx: Context) {
     console.log(ctx.params)
-    const { site } = ctx.params
-    // if(site === 'baidu') {
-    //   ctx.body = Baidu
-    // } else if (site === 'tmall') {
-    //   ctx.body = Tmall
-    // } else {
-    //   ctx.body = '404, not found'
-    // }
+    // 
   }
 
 }
