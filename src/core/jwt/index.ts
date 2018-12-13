@@ -8,7 +8,7 @@ export interface Options {
   encoding?: string
   passthrough?: boolean
   tokenKey?: string
-  unless?: RegExp[]
+  unless?: RegExp[][]
 }
 
 // verify jwt, koa middleware
@@ -17,7 +17,8 @@ export default (opts: Options) => {
   const { debug, key = 'jwt-user', unless, passthrough, tokenKey } = opts;
 
   return async (ctx: Context, next: () => Promise<any>) => {
-    if(unless.some(urlReg => urlReg.test(ctx.path))) {
+    const method = ctx.method
+    if(unless.some(urlReg => urlReg[0].test(ctx.path) && urlReg[1].test(method))) {
       await next()
     } else {
       let token = ctx.header['authorization']
@@ -50,9 +51,7 @@ export default (opts: Options) => {
       }
 
       await next() // authorized, next()
-
     }
-    
 
   }
 } 

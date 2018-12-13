@@ -9,8 +9,8 @@ import JWT from './xJwt'
 
 const Middlewares = (App: Koa) => {
   App.use(KoaBody)
-  // App.use(Auth)
   App.use(JWT)
+  App.use(Auth)
   App.use(Cors);
   App.use(Request);
   App.use(Response);
