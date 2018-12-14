@@ -50,8 +50,13 @@ export default class ArticleController {
 
   static async insert(args: any, ctx: Context) {
     let model = new ArticleType()
+    model.id = Guid()
     model.name = args.name
     model.remark = args.remark
+    model.createdAt = Date.now()
+    model.createdBy = ctx.state['CUR_USER'].id
+    model.updatedAt = Date.now()
+    model.updatedBy = ctx.state['CUR_USER'].id
     const result = await getRepository(ArticleType).save(model)
     console.log('result:', result)
     return result

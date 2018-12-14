@@ -6,6 +6,7 @@ import {
   GraphQLList,
   GraphQLString,
   GraphQLType,
+  GraphQLNonNull,
   GraphQLScalarType,
   Thunk,
   GraphQLFieldConfigMap,
@@ -59,13 +60,13 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     args: {
       id: {
         name: 'id',
-        type: GraphQLString
+        type: new GraphQLNonNull(GraphQLString)
       }
     },
     resolve: async (obj, args, ctx, info) => {
       const {id} = args;
-      const article = await ArticleTypeCtrl.getById(id)
-      return article
+      const articleType = await ArticleTypeCtrl.getById(id)
+      return articleType
     }
   },
   articleTypes: {
@@ -94,14 +95,15 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     description: 'create articleType',
     args: {
       name: {
-        type: GraphQLString
+        type: new GraphQLNonNull(GraphQLString)
       },
       remark: {
         type: GraphQLString
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      return {}
+      const result = await ArticleTypeCtrl.insert(args, ctx)
+      return result
     }
   }
 }
