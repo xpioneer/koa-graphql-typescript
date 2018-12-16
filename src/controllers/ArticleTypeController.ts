@@ -58,6 +58,17 @@ export default class ArticleController {
     model.updatedAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
     const result = await getRepository(ArticleType).save(model)
+    return result
+  }
+  
+  static async update(args: any, ctx: Context) {
+    let model = new ArticleType()
+    // model.id = args.id
+    model.name = args.name
+    model.remark = args.remark
+    model.updatedAt = Date.now()
+    model.updatedBy = ctx.state['CUR_USER'].id
+    const result = await getRepository(ArticleType).update(args.id, model)
     console.log('result:', result)
     return result
   }
