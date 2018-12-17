@@ -100,9 +100,6 @@ const ArticlePagesType = new GraphQLObjectType({
     ...metaFields,
     list: {
       type: new GraphQLList(ArticleObjectType),
-      // resolve(obj, args, ctx, info){
-      //   return obj.list
-      // }
     }
   }
 })

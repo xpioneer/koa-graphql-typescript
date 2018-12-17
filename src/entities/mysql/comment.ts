@@ -9,5 +9,17 @@ export class Comment extends BaseEntity {
 
   @Column()
   articleId: string;
+  
+  @Column()
+  parentId: string;
+
+  @Column()
+  ip: string;
+
+  @Column()
+  client: string;
+
+  @Column()
+  url: string;
 
 }

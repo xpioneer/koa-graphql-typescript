@@ -6,6 +6,7 @@ import {
   GraphQLList,
   GraphQLString,
   GraphQLType,
+  GraphQLNonNull,
   GraphQLScalarType,
   Thunk,
   GraphQLFieldConfigMap,
@@ -24,6 +25,18 @@ export const commentObjectType = new GraphQLObjectType({
       type: GraphQLString
     },
     description: {
+      type: GraphQLString
+    },
+    aritcleId: {
+      type: GraphQLString
+    },
+    parentId: {
+      type: GraphQLString
+    },
+    ip: {
+      type: GraphQLString
+    },
+    client: {
       type: GraphQLString
     },
     remark: {
@@ -71,11 +84,14 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   comments: {
     type: CommentPagesType,
     args: {
-      ...pageArgsFields
+      ...pageArgsFields,
+      description: {
+        name: 'description',
+        type: GraphQLString
+      }
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
       const pages = await CommentCtrl.pages(args)
-      console.log(args, '-------------->args')
       return Object.assign({
         list: pages[0],
         total: pages[1],
