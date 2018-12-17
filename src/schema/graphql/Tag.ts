@@ -108,6 +108,9 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   editTag: {
     type: tagObjectType,
     args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
       name: {
         type: new GraphQLNonNull(GraphQLString)
       },

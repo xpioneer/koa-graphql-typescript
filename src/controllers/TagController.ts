@@ -42,17 +42,25 @@ export default class TagController {
   }
 
   static async insert(args: any, ctx: Context) {
+    if(!args.name || args.name.length < 1) {
+      ctx.throw(400, '标签名称长度必须大于1')
+    }
     let model = new Tag()
     model.id = Guid()
     model.name = args.name
     model.remark = args.remark
     model.createdAt = Date.now()
     model.createdBy = ctx.state[JWT_KEY].id
+    model.updatedAt = Date.now()
+    model.updatedBy = ctx.state[JWT_KEY].id
     const result = await getRepository(Tag).save(model)
     return result
   }
 
   static async update(args: any, ctx: Context) {
+    if(!args.name || args.name.length < 1) {
+      ctx.throw(400, '标签名称长度必须大于1')
+    }
     let model = new Tag()
     model.id = args.id
     model.name = args.name
