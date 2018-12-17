@@ -11,7 +11,11 @@ export const JWT_KEY = 'CUR_USER'
 export const EXP_TIME = _PROD_ ?  1000 * 60 * 60 : 1000 * 60 * 60 * 2
 
 // don't need auth url
-export const NO_AUTH_URLS = [[/\/api\/login/,  /^post$/i], [/\/graphql/, /^get$/i], [/\/view/,  /^get$/i]]
+export const NO_AUTH_URLS = [
+  [/\/api\/login/,  /^post$/i],
+  [/\/graphql/, /^get$/i],
+  [/\/view/,  /^get$/i]
+]
 
 
 export const Baidu = `

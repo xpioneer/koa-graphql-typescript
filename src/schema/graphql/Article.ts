@@ -160,6 +160,34 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       const result = await ArticleCtrl.insert(args.input, ctx)
       return {id: result.id}
     }
+  },
+  editArticle: {
+    type: ArticleObjectType,
+    description: 'create/update article',
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      title: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      abstract: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      typeId: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      description: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      tag: {
+        type: new GraphQLNonNull(GraphQLString)
+      }
+    },
+    resolve: async (obj, args, ctx, info) => {
+      const result = await ArticleCtrl.update(args, ctx)
+      return result
+    }
   }
 }
 

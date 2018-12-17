@@ -5,6 +5,7 @@ import {
   GraphQLNullableType,
   GraphQLList,
   GraphQLString,
+  GraphQLNonNull,
   GraphQLType,
   GraphQLScalarType,
   Thunk,
@@ -71,7 +72,11 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   tags: {
     type: TagPagesType,
     args: {
-      ...pageArgsFields
+      ...pageArgsFields,
+      name: {
+        name: 'name',
+        type: GraphQLString
+      }
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
       const pages = await TagCtrl.pages(args)
@@ -89,11 +94,30 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: tagObjectType,
     args: {
       name: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      remark: {
         type: GraphQLString
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      return {}
+      const result = await TagCtrl.insert(args, ctx)
+      return result
+    }
+  },
+  editTag: {
+    type: tagObjectType,
+    args: {
+      name: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+      remark: {
+        type: GraphQLString
+      }
+    },
+    resolve: async (obj, args, ctx, info) => {
+      const result = await TagCtrl.update(args, ctx)
+      return result
     }
   }
 }

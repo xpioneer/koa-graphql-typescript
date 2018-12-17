@@ -1,8 +1,9 @@
-import {getManager, getRepository, Like} from "typeorm";
+import {getManager, getRepository, Like, FindManyOptions, Between} from "typeorm";
 import { Context } from '@core/koa'
 import { Tag } from '../entities/mysql/tag'
 import { Guid } from "../utils/tools";
-
+import * as Moment from 'moment'
+import { JWT_KEY } from '../constants'
 
 export default class TagController {
 
@@ -18,26 +19,48 @@ export default class TagController {
   }
 
   static async pages(args: any) {
-    const pages = await getRepository(Tag)
-      .createQueryBuilder()
-      .orderBy({createdAt: 'DESC'})
-      .skip(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
-      .take(args.pageSize)
-      .getManyAndCount()
+    const options: FindManyOptions<Tag> = {
+      skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
+      take: args.pageSize,
+      order: {},
+      where: {
+        deletedAt: null
+      }
+    }
+    if(args.name) {
+      options.where['name'] = Like(`%${args.name}%`)
+    }
+    if(args.createdAt) {
+      const date = args.createdAt.map((c: string) => (Moment(c)).valueOf())
+      options.where['createdAt'] = Between(date[0], date[1])
+    }
+    if(args.order) {
+      options.order = Object.assign(options.order, args.order)
+    }
+    const pages = await getRepository(Tag).findAndCount(options)
     return pages
   }
 
   static async insert(args: any, ctx: Context) {
-    // console.log('ctx.ip:', ctx.ip, ctx.ips)
-    // let guid = Guid()
-    // let model = new ChatModel.Chat()
-    // model.message = args.message
-    // model.ip = ctx.ip
-    // model.username = '用户' + guid.substring(10,15)
-    // model.created_by = guid
-    // const result = await getRepository(Tag).save(model)
-    // console.log('result:', result)
-    return {}
+    let model = new Tag()
+    model.id = Guid()
+    model.name = args.name
+    model.remark = args.remark
+    model.createdAt = Date.now()
+    model.createdBy = ctx.state[JWT_KEY].id
+    const result = await getRepository(Tag).save(model)
+    return result
+  }
+
+  static async update(args: any, ctx: Context) {
+    let model = new Tag()
+    model.id = args.id
+    model.name = args.name
+    model.remark = args.remark
+    model.updatedAt = Date.now()
+    model.updatedBy = ctx.state[JWT_KEY].id
+    const result = await getRepository(Tag).save(model)
+    return result
   }
 
 }
