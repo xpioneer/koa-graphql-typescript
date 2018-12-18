@@ -5,12 +5,9 @@ import { User } from '../entities/mysql/user'
 import Store from "../utils/session/store";
 import { JWT_SECRET, EXP_TIME } from '../constants'
 import { sign } from '../core/jwt/sign'
+import { cryptoPwd } from "../utils/tools"
 
 const store = new Store
-
-const cryptoPwd = (pwd: string, key: string) => {
-  return Crypto.createHmac('sha256', key).update(pwd).digest('hex');
-};
 
 export default class AccountController {
   

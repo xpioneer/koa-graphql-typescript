@@ -30,8 +30,14 @@ export const userObjectType = new GraphQLObjectType({
     nickName: {
       type: GraphQLString
     },
-    remark: {
+    userType: {
       type: GraphQLInt
+    },
+    sex: {
+      type: GraphQLInt
+    },
+    remark: {
+      type: GraphQLString
     },
     createdAt: {
       type: GraphQLString,
@@ -75,11 +81,19 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   users: {
     type: UserPagesType,
     args: {
-      ...pageArgsFields
+      ...pageArgsFields,
+      username: {
+        type: GraphQLString
+      },
+      nickName: {
+        type: GraphQLString
+      },
+      userType: {
+        type: GraphQLInt
+      },
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
       const pages = await UserCtrl.pages(args)
-      console.log(args, '-------------->args')
       return Object.assign({
         list: pages[0],
         total: pages[1],
@@ -93,15 +107,58 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   user: {
     type: userObjectType,
     args: {
-      name: {
-        type: GraphQLString
+      username: {
+        type: GraphQLNonNull(GraphQLString)
+      },
+      nickName: {
+        type: GraphQLNonNull(GraphQLString)
+      },
+      password: {
+        type: GraphQLNonNull(GraphQLString)
+      },
+      userType: {
+        type: GraphQLNonNull(GraphQLInt)
+      },
+      sex: {
+        type: GraphQLNonNull(GraphQLInt)
       },
       remark: {
         type: GraphQLString
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      return {}
+      const result = await UserCtrl.insert(args, ctx)
+      return result
+    }
+  },
+  editUser: {
+    type: userObjectType,
+    args: {
+      id: {
+        type: GraphQLNonNull(GraphQLString)
+      },
+      username: {
+        type: GraphQLNonNull(GraphQLString)
+      },
+      nickName: {
+        type: GraphQLNonNull(GraphQLString)
+      },
+      password: {
+        type: GraphQLString
+      },
+      userType: {
+        type: GraphQLNonNull(GraphQLInt)
+      },
+      sex: {
+        type: GraphQLNonNull(GraphQLInt)
+      },
+      remark: {
+        type: GraphQLString
+      }
+    },
+    resolve: async (obj, args, ctx, info) => {
+      const result = await UserCtrl.update(args, ctx)
+      return result
     }
   }
 }
