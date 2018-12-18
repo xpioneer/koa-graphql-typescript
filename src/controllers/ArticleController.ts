@@ -62,12 +62,11 @@ export default class ArticleController {
   }
 
   static async insert(args: any, ctx: Context) {
-    let guid = Guid()
     let model = new Article()
     model.id = Guid()
     model.title = args.title
     model.abstract = args.abstract
-    model.description =  args.description//'用户' + guid.substring(10,15)
+    model.description =  args.description
     model.typeId = args.typeId
     model.isTop = args.isTop
     model.tag = args.tag
@@ -89,7 +88,7 @@ export default class ArticleController {
     article.isTop = args.isTop
     article.tag = args.tag
     article.updatedAt = Date.now()
-    article.updatedAt = ctx.state['CUR_USER'].id
+    article.updatedBy = ctx.state['CUR_USER'].id
     const result = await getRepository(Article).save(article)
     return result
   }

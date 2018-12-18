@@ -34,7 +34,7 @@ const ArticleInputType = new GraphQLInputObjectType({
       type: new GraphQLNonNull(GraphQLString)
     },
     isTop: {
-      type: GraphQLString,
+      type: GraphQLInt,
       defaultValue: 0
     },
     tag: {
@@ -64,7 +64,7 @@ const ArticleObjectType = new GraphQLObjectType({
       type: GraphQLString
     },
     isTop: {
-      type: GraphQLString
+      type: GraphQLInt
     },
     tag: {
       type: GraphQLString
@@ -174,11 +174,14 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       typeId: {
         type: new GraphQLNonNull(GraphQLString)
       },
+      isTop: {
+        type: GraphQLInt
+      },
       description: {
         type: new GraphQLNonNull(GraphQLString)
       },
       tag: {
-        type: new GraphQLNonNull(GraphQLString)
+        type: GraphQLString
       }
     },
     resolve: async (obj, args, ctx, info) => {
