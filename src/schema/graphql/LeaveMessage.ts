@@ -14,12 +14,12 @@ import {
 } from 'graphql';
 import {Context} from '@core/koa'
 import * as Moment from 'moment'
-import CommentCtrl from '../../controllers/CommentController'
+import LeaveMsgCtrl from '../../controllers/LeaveMessageController'
 import { metaFields, pageArgsFields } from './common'
 
-// comment
-export const commentObjectType = new GraphQLObjectType({
-  name: 'comment',
+// leaveMessage
+export const leaveMessageObjectType = new GraphQLObjectType({
+  name: 'leaveMessage',
   fields: {
     id: {
       type: GraphQLString
@@ -27,16 +27,10 @@ export const commentObjectType = new GraphQLObjectType({
     description: {
       type: GraphQLString
     },
-    articleId: {
-      type: GraphQLString
-    },
     parentId: {
       type: GraphQLString
     },
     ip: {
-      type: GraphQLString
-    },
-    client: {
       type: GraphQLString
     },
     createdAt: {
@@ -52,20 +46,20 @@ export const commentObjectType = new GraphQLObjectType({
   }
 })
 
-// comment pages type
-const CommentPagesType = new GraphQLObjectType({
-  name: 'commentPageType',
+// leaveMessage pages type
+const LeaveMsgPagesType = new GraphQLObjectType({
+  name: 'leaveMsgPageType',
   fields: {
     ...metaFields,
     list: {
-      type: new GraphQLList(commentObjectType)
+      type: new GraphQLList(leaveMessageObjectType)
     }
   }
 })
 
 const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
-  comment: {
-    type: commentObjectType,
+  leaveMsg: {
+    type: leaveMessageObjectType,
     args: {
       id: {
         name: 'id',
@@ -74,12 +68,12 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     },
     resolve: async (obj, args, ctx, info) => {
       const {id} = args;
-      const article = await CommentCtrl.getById(id)
-      return article
+      const leaveMsg = await LeaveMsgCtrl.getById(id)
+      return leaveMsg
     }
   },
-  comments: {
-    type: CommentPagesType,
+  leaveMsgs: {
+    type: LeaveMsgPagesType,
     args: {
       ...pageArgsFields,
       description: {
@@ -88,7 +82,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       }
     },
     resolve: async (obj, args, ctx, info): Promise<any> => {
-      const pages = await CommentCtrl.pages(args)
+      const pages = await LeaveMsgCtrl.pages(args)
       return Object.assign({
         list: pages[0],
         total: pages[1],
@@ -99,13 +93,10 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
 }
 
 const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
-  comment: {
-    type: commentObjectType,
+  leaveMessage: {
+    type: leaveMessageObjectType,
     args: {
-      name: {
-        type: GraphQLString
-      },
-      remark: {
+      description: {
         type: GraphQLString
       }
     },

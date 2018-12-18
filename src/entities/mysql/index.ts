@@ -3,6 +3,7 @@ import { ArticleType } from './articleType'
 import { Comment } from './comment'
 import { User } from './user'
 import { Tag } from './tag'
+import { LeaveMessage } from './leaveMessage'
 
 
 export const Entities:any[] = [
@@ -10,5 +11,6 @@ export const Entities:any[] = [
   ArticleType,
   Comment,
   User,
-  Tag
+  Tag,
+  LeaveMessage
 ]

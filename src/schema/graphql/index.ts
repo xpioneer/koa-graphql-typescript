@@ -12,6 +12,7 @@ import ArticleType from './ArticleType'
 import Comment from './Comment'
 import Tag from './Tag'
 import User from './User'
+import LeaveMsg from './LeaveMessage'
 
 let count = 0
 const demo: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
@@ -39,7 +40,8 @@ const RootSchema = new GraphQLSchema({
       ...ArticleType.query,
       ...Comment.query,
       ...Tag.query,
-      ...User.query
+      ...User.query,
+      ...LeaveMsg.query
     }
   }),
 
@@ -50,7 +52,8 @@ const RootSchema = new GraphQLSchema({
       ...ArticleType.mutation,
       ...Comment.mutation,
       ...Tag.mutation,
-      ...User.mutation
+      ...User.mutation,
+      ...LeaveMsg.mutation
     }
   })
 })
