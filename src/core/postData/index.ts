@@ -8,6 +8,7 @@ const getPostData = (ctx: Context) => {
     try{
       let postData = ''
       ctx.req.on('data', data => {
+        // console.log(data, 'data')
         postData += data
       })
 
@@ -25,7 +26,7 @@ const getPostData = (ctx: Context) => {
 }
 
 const KoaBody = async (ctx: Context, next: () => Promise<any>) => {
-  if(/^(POST|PUT)$/.test(ctx.method)) {
+  if(/^(POST|PUT)$/.test(ctx.method) && !/\/api\/upload/.test(ctx.path)) {
     ctx.fields = await getPostData(ctx)
   }
   // console.log('ctx.fields,', ctx.fields)

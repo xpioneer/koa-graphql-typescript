@@ -3,6 +3,7 @@ import { KoaGraphql } from '../core/graphql'
 import { RootSchema } from '../schema/graphql/index'
 import DemoCtrl from '../controllers/DemoController'
 import AccountCtrl from '../controllers/AccountController'
+import FileCtrl from '../controllers/FileController'
 import LogsCtrl from '../controllers/LogsController'
 import ServerAPI from '../controllers/ServerAPIController'
 
@@ -16,6 +17,7 @@ router
   .post('/platform/*', ServerAPI.KDJZ)
   .get('/api/log-api', LogsCtrl.apiPages)
   .get('/api/log-errors', LogsCtrl.errorsPages)
+  .post('/api/upload', FileCtrl.upload)
   .get('/graphql', KoaGraphql({
     schema: RootSchema,
     graphql: true

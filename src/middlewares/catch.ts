@@ -21,13 +21,14 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
       LogCtrl.APIlogger(ctx, { time: Date.now() - start }) // api log
     }
   } catch (err) {
-    // console.log('catch', err, err.status);
+    let stack = err.stack
+    console.log('catch', err, err.status, err.message);
     try {
       let status: number = err.status || 500;
       LogCtrl.ERRlogger(ctx, {
         status: status,
         time: Date.now() - start,
-        errors: err.stack.split('\n'),
+        errors: stack.split('\n'),
         msg: err.toString()
       }); // error log
       ctx.status = status;
@@ -35,13 +36,14 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
         ctx.body = {status: 404, data: null, msg: 'Not Found'};
       } else {
         let msg: string = err.message || err.toString();
-        let errors: string = err.stack ? err.stack.split('\n') : err.toString();
-        ctx.body = {status: status, data: null, msg: msg, errors: errors};
+        let errors: string = stack ? stack.split('\n') : err.toString();
+        ctx.body = {status, data: null, msg, errors};
       }
     } catch (e) {
       let msg: string = e.message || e.toString();
       let errors: string = e.stack ? e.stack.split('\n') : e.toString();
-      ctx.body = {status: 500, data: null, msg: msg, errors: errors};
+      ctx.status = 500;
+      ctx.body = {status: 500, data: null, msg, errors};
     }
   }
 };
