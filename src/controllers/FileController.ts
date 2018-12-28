@@ -18,7 +18,6 @@ const getFile = (ctx: Context) => {
       ctx.req.on('end', () => {
         try{
           buf = Buffer.concat(arr)
-          console.log(buf.length, 'buf.length', arr[0].length)
           if(buf.length <= 0) {
             resolve({})
           } else {
