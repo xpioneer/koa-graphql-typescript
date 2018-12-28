@@ -12,12 +12,10 @@ export default class LogsController {
 
   static async getById(id: string = '') {
     const api = await getMongoRepository(API, 'mongo').findOne({id})
-    // console.log('api: ', api)
     return api
   }
 
   static async apiPages(ctx: Context) {
-    // console.log('log-----', ctx.state)
     const params = ctx.getParams
     const query = ctx.query
     
@@ -30,7 +28,6 @@ export default class LogsController {
       where: {}
     }
     if(query.path) {
-      // const dateRange = query.createdAt.split(',').map((d: string) => Moment(d).format('YYYY/MM/DD HH:mm:ss.SSS'))
       options.where['path'] = query.path
     }
     if(query.url) {

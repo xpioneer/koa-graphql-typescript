@@ -5,7 +5,7 @@ import $http from '../utils/http'
 export default class ServerAPIController {
 
   static async KDJZ (ctx: Context) {
-    const HOST = 'http://pre-deposit.koudailc.com'
+    const HOST = ''
     const token = ctx.header['token']
     const UA = ctx.header['user-agent']
     let path = ctx.path
