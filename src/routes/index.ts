@@ -7,6 +7,8 @@ import FileCtrl from '../controllers/FileController'
 import LogsCtrl from '../controllers/LogsController'
 import ServerAPI from '../controllers/ServerAPIController'
 
+const _PROD_ = process.env.NODE_ENV === 'production'
+
 const router = new Router();
 
 router
@@ -20,7 +22,7 @@ router
   .post('/api/upload', FileCtrl.upload)
   .get('/graphql', KoaGraphql({
     schema: RootSchema,
-    graphql: true
+    graphql: _PROD_ ? false : true
   }))
   .post('/graphql', KoaGraphql({
     schema: RootSchema,

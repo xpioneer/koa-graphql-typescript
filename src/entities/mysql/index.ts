@@ -4,6 +4,7 @@ import { Comment } from './comment'
 import { User } from './user'
 import { Tag } from './tag'
 import { LeaveMessage } from './leaveMessage'
+import { Balls } from './balls'
 
 
 export const Entities:any[] = [
@@ -13,4 +14,8 @@ export const Entities:any[] = [
   User,
   Tag,
   LeaveMessage
+]
+
+export const BallsEntities:any[] = [
+  Balls
 ]
