@@ -2,11 +2,11 @@
 import {Entity, Column} from "typeorm";
 import { BaseEntity } from './baseEntity'
 
-@Entity('balls')
+@Entity('doubleColorBall')
 export class Balls extends BaseEntity {
 
   @Column()
-  orderId: string;
+  issue: string;
 
   @Column()
   red1: number;
@@ -49,4 +49,7 @@ export class Balls extends BaseEntity {
 
   @Column()
   bettingNum: number;
+
+  @Column()
+  drawDate: number
 }

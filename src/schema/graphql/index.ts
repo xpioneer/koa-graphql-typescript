@@ -13,6 +13,7 @@ import Comment from './Comment'
 import Tag from './Tag'
 import User from './User'
 import LeaveMsg from './LeaveMessage'
+import Balls from './Balls'
 
 let count = 0
 const demo: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
@@ -41,7 +42,8 @@ const RootSchema = new GraphQLSchema({
       ...Comment.query,
       ...Tag.query,
       ...User.query,
-      ...LeaveMsg.query
+      ...LeaveMsg.query,
+      ...Balls.query
     }
   }),
 
@@ -53,7 +55,8 @@ const RootSchema = new GraphQLSchema({
       ...Comment.mutation,
       ...Tag.mutation,
       ...User.mutation,
-      ...LeaveMsg.mutation
+      ...LeaveMsg.mutation,
+      ...Balls.mutation
     }
   })
 })

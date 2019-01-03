@@ -13,9 +13,6 @@ export const Entities:any[] = [
   Comment,
   User,
   Tag,
-  LeaveMessage
-]
-
-export const BallsEntities:any[] = [
+  LeaveMessage,
   Balls
 ]
