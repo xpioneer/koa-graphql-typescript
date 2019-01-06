@@ -74,6 +74,12 @@ const DoubleColorBallType = new GraphQLObjectType({
     red6: {
       type: GraphQLInt
     },
+    reds: {
+      type: GraphQLList(GraphQLInt),
+      resolve(obj, args, ctx, info){
+        return [obj.red1, obj.red2, obj.red3, obj.red4, obj.red5, obj.red6]
+      }
+    },
     blue: {
       type: GraphQLInt
     },
@@ -169,10 +175,13 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
 }
 
 const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
-  article: {
+  ball: {
     type: DoubleColorBallType,
     description: 'create/update a ball',
     args: {
+      issue: {
+        type: GraphQLNonNull(GraphQLString)
+      },
       reds: {
         type: new GraphQLNonNull(new GraphQLList(GraphQLInt))
       },
@@ -202,23 +211,23 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      const result = await DoubleBallCtrl.insert(args.input, ctx)
+      const result = await DoubleBallCtrl.insert(args, ctx)
       return {id: result.id}
     }
   },
-  // editArticle: {
-  //   type: DoubleBallCtrl,
-  //   description: 'create/update article',
-  //   args: {
-  //     id: {
-  //       type: new GraphQLNonNull(GraphQLString)
-  //     },
-  //   },
-  //   resolve: async (obj, args, ctx, info) => {
-  //     const result = await ArticleCtrl.update(args, ctx)
-  //     return result
-  //   }
-  // }
+  editBall: {
+    type: DoubleColorBallType,
+    description: 'update ball',
+    args: {
+      id: {
+        type: new GraphQLNonNull(GraphQLString)
+      },
+    },
+    resolve: async (obj, args, ctx, info) => {
+      const result = await DoubleBallCtrl.update(args, ctx)
+      return result
+    }
+  }
 }
 
 export default {

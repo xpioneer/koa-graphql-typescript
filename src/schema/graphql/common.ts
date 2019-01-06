@@ -56,6 +56,9 @@ export const PageOrderType = new GraphQLInputObjectType({
     createdAt: {
       type: GraphQLString
     },
+    drawDate: {
+      type: GraphQLString
+    },
     id: {
       type: GraphQLString
     },
