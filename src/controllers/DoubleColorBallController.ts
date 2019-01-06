@@ -6,7 +6,8 @@ import { Guid } from "../utils/tools";
 export default class DoubleColorBallController {
 
   static async getById(id: string = '') {
-    const result = await getRepository(Balls).find({id})
+    const result = await getRepository(Balls).findOne({id})
+    console.log(result, 'getById')
     return result
   }
 
@@ -72,7 +73,7 @@ export default class DoubleColorBallController {
   static async update(args: any, ctx: Context) {
     const ball = await getRepository(Balls).findOne({id: args.id})
     if(!ball) {
-      ctx.throw(500, '该期号不存在')
+      ctx.throw(500, '该期不存在')
     }
     let model = new Balls()
     model.issue = args.issue
@@ -93,8 +94,11 @@ export default class DoubleColorBallController {
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
     const result = await getRepository(Balls).update({id: args.id}, model)
-    console.log(result, '-----------result')
-    return result
+    if(result.raw.affectedRows) {
+      return true
+    } else {
+      return false
+    }
   }
 
 }

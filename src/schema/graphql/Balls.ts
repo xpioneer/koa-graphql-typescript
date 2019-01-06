@@ -18,31 +18,45 @@ import * as Moment from 'moment'
 import DoubleBallCtrl from '../../controllers/DoubleColorBallController'
 import { metaFields, pageArgsFields } from './common'
 
-// const ArticleInputType = new GraphQLInputObjectType({
-//   name: 'articleInput',
-//   description: 'input article playload',
-//   fields: () => ({
-//     title: {
-//       type: new GraphQLNonNull(GraphQLString)
-//     },
-//     description: {
-//       type: new GraphQLNonNull(GraphQLString)
-//     },
-//     abstract: {
-//       type: new GraphQLNonNull(GraphQLString)
-//     },
-//     isTop: {
-//       type: GraphQLInt,
-//       defaultValue: 0
-//     },
-//     tag: {
-//       type: GraphQLString
-//     },
-//     typeId: {
-//       type: new GraphQLNonNull(GraphQLString)
-//     }
-//   })
-// })
+const BallInputType = new GraphQLInputObjectType({
+  name: 'ballInput',
+  description: 'input ball playload',
+  fields: () => ({
+    id: {
+      type: GraphQLString
+    },
+    issue: {
+      type: GraphQLNonNull(GraphQLString)
+    },
+    reds: {
+      type: new GraphQLNonNull(new GraphQLList(GraphQLInt))
+    },
+    blue: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    pool: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    prizeOne: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    prizeOneNum: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    prizeTwo: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    prizeTwoNum: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    bettingNum: {
+      type: new GraphQLNonNull(GraphQLInt)
+    },
+    drawDate: {
+      type: new GraphQLNonNull(GraphQLString)
+    }
+  })
+})
 
 // doubleColorBall
 const DoubleColorBallType = new GraphQLObjectType({
@@ -143,7 +157,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     args: {
       id: {
         name: 'id',
-        type: GraphQLString
+        type: GraphQLNonNull(GraphQLString)
       }
     },
     resolve: async (obj, args, ctx, info) => {
@@ -179,52 +193,25 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: DoubleColorBallType,
     description: 'create/update a ball',
     args: {
-      issue: {
-        type: GraphQLNonNull(GraphQLString)
-      },
-      reds: {
-        type: new GraphQLNonNull(new GraphQLList(GraphQLInt))
-      },
-      blue: {
-        type: new GraphQLNonNull(GraphQLInt)
-      },
-      pool: {
-        type: new GraphQLNonNull(GraphQLInt)
-      },
-      drawDate: {
-        type: new GraphQLNonNull(GraphQLString)
-      },
-      prizeOne: {
-        type: new GraphQLNonNull(GraphQLInt)
-      },
-      prizeOneNum: {
-        type: new GraphQLNonNull(GraphQLInt)
-      },
-      prizeTwo: {
-        type: new GraphQLNonNull(GraphQLInt)
-      },
-      prizeTwoNum: {
-        type: new GraphQLNonNull(GraphQLInt)
-      },
-      bettingNum: {
-        type: new GraphQLNonNull(GraphQLInt)
+      input: {
+        type: new GraphQLNonNull(BallInputType)
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      const result = await DoubleBallCtrl.insert(args, ctx)
+      const result = await DoubleBallCtrl.insert(args.input, ctx)
       return {id: result.id}
     }
   },
   editBall: {
-    type: DoubleColorBallType,
+    type: GraphQLBoolean,
     description: 'update ball',
     args: {
-      id: {
-        type: new GraphQLNonNull(GraphQLString)
-      },
+      input: {
+        type: new GraphQLNonNull(BallInputType)
+      }
     },
     resolve: async (obj, args, ctx, info) => {
-      const result = await DoubleBallCtrl.update(args, ctx)
+      const result = await DoubleBallCtrl.update(args.input, ctx)
       return result
     }
   }
