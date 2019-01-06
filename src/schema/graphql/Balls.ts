@@ -214,6 +214,20 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       const result = await DoubleBallCtrl.update(args.input, ctx)
       return result
     }
+  },
+  delBall: {
+    type: GraphQLBoolean,
+    description: 'update ball',
+    args: {
+      id: {
+        name: 'id',
+        type: new GraphQLNonNull(GraphQLString)
+      }
+    },
+    resolve: async (obj, args, ctx, info) => {
+      const result = await DoubleBallCtrl.deleteById(args.id, ctx)
+      return result
+    }
   }
 }
 

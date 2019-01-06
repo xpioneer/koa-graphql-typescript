@@ -11,6 +11,19 @@ export default class DoubleColorBallController {
     return result
   }
 
+  static async deleteById(id: string = '', ctx: Context) {
+    const result = await getRepository(Balls).update({id}, {
+      deletedAt: Date.now(),
+      deletedBy: ctx.state['CUR_USER'].id,
+    })
+    console.log(result, '--------delete')
+    if(result.raw.affectedRows) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   static async pages(args: any) {
     // console.log(args)
     // delete args.createdAt // delete createdAt
