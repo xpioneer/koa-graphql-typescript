@@ -18,6 +18,25 @@ import * as Moment from 'moment'
 import DoubleBallCtrl from '../../controllers/DoubleColorBallController'
 import { metaFields, pageArgsFields } from './common'
 
+const BallChartType = new GraphQLObjectType({
+  name: 'ballChartType',
+  fields: {
+    name: {
+      type: GraphQLInt,
+      resolve(obj: any) {
+        return obj.ball
+      }
+    },
+    value: {
+      type: GraphQLInt,
+      resolve(obj: any) {
+        return obj.total
+      }
+    }
+  }
+})
+
+// ballInputType
 const BallInputType = new GraphQLInputObjectType({
   name: 'ballInput',
   description: 'input ball playload',
@@ -184,6 +203,20 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
         total: pages[1],
         ...args
       });
+    }
+  },
+  ballCount: {
+    type: new GraphQLObjectType({
+      name: 'ballCount',
+      fields: {
+        reds: { type: GraphQLList(BallChartType) },
+        blues: { type: GraphQLList(BallChartType) },
+        redDisList: { type: GraphQLList(GraphQLList(BallChartType)) }
+      }
+    }),
+    resolve: async (obj, args, ctx, info): Promise<any> => {
+      const result = await DoubleBallCtrl.allBallCount()
+      return result;
     }
   }
 }

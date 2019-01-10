@@ -114,4 +114,53 @@ export default class DoubleColorBallController {
     }
   }
 
+  static async allBallCount() {
+    let redList:any = [], _redDisList = []
+    for(let i = 1; i <= 6; i++) {
+      const list = await getRepository(Balls)
+        .createQueryBuilder('ball')
+        .select(`COUNT(ball.red${i})`, 'total')
+        .addSelect(`red${i}`)
+        .groupBy(`red${i}`)
+        .getRawMany()
+      redList = [...redList, ...list.map(v => {
+        return { total: v.total, ball: v[`red${i}`] }
+      })]
+      _redDisList.push(list.map(v => ({total: +v.total, ball: v[`red${i}`]})))
+    }
+    let reds:any = []
+    redList.forEach((v: {[key: string]: any}) => {
+      let r = reds.filter((v1: {[key: string]: any}) => v1.ball === v.ball)
+      if(r.length === 1) {
+        r[0].total = r[0].total + 1*v.total
+      } else {
+        reds.push({ball: v.ball, total: +v.total})
+      }
+    })
+    let blues:any = []
+    const list = await getRepository(Balls)
+      .createQueryBuilder('ball')
+      .select('COUNT(ball.blue)', 'total')
+      .addSelect('blue')
+      .groupBy('blue')
+      .getRawMany()
+    blues = list.map(v => ({ total: v.total, ball: +v['blue'] }))
+    // 补充
+    let $redDisList = JSON.parse(JSON.stringify(_redDisList)), redDisList: [any[]] = [[]]
+    $redDisList.forEach((item: [{[key: string]: any}], index: number) =>{
+      let _item = []
+      for(let i = 1; i <= 33; i++) {
+        let redBall = item.filter(ball => ball.ball === i)[0]
+        _item[i - 1] = {ball: i, total: redBall ? redBall.total : 0}
+      }
+      redDisList.push(_item)
+    })
+    
+    return {
+      reds,
+      blues,
+      redDisList
+    }
+  }
+
 }
