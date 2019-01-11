@@ -146,14 +146,14 @@ export default class DoubleColorBallController {
       .getRawMany()
     blues = list.map(v => ({ total: v.total, ball: +v['blue'] }))
     // 补充
-    let $redDisList = JSON.parse(JSON.stringify(_redDisList)), redDisList: [any[]] = [[]]
+    let $redDisList = JSON.parse(JSON.stringify(_redDisList)), redDisList: any[] = []
     $redDisList.forEach((item: [{[key: string]: any}], index: number) =>{
       let _item = []
       for(let i = 1; i <= 33; i++) {
-        let redBall = item.filter(ball => ball.ball === i)[0]
+        let redBall = item.filter(b => b.ball === i)[0]
         _item[i - 1] = {ball: i, total: redBall ? redBall.total : 0}
       }
-      redDisList.push(_item)
+      redDisList[index] = _item
     })
     
     return {
