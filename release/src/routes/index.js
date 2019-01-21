@@ -8,6 +8,7 @@ const AccountController_1 = require("../controllers/AccountController");
 const FileController_1 = require("../controllers/FileController");
 const LogsController_1 = require("../controllers/LogsController");
 const ServerAPIController_1 = require("../controllers/ServerAPIController");
+const _PROD_ = process.env.NODE_ENV === 'production';
 const router = new Router();
 router
     .post('/api/login', AccountController_1.default.login)
@@ -20,7 +21,7 @@ router
     .post('/api/upload', FileController_1.default.upload)
     .get('/graphql', graphql_1.KoaGraphql({
     schema: index_1.RootSchema,
-    graphql: true
+    graphql: _PROD_ ? false : true
 }))
     .post('/graphql', graphql_1.KoaGraphql({
     schema: index_1.RootSchema,

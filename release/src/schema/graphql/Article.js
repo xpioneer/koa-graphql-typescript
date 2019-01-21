@@ -98,7 +98,7 @@ const query = {
         args: {
             id: {
                 name: 'id',
-                type: graphql_1.GraphQLString
+                type: graphql_1.GraphQLNonNull(graphql_1.GraphQLString)
             }
         },
         resolve: (obj, args, ctx, info) => __awaiter(this, void 0, void 0, function* () {

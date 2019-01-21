@@ -9,7 +9,7 @@
     "removeComments": false,
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
-    "lib": ["es2015"],
+    "lib": ["esnext"],
     "outDir": "./release/",
     "typeRoots": [
       "./node_modules/@types/",

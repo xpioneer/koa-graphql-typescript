@@ -26,7 +26,7 @@ export default class DoubleColorBallController {
 
   static async pages(args: any) {
     // console.log(args)
-    // delete args.createdAt // delete createdAt
+    delete args.order.createdAt // delete createdAt
     const options: FindManyOptions<Balls> = {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
       take: args.pageSize,
@@ -88,14 +88,21 @@ export default class DoubleColorBallController {
     if(!ball) {
       ctx.throw(500, '该期不存在')
     }
+    const reds = args.reds
     let model = new Balls()
     model.issue = args.issue
-    model.red1 = args.reds[0]
-    model.red2 = args.reds[1]
-    model.red3 = args.reds[2]
-    model.red4 = args.reds[3]
-    model.red5 = args.reds[4]
-    model.red6 = args.reds[5]
+    model.red1 = reds[0]
+    model.red2 = reds[1]
+    model.red3 = reds[2]
+    model.red4 = reds[3]
+    model.red5 = reds[4]
+    model.red6 = reds[5]
+    model['r' + reds[0]] = 1
+    model['r' + reds[1]] = 1
+    model['r' + reds[2]] = 1
+    model['r' + reds[3]] = 1
+    model['r' + reds[4]] = 1
+    model['r' + reds[5]] = 1
     model.blue = args.blue
     model.pool = args.pool
     model.prizeOne = args.prizeOne

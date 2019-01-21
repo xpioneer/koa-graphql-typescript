@@ -6,12 +6,14 @@ const comment_1 = require("./comment");
 const user_1 = require("./user");
 const tag_1 = require("./tag");
 const leaveMessage_1 = require("./leaveMessage");
+const balls_1 = require("./balls");
 exports.Entities = [
     article_1.Article,
     articleType_1.ArticleType,
     comment_1.Comment,
     user_1.User,
     tag_1.Tag,
-    leaveMessage_1.LeaveMessage
+    leaveMessage_1.LeaveMessage,
+    balls_1.Balls
 ];
 //# sourceMappingURL=index.js.map

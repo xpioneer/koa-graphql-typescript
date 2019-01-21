@@ -50,6 +50,22 @@ export const PageDataType = new GraphQLObjectType({
   }
 })
 
+// 计算返回分页数据
+export const metaFields: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
+  meta: {
+    type: PageDataType,
+    resolve(obj, args, ctx, info){
+      const pageInfo = {}
+      pageInfo['total'] = obj['total']
+      pageInfo['curSize'] = obj['list'].length
+      pageInfo['page'] = obj['page']
+      pageInfo['pageSize'] = obj['pageSize']
+      return pageInfo
+    }
+  },
+}
+
+// 分页排序默认参数
 export const PageOrderType = new GraphQLInputObjectType({
   name: 'pageOrder',
   fields: {
@@ -65,21 +81,6 @@ export const PageOrderType = new GraphQLInputObjectType({
   }
 })
 
-
-// 计算返回分页数据
-export const metaFields: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
-  meta: {
-    type: PageDataType,
-    resolve(obj, args, ctx, info){
-      const pageInfo = {}
-      pageInfo['total'] = obj['total']
-      pageInfo['curSize'] = obj['list'].length
-      pageInfo['page'] = obj['page']
-      pageInfo['pageSize'] = obj['pageSize']
-      return pageInfo
-    }
-  },
-}
 
 // 获取参数
 export const pageArgsFields: GraphQLFieldConfigArgumentMap = {

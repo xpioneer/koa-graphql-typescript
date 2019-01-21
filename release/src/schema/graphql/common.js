@@ -42,6 +42,9 @@ exports.PageOrderType = new graphql_1.GraphQLInputObjectType({
         createdAt: {
             type: graphql_1.GraphQLString
         },
+        drawDate: {
+            type: graphql_1.GraphQLString
+        },
         id: {
             type: graphql_1.GraphQLString
         },

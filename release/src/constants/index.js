@@ -6,7 +6,7 @@ exports.JWT_SECRET = 'koa-grapqhql-secret';
 // JWT Key, indicate current user
 exports.JWT_KEY = 'CUR_USER';
 // JWT EXP_TIME
-exports.EXP_TIME = _PROD_ ? 1000 * 60 * 60 : 1000 * 60 * 60 * 2;
+exports.EXP_TIME = _PROD_ ? 1000 * 60 * 60 : 1000 * 60 * 60 * 4;
 // don't need auth url
 exports.NO_AUTH_URLS = [
     [/\/api\/login/, /^post$/i],

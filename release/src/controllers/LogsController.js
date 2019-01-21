@@ -17,13 +17,11 @@ class LogsController {
     static getById(id = '') {
         return __awaiter(this, void 0, void 0, function* () {
             const api = yield typeorm_1.getMongoRepository(api_1.API, 'mongo').findOne({ id });
-            // console.log('api: ', api)
             return api;
         });
     }
     static apiPages(ctx) {
         return __awaiter(this, void 0, void 0, function* () {
-            // console.log('log-----', ctx.state)
             const params = ctx.getParams;
             const query = ctx.query;
             const options = {
@@ -35,7 +33,6 @@ class LogsController {
                 where: {}
             };
             if (query.path) {
-                // const dateRange = query.createdAt.split(',').map((d: string) => Moment(d).format('YYYY/MM/DD HH:mm:ss.SSS'))
                 options.where['path'] = query.path;
             }
             if (query.url) {

@@ -15,7 +15,7 @@
     "start": "npm run dev",
     "build-server": "tslint --project . && tsc",
     "dev": "NODE_ENV=development nodemon --config nodemon.json",
-    "test": "NODE_ENV=development ./release/conf/server.js"
+    "test": "NODE_ENV=development node ./release/conf/server.js"
   },
   "dependencies": {
     "@types/ioredis": "^4.0.3",

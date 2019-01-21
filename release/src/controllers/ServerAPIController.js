@@ -12,7 +12,7 @@ const http_1 = require("../utils/http");
 class ServerAPIController {
     static KDJZ(ctx) {
         return __awaiter(this, void 0, void 0, function* () {
-            const HOST = 'http://pre-deposit.koudailc.com';
+            const HOST = '';
             const token = ctx.header['token'];
             const UA = ctx.header['user-agent'];
             let path = ctx.path;

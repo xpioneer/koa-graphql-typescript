@@ -44,8 +44,7 @@ __decorate([
 __decorate([
     typeorm_1.Column({
         select: false,
-        default: 0,
-        onUpdate: '111'
+        default: 0
     }),
     __metadata("design:type", Number)
 ], BaseEntity.prototype, "version", void 0);
