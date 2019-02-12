@@ -97,12 +97,6 @@ export default class DoubleColorBallController {
     model.red4 = reds[3]
     model.red5 = reds[4]
     model.red6 = reds[5]
-    model['r' + reds[0]] = 1
-    model['r' + reds[1]] = 1
-    model['r' + reds[2]] = 1
-    model['r' + reds[3]] = 1
-    model['r' + reds[4]] = 1
-    model['r' + reds[5]] = 1
     model.blue = args.blue
     model.pool = args.pool
     model.prizeOne = args.prizeOne
