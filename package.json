@@ -13,6 +13,7 @@
   },
   "scripts": {
     "start": "npm run dev",
+    "build": "tsc",
     "build-server": "tslint --project . && tsc",
     "dev": "NODE_ENV=development nodemon --config nodemon.json",
     "test": "NODE_ENV=development node ./release/conf/server.js"

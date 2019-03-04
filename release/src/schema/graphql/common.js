@@ -36,20 +36,6 @@ exports.PageDataType = new graphql_1.GraphQLObjectType({
         }
     }
 });
-exports.PageOrderType = new graphql_1.GraphQLInputObjectType({
-    name: 'pageOrder',
-    fields: {
-        createdAt: {
-            type: graphql_1.GraphQLString
-        },
-        drawDate: {
-            type: graphql_1.GraphQLString
-        },
-        id: {
-            type: graphql_1.GraphQLString
-        },
-    }
-});
 // 计算返回分页数据
 exports.metaFields = {
     meta: {
@@ -64,6 +50,21 @@ exports.metaFields = {
         }
     },
 };
+// 分页排序默认参数
+exports.PageOrderType = new graphql_1.GraphQLInputObjectType({
+    name: 'pageOrder',
+    fields: {
+        createdAt: {
+            type: graphql_1.GraphQLString
+        },
+        drawDate: {
+            type: graphql_1.GraphQLString
+        },
+        id: {
+            type: graphql_1.GraphQLString
+        },
+    }
+});
 // 获取参数
 exports.pageArgsFields = {
     page: {

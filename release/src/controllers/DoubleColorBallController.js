@@ -37,7 +37,7 @@ class DoubleColorBallController {
     static pages(args) {
         return __awaiter(this, void 0, void 0, function* () {
             // console.log(args)
-            // delete args.createdAt // delete createdAt
+            delete args.order.createdAt; // delete createdAt
             const options = {
                 skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
                 take: args.pageSize,
@@ -100,14 +100,15 @@ class DoubleColorBallController {
             if (!ball) {
                 ctx.throw(500, '该期不存在');
             }
+            const reds = args.reds;
             let model = new balls_1.Balls();
             model.issue = args.issue;
-            model.red1 = args.reds[0];
-            model.red2 = args.reds[1];
-            model.red3 = args.reds[2];
-            model.red4 = args.reds[3];
-            model.red5 = args.reds[4];
-            model.red6 = args.reds[5];
+            model.red1 = reds[0];
+            model.red2 = reds[1];
+            model.red3 = reds[2];
+            model.red4 = reds[3];
+            model.red5 = reds[4];
+            model.red6 = reds[5];
             model.blue = args.blue;
             model.pool = args.pool;
             model.prizeOne = args.prizeOne;
