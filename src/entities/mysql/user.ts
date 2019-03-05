@@ -1,4 +1,4 @@
-// import 'reflect-metadata'
+import 'reflect-metadata'
 import {Entity, Column} from "typeorm";
 import { BaseEntity } from './baseEntity'
 

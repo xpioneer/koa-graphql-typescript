@@ -6,6 +6,7 @@ const cors_1 = require("./cors");
 const request_1 = require("./request");
 const response_1 = require("./response");
 const routes_1 = require("../routes");
+// import JWT from './jwt'
 const xJwt_1 = require("./xJwt");
 const Middlewares = (App) => {
     App.use(postData_1.default);

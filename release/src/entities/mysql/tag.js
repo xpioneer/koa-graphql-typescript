@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// import 'reflect-metadata'
+require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const baseEntity_1 = require("./baseEntity");
 let Tag = class Tag extends baseEntity_1.BaseEntity {
