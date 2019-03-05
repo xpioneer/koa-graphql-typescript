@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-const typeorm_1 = require("typeorm");
-const db_conf_1 = require("../../conf/db.conf");
-const mysql_1 = require("../entities/mysql");
-const mongo_1 = require("../entities/mongo");
-const _PROD_ = process.env.NODE_ENV === 'production';
-const connectDB = () => {
+var typeorm_1 = require("typeorm");
+var db_conf_1 = require("../../conf/db.conf");
+var mysql_1 = require("../entities/mysql");
+var mongo_1 = require("../entities/mongo");
+var _PROD_ = process.env.NODE_ENV === 'production';
+var connectDB = function () {
     typeorm_1.createConnection({
         type: 'mysql',
         host: db_conf_1.MySqlConf.host,
@@ -16,14 +16,14 @@ const connectDB = () => {
         database: db_conf_1.MySqlConf.database,
         entities: mysql_1.Entities,
         logging: _PROD_ ? false : true,
-    }).then((connect) => {
+    }).then(function (connect) {
         console.log('mysql connect success!');
-    }).catch((err) => {
+    }).catch(function (err) {
         console.log('mysql connect fail!', err);
     });
 };
 exports.connectDB = connectDB;
-const connectMongo = () => {
+var connectMongo = function () {
     typeorm_1.createConnection({
         name: 'mongo',
         type: 'mongodb',
@@ -34,9 +34,9 @@ const connectMongo = () => {
         database: db_conf_1.MongoConf.database,
         entities: mongo_1.MongoEntities,
         logging: _PROD_ ? false : true,
-    }).then((connect) => {
+    }).then(function (connect) {
         console.log('mongo connect success!');
-    }).catch((err) => {
+    }).catch(function (err) {
         console.log('mongo connect fail!', err);
     });
 };

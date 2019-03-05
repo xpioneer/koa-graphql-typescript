@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Crypto = require("crypto");
-class Options {
-    constructor() {
+var Crypto = require("crypto");
+var Options = /** @class */ (function () {
+    function Options() {
         this.alg = 'HS256';
         this.typ = 'JWT';
     }
-}
+    return Options;
+}());
 function createHmacSigner(thing, secret) {
-    let sig = Crypto.createHmac('sha256', secret).update(thing).digest('base64');
+    var sig = Crypto.createHmac('sha256', secret).update(thing).digest('base64');
     return sig.replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
 }
 exports.createHmacSigner = createHmacSigner;
@@ -34,23 +35,24 @@ function base64url(string, encoding) {
 }
 function jwtSecuredInput(header, payload, encoding) {
     encoding = encoding || 'utf8';
-    let encodedHeader = base64url(toString(header), 'binary');
-    let encodedPayload = base64url(toString(payload), encoding);
-    return `${encodedHeader}.${encodedPayload}`;
+    var encodedHeader = base64url(toString(header), 'binary');
+    var encodedPayload = base64url(toString(payload), encoding);
+    return encodedHeader + "." + encodedPayload;
 }
 // sign jwt
-exports.sign = (payload, secret, opts = new Options) => {
-    let header = opts;
+exports.sign = function (payload, secret, opts) {
+    if (opts === void 0) { opts = new Options; }
+    var header = opts;
     if (payload.exp <= 0) {
         throw new Error('the payload.exp must be greater than 0');
     }
     payload.iat = Date.now(); // sign time
     payload.exp = payload.iat + payload.exp; // expire time, become time stamp
-    let secretOrKey = secret;
-    let encoding = opts.encoding;
-    let securedInput = jwtSecuredInput(header, payload, encoding);
-    let signature = createHmacSigner(securedInput, secretOrKey);
-    const signStr = `${securedInput}.${signature}`;
+    var secretOrKey = secret;
+    var encoding = opts.encoding;
+    var securedInput = jwtSecuredInput(header, payload, encoding);
+    var signature = createHmacSigner(securedInput, secretOrKey);
+    var signStr = securedInput + "." + signature;
     return signStr;
 };
 //# sourceMappingURL=sign.js.map

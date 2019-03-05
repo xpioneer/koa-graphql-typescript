@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class BaseController {
-}
+var BaseController = /** @class */ (function () {
+    function BaseController() {
+    }
+    return BaseController;
+}());
 exports.default = BaseController;
 //# sourceMappingURL=BaseController.js.map

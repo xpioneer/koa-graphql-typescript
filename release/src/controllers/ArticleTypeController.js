@@ -7,82 +7,155 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const typeorm_1 = require("typeorm");
-const articleType_1 = require("../entities/mysql/articleType");
-const tools_1 = require("../utils/tools");
-const Moment = require("moment");
-class ArticleController {
-    static getAll(args) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield typeorm_1.getManager().find(articleType_1.ArticleType);
-        });
+var typeorm_1 = require("typeorm");
+var articleType_1 = require("../entities/mysql/articleType");
+var tools_1 = require("../utils/tools");
+var Moment = require("moment");
+var ArticleController = /** @class */ (function () {
+    function ArticleController() {
     }
-    static getById(id = '') {
-        return __awaiter(this, void 0, void 0, function* () {
-            // getManager().findOne()
-            const articleType = yield typeorm_1.getRepository(articleType_1.ArticleType).findOne({ id });
-            return articleType;
-        });
-    }
-    static pages(args) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const options = {
-                skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
-                take: args.pageSize,
-                order: {},
-                where: {
-                    deletedAt: null
+    ArticleController.getAll = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, typeorm_1.getManager().find(articleType_1.ArticleType)];
+                    case 1: return [2 /*return*/, _a.sent()];
                 }
-            };
-            if (args.name) {
-                options.where['name'] = typeorm_1.Like(`%${args.name}%`);
-            }
-            if (args.createdAt) {
-                const date = args.createdAt.map((c) => (Moment(c)).valueOf());
-                options.where['createdAt'] = typeorm_1.Between(date[0], date[1]);
-            }
-            if (args.order) {
-                options.order = Object.assign(options.order, args.order);
-            }
-            console.log(options, '----options');
-            const pages = yield typeorm_1.getRepository('articleType').findAndCount(options);
-            // .createQueryBuilder()
-            // .orderBy({createdAt: 'DESC'})
-            // .offset(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
-            // .limit(args.pageSize)
-            // .getManyAndCount()
-            // console.log(pages[0].length, pages[1])
-            return pages;
+            });
         });
-    }
-    static insert(args, ctx) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let model = new articleType_1.ArticleType();
-            model.id = tools_1.Guid();
-            model.name = args.name;
-            model.remark = args.remark;
-            model.createdAt = Date.now();
-            model.createdBy = ctx.state['CUR_USER'].id;
-            model.updatedAt = Date.now();
-            model.updatedBy = ctx.state['CUR_USER'].id;
-            const result = yield typeorm_1.getRepository(articleType_1.ArticleType).save(model);
-            return result;
+    };
+    ArticleController.getById = function (id) {
+        if (id === void 0) { id = ''; }
+        return __awaiter(this, void 0, void 0, function () {
+            var articleType;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, typeorm_1.getRepository(articleType_1.ArticleType).findOne({ id: id })];
+                    case 1:
+                        articleType = _a.sent();
+                        return [2 /*return*/, articleType];
+                }
+            });
         });
-    }
-    static update(args, ctx) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let model = new articleType_1.ArticleType();
-            // model.id = args.id
-            model.name = args.name;
-            model.remark = args.remark;
-            model.updatedAt = Date.now();
-            model.updatedBy = ctx.state['CUR_USER'].id;
-            const result = yield typeorm_1.getRepository(articleType_1.ArticleType).update(args.id, model);
-            console.log('result:', result);
-            return result;
+    };
+    ArticleController.pages = function (args) {
+        return __awaiter(this, void 0, void 0, function () {
+            var options, date, pages;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        options = {
+                            skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
+                            take: args.pageSize,
+                            order: {},
+                            where: {
+                                deletedAt: null
+                            }
+                        };
+                        if (args.name) {
+                            options.where['name'] = typeorm_1.Like("%" + args.name + "%");
+                        }
+                        if (args.createdAt) {
+                            date = args.createdAt.map(function (c) { return (Moment(c)).valueOf(); });
+                            options.where['createdAt'] = typeorm_1.Between(date[0], date[1]);
+                        }
+                        if (args.order) {
+                            options.order = Object.assign(options.order, args.order);
+                        }
+                        console.log(options, '----options');
+                        return [4 /*yield*/, typeorm_1.getRepository('articleType').findAndCount(options)
+                            // .createQueryBuilder()
+                            // .orderBy({createdAt: 'DESC'})
+                            // .offset(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
+                            // .limit(args.pageSize)
+                            // .getManyAndCount()
+                            // console.log(pages[0].length, pages[1])
+                        ];
+                    case 1:
+                        pages = _a.sent();
+                        // .createQueryBuilder()
+                        // .orderBy({createdAt: 'DESC'})
+                        // .offset(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
+                        // .limit(args.pageSize)
+                        // .getManyAndCount()
+                        // console.log(pages[0].length, pages[1])
+                        return [2 /*return*/, pages];
+                }
+            });
         });
-    }
-}
+    };
+    ArticleController.insert = function (args, ctx) {
+        return __awaiter(this, void 0, void 0, function () {
+            var model, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        model = new articleType_1.ArticleType();
+                        model.id = tools_1.Guid();
+                        model.name = args.name;
+                        model.remark = args.remark;
+                        model.createdAt = Date.now();
+                        model.createdBy = ctx.state['CUR_USER'].id;
+                        model.updatedAt = Date.now();
+                        model.updatedBy = ctx.state['CUR_USER'].id;
+                        return [4 /*yield*/, typeorm_1.getRepository(articleType_1.ArticleType).save(model)];
+                    case 1:
+                        result = _a.sent();
+                        return [2 /*return*/, result];
+                }
+            });
+        });
+    };
+    ArticleController.update = function (args, ctx) {
+        return __awaiter(this, void 0, void 0, function () {
+            var model, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        model = new articleType_1.ArticleType();
+                        // model.id = args.id
+                        model.name = args.name;
+                        model.remark = args.remark;
+                        model.updatedAt = Date.now();
+                        model.updatedBy = ctx.state['CUR_USER'].id;
+                        return [4 /*yield*/, typeorm_1.getRepository(articleType_1.ArticleType).update(args.id, model)];
+                    case 1:
+                        result = _a.sent();
+                        console.log('result:', result);
+                        return [2 /*return*/, result];
+                }
+            });
+        });
+    };
+    return ArticleController;
+}());
 exports.default = ArticleController;
 //# sourceMappingURL=ArticleTypeController.js.map

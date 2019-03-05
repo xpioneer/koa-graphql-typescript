@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const cors_1 = require("../core/cors");
-const _PROD_ = process.env.NODE_ENV === 'production';
+var cors_1 = require("../core/cors");
+var _PROD_ = process.env.NODE_ENV === 'production';
 exports.default = cors_1.default({
     origin: function (ctx) {
-        const origin = ctx.header.origin;
+        var origin = ctx.header.origin;
         if (_PROD_) {
             return false;
         }

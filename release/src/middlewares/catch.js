@@ -7,56 +7,95 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (_) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+var _this = this;
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsController_1 = require("../controllers/LogsController");
-exports.default = (ctx, next) => __awaiter(this, void 0, void 0, function* () {
-    // console.log('ctx-----------', ctx.header)
-    const start = Date.now();
-    try {
-        yield next();
-        const status = ctx.status || 404;
-        if (status === 404) {
-            ctx.throw(404);
+var LogsController_1 = require("../controllers/LogsController");
+exports.default = (function (ctx, next) { return __awaiter(_this, void 0, void 0, function () {
+    var start, status, err_1, stack, status, msg, errors, msg, errors;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                start = Date.now();
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, next()];
+            case 2:
+                _a.sent();
+                status = ctx.status || 404;
+                if (status === 404) {
+                    ctx.throw(404);
+                }
+                if (ctx.path === '/graphql' && ctx.body.errors) {
+                    LogsController_1.default.ERRlogger(ctx, {
+                        status: status,
+                        time: Date.now() - start,
+                        errors: ctx.body.errors,
+                        msg: ctx.body.errors[0].message
+                    }); // error log
+                }
+                else {
+                    LogsController_1.default.APIlogger(ctx, { time: Date.now() - start }); // api log
+                }
+                return [3 /*break*/, 4];
+            case 3:
+                err_1 = _a.sent();
+                stack = err_1.stack;
+                console.log('catch', err_1, err_1.status, err_1.message);
+                try {
+                    status = err_1.status || 500;
+                    LogsController_1.default.ERRlogger(ctx, {
+                        status: status,
+                        time: Date.now() - start,
+                        errors: stack.split('\n'),
+                        msg: err_1.toString()
+                    }); // error log
+                    ctx.status = status;
+                    if (status === 404) {
+                        ctx.body = { status: 404, data: null, msg: 'Not Found' };
+                    }
+                    else {
+                        msg = err_1.message || err_1.toString();
+                        errors = stack ? stack.split('\n') : err_1.toString();
+                        ctx.body = { status: status, data: null, msg: msg, errors: errors };
+                    }
+                }
+                catch (e) {
+                    msg = e.message || e.toString();
+                    errors = e.stack ? e.stack.split('\n') : e.toString();
+                    ctx.status = 500;
+                    ctx.body = { status: 500, data: null, msg: msg, errors: errors };
+                }
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
-        if (ctx.path === '/graphql' && ctx.body.errors) {
-            LogsController_1.default.ERRlogger(ctx, {
-                status: status,
-                time: Date.now() - start,
-                errors: ctx.body.errors,
-                msg: ctx.body.errors[0].message
-            }); // error log
-        }
-        else {
-            LogsController_1.default.APIlogger(ctx, { time: Date.now() - start }); // api log
-        }
-    }
-    catch (err) {
-        let stack = err.stack;
-        console.log('catch', err, err.status, err.message);
-        try {
-            let status = err.status || 500;
-            LogsController_1.default.ERRlogger(ctx, {
-                status: status,
-                time: Date.now() - start,
-                errors: stack.split('\n'),
-                msg: err.toString()
-            }); // error log
-            ctx.status = status;
-            if (status === 404) {
-                ctx.body = { status: 404, data: null, msg: 'Not Found' };
-            }
-            else {
-                let msg = err.message || err.toString();
-                let errors = stack ? stack.split('\n') : err.toString();
-                ctx.body = { status, data: null, msg, errors };
-            }
-        }
-        catch (e) {
-            let msg = e.message || e.toString();
-            let errors = e.stack ? e.stack.split('\n') : e.toString();
-            ctx.status = 500;
-            ctx.body = { status: 500, data: null, msg, errors };
-        }
-    }
-});
+    });
+}); });
 //# sourceMappingURL=catch.js.map

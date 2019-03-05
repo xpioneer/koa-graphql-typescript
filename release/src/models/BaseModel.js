@@ -1,17 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const tools_1 = require("../utils/tools");
-class BaseModel {
-    constructor() {
+var tools_1 = require("../utils/tools");
+var BaseModel = /** @class */ (function () {
+    function BaseModel() {
         this._id = tools_1.Guid();
         this._created_at = Date.now();
         this.version = 0;
     }
-    // id: string
-    get id() { return this._id; }
-    set id(_id) { this._id = _id; }
-    get created_at() { return this._created_at; }
-    set created_at(_created_at) { this._created_at = _created_at; }
-}
+    Object.defineProperty(BaseModel.prototype, "id", {
+        // id: string
+        get: function () { return this._id; },
+        set: function (_id) { this._id = _id; },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(BaseModel.prototype, "created_at", {
+        get: function () { return this._created_at; },
+        set: function (_created_at) { this._created_at = _created_at; },
+        enumerable: true,
+        configurable: true
+    });
+    return BaseModel;
+}());
 exports.BaseModel = BaseModel;
 //# sourceMappingURL=BaseModel.js.map

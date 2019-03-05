@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Router = require("koa-router");
-const graphql_1 = require("../core/graphql");
-const index_1 = require("../schema/graphql/index");
-const DemoController_1 = require("../controllers/DemoController");
-const AccountController_1 = require("../controllers/AccountController");
-const FileController_1 = require("../controllers/FileController");
-const LogsController_1 = require("../controllers/LogsController");
-const ServerAPIController_1 = require("../controllers/ServerAPIController");
-const _PROD_ = process.env.NODE_ENV === 'production';
-const router = new Router();
+var Router = require("koa-router");
+var graphql_1 = require("../core/graphql");
+var index_1 = require("../schema/graphql/index");
+var DemoController_1 = require("../controllers/DemoController");
+var AccountController_1 = require("../controllers/AccountController");
+var FileController_1 = require("../controllers/FileController");
+var LogsController_1 = require("../controllers/LogsController");
+var ServerAPIController_1 = require("../controllers/ServerAPIController");
+var _PROD_ = process.env.NODE_ENV === 'production';
+var router = new Router();
 router
     .post('/api/login', AccountController_1.default.login)
     .post('/api/logout', AccountController_1.default.logout)

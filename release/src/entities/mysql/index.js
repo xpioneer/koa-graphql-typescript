@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const article_1 = require("./article");
-const articleType_1 = require("./articleType");
-const comment_1 = require("./comment");
-const user_1 = require("./user");
-const tag_1 = require("./tag");
-const leaveMessage_1 = require("./leaveMessage");
-const balls_1 = require("./balls");
+var article_1 = require("./article");
+var articleType_1 = require("./articleType");
+var comment_1 = require("./comment");
+var user_1 = require("./user");
+var tag_1 = require("./tag");
+var leaveMessage_1 = require("./leaveMessage");
+var balls_1 = require("./balls");
 exports.Entities = [
     article_1.Article,
     articleType_1.ArticleType,

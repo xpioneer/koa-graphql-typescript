@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const graphql_1 = require("graphql");
-let count = 0;
-let schema = new graphql_1.GraphQLSchema({
+var graphql_1 = require("graphql");
+var count = 0;
+var schema = new graphql_1.GraphQLSchema({
     query: new graphql_1.GraphQLObjectType({
         name: 'RootQueryType',
         fields: {
@@ -14,7 +14,7 @@ let schema = new graphql_1.GraphQLSchema({
                         type: graphql_1.GraphQLInt // 参数不为空
                     }
                 },
-                resolve: (a, b, c, d) => {
+                resolve: function (a, b, c, d) {
                     ++count;
                     return count;
                 }
