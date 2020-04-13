@@ -52,6 +52,18 @@ export default class DoubleColorBallController {
     return pages
   }
 
+  /***
+   * batch insert(test)
+   */
+  static async batchInsert(ctx: Context) {
+    const list = ctx.fields as object[]
+    console.log(list, '----9999', ctx.state)
+    for(let i = list.length - 1; i >= 0; i --) {
+      await DoubleColorBallController.insert(list[i], ctx)
+    }
+    ctx.Json({ data: 999 })
+  }
+
   static async insert(args: any, ctx: Context) {
     const ball = await getRepository(Balls).findOne({issue: args.issue})
     if(ball) {

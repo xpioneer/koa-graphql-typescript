@@ -25,4 +25,9 @@ export default class LogsController {
     // 
   }
 
+  static async test(ctx: Context) {
+    console.log('ctx.path: ', ctx.path.length, ctx.params)
+    ctx.body = ctx.params.id.length
+  }
+
 }
