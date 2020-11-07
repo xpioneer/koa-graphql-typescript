@@ -16,10 +16,12 @@ import {Context} from '@core/koa'
 import * as Moment from 'moment'
 import UserCtrl from '../../controllers/UserController'
 import { metaFields, pageArgsFields } from './common'
+import { User } from '@src/entities/mysql/user';
 
 // user
-export const userObjectType = new GraphQLObjectType({
+export const userObjectType = new GraphQLObjectType<User>({
   name: 'user',
+  description: '获取单个用户数据',
   fields: {
     id: {
       type: GraphQLString
@@ -63,6 +65,21 @@ const UserPagesType = new GraphQLObjectType({
   }
 })
 
+const AllUserQuery: Thunk<GraphQLFieldConfigMap<{ids: string[]}, Context>> = {
+
+  allUsers: {
+    type: new GraphQLList(userObjectType),
+    args: {
+      ids: {
+        type: GraphQLList(GraphQLString)
+      }
+    },
+    resolve: async(args) => {
+      return await UserCtrl.findAllUsers([])
+    }
+  },
+}
+
 const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   user: {
     type: userObjectType,
@@ -78,8 +95,10 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       return article
     }
   },
+  ...AllUserQuery,
   users: {
     type: UserPagesType,
+    description: '这里是查询的用户列表(含分页)',
     args: {
       ...pageArgsFields,
       username: {

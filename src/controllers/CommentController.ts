@@ -1,18 +1,19 @@
-import {getManager, getRepository, Like, Between, FindManyOptions} from "typeorm";
+import { Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { Comment } from '../entities/mysql/comment'
 import { Guid } from "../utils/tools";
 import * as Moment from 'moment'
+import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 
 export default class CommentController {
 
   static async getAll(args: any) {
-    return await getManager().find(Comment);
+    return await getBlogManager().find(Comment);
   }
 
 
   static async getById(id: string = '') {
-    const article = await getRepository(Comment).findOne({id})
+    const article = await getBlogRepository(Comment).findOne({id})
     return article
   }
 
@@ -35,7 +36,7 @@ export default class CommentController {
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
-    const pages = await getRepository('comment').findAndCount(options)
+    const pages = await getBlogRepository('comment').findAndCount(options)
     return pages
   }
 

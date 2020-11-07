@@ -1,20 +1,21 @@
-import {getManager, getRepository, Like, Between, FindManyOptions} from "typeorm";
+import { Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { LeaveMessage } from '../entities/mysql/leaveMessage'
 import { Guid } from "../utils/tools";
 import * as Moment from 'moment'
+import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 
 
 export default class LeaveMessageController {
 
   static async getAll(args: any) {
-    return await getManager().find(LeaveMessage);
+    return await getBlogManager().find(LeaveMessage);
   }
 
 
   static async getById(id: string = '') {
     // getManager().findOne()
-    const leaveMsg = await getRepository(LeaveMessage).findOne({id})
+    const leaveMsg = await getBlogRepository(LeaveMessage).findOne({id})
     return leaveMsg
   }
 
@@ -37,7 +38,7 @@ export default class LeaveMessageController {
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
-    const pages = await getRepository(LeaveMessage).findAndCount(options)
+    const pages = await getBlogRepository(LeaveMessage).findAndCount(options)
     return pages
   }
 

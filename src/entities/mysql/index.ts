@@ -5,7 +5,7 @@ import { User } from './user'
 import { Tag } from './tag'
 import { LeaveMessage } from './leaveMessage'
 import { Balls } from './balls'
-
+import { ShareEntities } from './shares/shareEntites'
 
 export const Entities:any[] = [
   Article,
@@ -16,3 +16,7 @@ export const Entities:any[] = [
   LeaveMessage,
   Balls
 ]
+
+export {
+  ShareEntities
+}

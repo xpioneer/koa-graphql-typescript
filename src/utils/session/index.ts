@@ -1,10 +1,10 @@
 // import * as Koa from '@core/koa'
 // import * as Cookies from "cookies";
-import Store from "./store";
+import Store, { RedisStore } from "./store";
 
 class SessionOptions {
   key: string = 'SESSION_ID'
-  store: Store = new Store()
+  store: RedisStore
   signed: boolean
   maxAge: number
 }

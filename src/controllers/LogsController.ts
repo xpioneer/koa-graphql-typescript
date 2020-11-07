@@ -4,14 +4,14 @@ import { Context } from '@core/koa'
 import { API } from '../entities/mongo/api'
 import { Errors } from '../entities/mongo/errors'
 import { Guid } from "../utils/tools";
-
+import { CONNECT_MONGO } from '../database/dbUtils'
 
 
 export default class LogsController {
 
 
   static async getById(id: string = '') {
-    const api = await getMongoRepository(API, 'mongo').findOne({id})
+    const api = await getMongoRepository(API, CONNECT_MONGO).findOne({id})
     return api
   }
 
@@ -33,8 +33,9 @@ export default class LogsController {
     if(query.url) {
       options.where['url'] = query.url
     }
-    const pages = await getMongoRepository('API', 'mongo').findAndCount(options)
-    ctx.Pages({page: pages})
+    const pages = await getMongoRepository('API', CONNECT_MONGO).findAndCount(options)
+    const [list, total] = pages
+    ctx.Pages({list, total})
   }
 
   static async errorsPages(ctx: Context) {
@@ -55,8 +56,9 @@ export default class LogsController {
     if(query.url) {
       options.where['url'] = query.url
     }
-    const pages = await getMongoRepository('Errors', 'mongo').findAndCount(options)
-    ctx.Pages({page: pages})
+    const pages = await getMongoRepository('Errors', CONNECT_MONGO).findAndCount(options)
+    const list = pages[0], total = pages[1]
+    ctx.Pages({list, total})
   }
 
   // api log insert
@@ -91,7 +93,7 @@ export default class LogsController {
       }
 
       model.time = options.time  // deal time
-      const result = await getMongoManager('mongo').save(model)
+      const result = await getMongoManager(CONNECT_MONGO).save(model)
     }
 
   }
@@ -130,7 +132,7 @@ export default class LogsController {
     }
 
     model.time = options.time  // deal time
-    const result = await getMongoRepository(Errors, 'mongo').save(model)
+    const result = await getMongoRepository(Errors, CONNECT_MONGO).save(model)
   }
 
 }

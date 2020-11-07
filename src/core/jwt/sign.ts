@@ -30,7 +30,7 @@ function toString(obj: any) {
   return JSON.stringify(obj);
 }
 
-function base64url(string: string, encoding: string): string {
+function base64url(string: string, encoding: BufferEncoding): string {
   return Buffer
     .from(string, encoding)
     .toString('base64')
@@ -39,7 +39,7 @@ function base64url(string: string, encoding: string): string {
     .replace(/\//g, '_');
 }
 
-function jwtSecuredInput(header: any, payload: any, encoding: string) {
+function jwtSecuredInput(header: any, payload: any, encoding: BufferEncoding) {
   encoding = encoding || 'utf8';
   let encodedHeader = base64url(toString(header), 'binary');
   let encodedPayload = base64url(toString(payload), encoding);

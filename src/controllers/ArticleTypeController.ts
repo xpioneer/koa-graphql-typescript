@@ -1,20 +1,21 @@
-import {getManager, getRepository, Like, Between, FindManyOptions} from "typeorm";
+import { Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { ArticleType } from '../entities/mysql/articleType'
 import { Guid } from "../utils/tools";
 import * as Moment from 'moment'
+import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 
 
 export default class ArticleController {
 
   static async getAll(args: any) {
-    return await getManager().find(ArticleType);
+    return await getBlogManager().find(ArticleType);
   }
 
 
   static async getById(id: string = '') {
     // getManager().findOne()
-    const articleType = await getRepository(ArticleType).findOne({id})
+    const articleType = await getBlogRepository(ArticleType).findOne({id})
     return articleType
   }
 
@@ -38,7 +39,7 @@ export default class ArticleController {
       options.order = Object.assign(options.order, args.order)
     }
     console.log(options, '----options')
-    const pages = await getRepository('articleType').findAndCount(options)
+    const pages = await getBlogRepository('articleType').findAndCount(options)
       // .createQueryBuilder()
       // .orderBy({createdAt: 'DESC'})
       // .offset(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
@@ -57,7 +58,7 @@ export default class ArticleController {
     model.createdBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
-    const result = await getRepository(ArticleType).save(model)
+    const result = await getBlogRepository(ArticleType).save(model)
     return result
   }
   
@@ -68,7 +69,7 @@ export default class ArticleController {
     model.remark = args.remark
     model.updatedAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
-    const result = await getRepository(ArticleType).update(args.id, model)
+    const result = await getBlogRepository(ArticleType).update(args.id, model)
     console.log('result:', result)
     return result
   }

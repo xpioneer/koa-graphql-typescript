@@ -92,7 +92,7 @@ export const KoaGraphql = (
       showGraphQL = graphql && canDisplayGraphQL(request, params);
 
       console.log('\n')
-      console.log('ctx graphql params: ', params)
+      // console.log('ctx graphql params: ', params)
       console.log('\n')
 
       result = await new Promise((resolve, reject): void => {
