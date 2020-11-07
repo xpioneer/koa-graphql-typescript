@@ -1,19 +1,36 @@
-import {getManager, getRepository, Like, Between, Equal, FindManyOptions} from "typeorm";
+import { Like, Between, Equal, FindManyOptions, In} from "typeorm";
 import { Context } from '@core/koa'
 import { User } from '../entities/mysql/user'
 import { Guid, cryptoPwd } from "../utils/tools"
 import * as Moment from 'moment'
+import { getBlogManager, getBlogRepository } from '../database/dbUtils';
+// import DataLoader from 'dataloader'
+const DataLoader = require('dataloader')
 
+export const UsersLoader = new DataLoader(async(ids: string[]) => {
+  console.log(ids, 'UsersLoader----------------ids')
+  const users = await UserController.findAllUsers(ids)
+  return users
+})
 
 export default class UserController {
 
   static async getAll(args: any) {
-    return await getManager().find(User);
+    return await getBlogManager().find(User);
   }
 
+  static async findAllUsers(ids: string[]) {
+    const [list, total] = await getBlogManager().getRepository(User).findAndCount({
+      where: {
+        id: In(ids)
+      }
+    })
+    console.log(list, total, '>>>>>>>>>>>>>>>>>')
+    return list
+  }
 
   static async getById(id: string = '') {
-    const article = await getRepository(User).findOne({id}, {
+    const article = await getBlogRepository(User).findOne({id}, {
       select: ['id', 'username', 'nickName', 'userType', 'createdAt', 'sex', 'remark']
     })
     return article
@@ -46,7 +63,7 @@ export default class UserController {
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
-    const pages = await getRepository(User).findAndCount(options)
+    const pages = await getBlogRepository(User).findAndCount(options)
     return pages
   }
 
@@ -71,7 +88,7 @@ export default class UserController {
     model.createdAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getRepository(User).save(model)
+    const result = await getBlogRepository(User).save(model)
     return result
   }
 
@@ -97,7 +114,7 @@ export default class UserController {
     }
     user.updatedBy = ctx.state['CUR_USER'].id
     user.updatedAt = Date.now()
-    const result = await getRepository(User).save(user)
+    const result = await getBlogRepository(User).save(user)
     return result
   }
 

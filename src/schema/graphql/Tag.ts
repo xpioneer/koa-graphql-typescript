@@ -15,7 +15,7 @@ import {
 import {Context} from '@core/koa'
 import * as Moment from 'moment'
 import TagCtrl from '../../controllers/TagController'
-import { metaFields, pageArgsFields } from './common'
+import { metaFields, pageArgsFields, creatorFields } from './common'
 
 // tag
 const tagObjectType = new GraphQLObjectType({
@@ -39,7 +39,8 @@ const tagObjectType = new GraphQLObjectType({
     },
     createdBy: {
       type: GraphQLString
-    }
+    },
+    ...creatorFields
   }
 })
 

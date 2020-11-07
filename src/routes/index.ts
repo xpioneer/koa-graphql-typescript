@@ -7,6 +7,7 @@ import FileCtrl from '../controllers/FileController'
 import LogsCtrl from '../controllers/LogsController'
 import ServerAPI from '../controllers/ServerAPIController'
 import DoubleColorBallController from '../controllers/DoubleColorBallController'
+import SharesCtrl from '../controllers/SharesController'
 
 const _PROD_ = process.env.NODE_ENV === 'production'
 
@@ -22,6 +23,7 @@ router
   .post('/platform/*', ServerAPI.KDJZ)
   .get('/api/log-api', LogsCtrl.apiPages)
   .get('/api/log-errors', LogsCtrl.errorsPages)
+  .post('/api/batchShares', SharesCtrl.batchInsert)
   .post('/api/upload', FileCtrl.upload)
   .get('/graphql', KoaGraphql({
     schema: RootSchema,

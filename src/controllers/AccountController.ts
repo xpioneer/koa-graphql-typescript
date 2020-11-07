@@ -6,8 +6,8 @@ import Store from "../utils/session/store";
 import { JWT_SECRET, EXP_TIME } from '../constants'
 import { sign } from '../core/jwt/sign'
 import { cryptoPwd } from "../utils/tools"
+import { getBlogManager } from '../database/dbUtils';
 
-const store = new Store
 
 export default class AccountController {
   
@@ -17,7 +17,7 @@ export default class AccountController {
     let username = inputs.username;
     let password = inputs.password;
     if ((username && username.length > 0) && (password && password.length > 5)) {
-      const result = await getManager().findOne(User, {
+      const result = await getBlogManager().findOne(User, {
         select: ['id', 'username', 'nickName', 'sex', 'userType'],
         where: {
           username: username,
@@ -26,7 +26,7 @@ export default class AccountController {
       });
       if(result) {
         const token = sign({ ...result, exp: EXP_TIME }, JWT_SECRET)
-        await store.set('true', {
+        await Store.set('true', {
           sid: token,
           maxAge: EXP_TIME // millisecond
         })
@@ -43,7 +43,7 @@ export default class AccountController {
   static async logout(ctx: Context) {
     const tokens = ctx.header['authorization']
     const token = tokens.split(' ')[1]
-    await store.destroy(token)
+    await Store.destroy(token)
     ctx.Json({ data: 1, msg: '退出成功！' });
   }
 

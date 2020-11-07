@@ -1,20 +1,21 @@
-import {getManager, getRepository, Like, FindManyOptions, Between} from "typeorm";
+import { Like, FindManyOptions, Between} from "typeorm";
 import { Context } from '@core/koa'
 import { Tag } from '../entities/mysql/tag'
 import { Guid } from "../utils/tools";
 import * as Moment from 'moment'
 import { JWT_KEY } from '../constants'
+import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 
 export default class TagController {
 
   static async getAll(args: any) {
     console.log(args)
-    return await getManager().find(Tag);
+    return await getBlogManager().find(Tag);
   }
 
 
   static async getById(id: string = '') {
-    const tag = await getRepository(Tag).findOne({id})
+    const tag = await getBlogRepository(Tag).findOne({id})
     return tag
   }
 
@@ -37,7 +38,7 @@ export default class TagController {
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
-    const pages = await getRepository(Tag).findAndCount(options)
+    const pages = await getBlogRepository(Tag).findAndCount(options)
     return pages
   }
 
@@ -53,7 +54,7 @@ export default class TagController {
     model.createdBy = ctx.state[JWT_KEY].id
     model.updatedAt = Date.now()
     model.updatedBy = ctx.state[JWT_KEY].id
-    const result = await getRepository(Tag).save(model)
+    const result = await getBlogRepository(Tag).save(model)
     return result
   }
 
@@ -67,7 +68,7 @@ export default class TagController {
     model.remark = args.remark
     model.updatedAt = Date.now()
     model.updatedBy = ctx.state[JWT_KEY].id
-    const result = await getRepository(Tag).save(model)
+    const result = await getBlogRepository(Tag).save(model)
     return result
   }
 

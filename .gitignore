@@ -16,3 +16,7 @@ conf/db.conf.ts
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+*.suo
+.gitkeep

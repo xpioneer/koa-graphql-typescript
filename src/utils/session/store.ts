@@ -4,11 +4,14 @@ import { RedisConf } from '../../../conf/db.conf'
 
 // const { Guid } = TOOLS;
 
-class RedisStore {
+export class RedisStore {
   private redis: Redis.Redis
   
   constructor() {
     this.redis = new Redis(RedisConf);
+    this.redis.connect(() => {
+      console.log('redis start...')
+    })
   }
 
   private getID(length: number): string {
@@ -38,4 +41,4 @@ class RedisStore {
   }
 }
 
-export default RedisStore;
+export default new RedisStore;

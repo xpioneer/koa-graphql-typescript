@@ -1,28 +1,23 @@
 import * as Koa from '@core/koa'
-import { ResponseData } from '../models/ResponseData'
+import { ResponseData, IResponseData, IReturnPage } from '../models/ResponseData'
 
-const json = (ctx: Koa.Context) => (res: any) => {
+
+const json = (ctx: Koa.Context) => <T = any>(res?:  T | IResponseData | (() => T)): IResponseData<T> => {
   let resData = new ResponseData();
   const type = typeof res;
   if(type === 'undefined') {
     resData = {data: undefined, msg: 'return data is undefined', status: 200}
-  } else if (type === 'object' && res !== null) {
-    if(res.hasOwnProperty('data')) { // data is the key property
-      Object.assign(resData, res)
-    } else {
-      resData.data = res;
-    }
-    resData.msg = res.msg||"";
-    resData.errors = res.errors;
-  } else {
+  } else if (type === 'object' && res.hasOwnProperty('data')) { // data is the key property
+    Object.assign(resData, res)
+    resData.msg = (res as IResponseData).msg||"";
+    resData.errors = (res as IResponseData).errors;
+  } else if(type === 'function') {
     resData.msg = `data's type is ${typeof res}`;
-    if(type === 'function'){
-      resData.data = res();
-    } else { // not function
-      resData.data = res;
-    }
+    resData.data = (res as Function)();
+  } else { // T
+    resData.data = res as T;
   }
-  resData.status = res.status || 200; // resData status code
+  resData.status = (res as IResponseData).status || 200; // resData status code
   let status = resData.status; // http status code
   // if (status == 200 && ctx.method === 'POST' || ctx.method === 'PUT' || ctx.method === 'DELETE') {
   //   status = 201;
@@ -31,8 +26,8 @@ const json = (ctx: Koa.Context) => (res: any) => {
   return ctx.body = resData;
 };
 
-const page = (ctx: Koa.Context) => (data: any) => {
-    let resData = new ResponseData();
+const page = (ctx: Koa.Context) => <T = any>(data: IReturnPage): IResponseData<T> => {
+    let resData = new ResponseData<T>();
     if (typeof data === 'object' && data !== null) {
       const total = data.page[1] || 0
       const count = data.page[0].length || 0

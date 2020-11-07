@@ -2,7 +2,7 @@ import { Context } from '@core/koa'
 
 // only post fields(not upload file stream)
 
-const getPostData = (ctx: Context) => {
+const getPostData = (ctx: Context): Promise<{[key: string]: any}> => {
 
   return new Promise((resolve, reject) => {
     try{

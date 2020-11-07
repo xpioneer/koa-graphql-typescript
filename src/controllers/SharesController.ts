@@ -1,28 +1,28 @@
 import { Equal, Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
-import { Article } from '../entities/mysql/article'
+import { GJRecord } from '../entities/mysql/shares/GJRecord'
 import { Guid } from "../utils/tools";
 import * as Moment from 'moment'
-import { getBlogManager, getBlogRepository } from '../database/dbUtils';
+import { getSharesManager, getSharesRepository } from '../database/dbUtils';
 
 
-export default class ArticleController {
+class SharesController {
 
-  static async getAll(args: any) {
+  async getAll(args: any) {
     console.log(args)
-    return await getBlogManager().find(Article);
+    return await getSharesManager().find(GJRecord);
   }
 
 
-  static async getById(id: string = '') {
-    const article = await getBlogRepository(Article).findOne({id})
+  async getById(id: string = '') {
+    const article = await getSharesRepository(GJRecord).findOne({id})
     // console.log('article: ', article)
     return article
   }
 
-  static async pages(args: any) {
+  async pages(args: any) {
     console.log(args, 'query args ===================')
-    const options: FindManyOptions<Article> = {
+    const options: FindManyOptions<GJRecord> = {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
       take: args.pageSize,
       order: {},
@@ -48,7 +48,7 @@ export default class ArticleController {
     }
     console.log(options, '----options')
 
-    const pages = await getBlogRepository(Article).findAndCount(options)
+    const pages = await getSharesRepository(GJRecord).findAndCount(options)
       // .createQueryBuilder()
       // .where({
       //   // title: Like(args.title)
@@ -62,36 +62,49 @@ export default class ArticleController {
     return pages
   }
 
-  static async insert(args: any, ctx: Context) {
-    let model = new Article()
+  async batchInsert(ctx: Context) {
+    
+    const list = ctx.fields as GJRecord[]
+    console.log(list)
+    // ctx.Json<null>({ msg: ''})
+  }
+
+  async insert(args: any, ctx: Context) {
+    let model = new GJRecord()
     model.id = Guid()
-    model.title = args.title
-    model.abstract = args.abstract
-    model.description =  args.description
-    model.typeId = args.typeId
-    model.isTop = args.isTop
-    model.tag = args.tag
+    model.tradeAt = args.tradeAt
+    model.amount = args.amount
+    model.price = args.price
+    model.total =  args.total
+    model.code = args.code
+    model.position = args.position
+    model.name = args.name
+    model.direction = args.direction
     model.createdBy = ctx.state['CUR_USER'].id
     model.createdAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getBlogRepository(Article).save(model)
+    const result = await getSharesRepository(GJRecord).save(model)
     return result
   }
 
-  static async update(args: any, ctx: Context) {
-    const article = new Article
-    article.id = args.id
-    article.title = args.title
-    article.abstract = args.abstract
-    article.description =  args.description
-    article.typeId = args.typeId
-    article.isTop = args.isTop
-    article.tag = args.tag
-    article.updatedAt = Date.now()
-    article.updatedBy = ctx.state['CUR_USER'].id
-    const result = await getBlogRepository(Article).save(article)
+  async update(args: any, ctx: Context) {
+    const record = new GJRecord
+    record.id = args.id
+    record.tradeAt = args.tradeAt
+    record.amount = args.amount
+    record.price = args.price
+    record.total =  args.total
+    record.code = args.code
+    record.position = args.position
+    record.name = args.name
+    record.direction = args.direction
+    record.updatedAt = Date.now()
+    record.updatedBy = ctx.state['CUR_USER'].id
+    const result = await getSharesRepository(GJRecord).save(record)
     return result
   }
 
 }
+
+export default new SharesController

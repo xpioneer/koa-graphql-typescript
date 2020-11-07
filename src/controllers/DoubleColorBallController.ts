@@ -1,18 +1,19 @@
-import {getManager, getRepository, Equal, Like, Between, FindManyOptions} from "typeorm";
+import { Equal, Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { Balls } from '../entities/mysql/balls'
 import { Guid } from "../utils/tools";
+import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 
 export default class DoubleColorBallController {
 
   static async getById(id: string = '') {
-    const result = await getRepository(Balls).findOne({id})
+    const result = await getBlogRepository(Balls).findOne({id})
     console.log(result, 'getById')
     return result
   }
 
   static async deleteById(id: string = '', ctx: Context) {
-    const result = await getRepository(Balls).update({id}, {
+    const result = await getBlogRepository(Balls).update({id}, {
       deletedAt: Date.now(),
       deletedBy: ctx.state['CUR_USER'].id,
     })
@@ -48,7 +49,7 @@ export default class DoubleColorBallController {
     }
     console.log(options, '----options')
 
-    const pages = await getRepository(Balls).findAndCount(options)
+    const pages = await getBlogRepository(Balls).findAndCount(options)
     return pages
   }
 
@@ -65,7 +66,7 @@ export default class DoubleColorBallController {
   }
 
   static async insert(args: any, ctx: Context) {
-    const ball = await getRepository(Balls).findOne({issue: args.issue})
+    const ball = await getBlogRepository(Balls).findOne({issue: args.issue})
     if(ball) {
       ctx.throw(500, '该期号已存在')
     }
@@ -91,12 +92,12 @@ export default class DoubleColorBallController {
     model.createdAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getRepository(Balls).save(model)
+    const result = await getBlogRepository(Balls).save(model)
     return result
   }
 
   static async update(args: any, ctx: Context) {
-    const ball = await getRepository(Balls).findOne({id: args.id})
+    const ball = await getBlogRepository(Balls).findOne({id: args.id})
     if(!ball) {
       ctx.throw(500, '该期不存在')
     }
@@ -119,7 +120,7 @@ export default class DoubleColorBallController {
     model.drawDate = new Date(args.drawDate).getTime()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getRepository(Balls).update({id: args.id}, model)
+    const result = await getBlogRepository(Balls).update({id: args.id}, model)
     if(result.raw.affectedRows) {
       return true
     } else {
@@ -130,7 +131,7 @@ export default class DoubleColorBallController {
   static async allBallCount() {
     let redList:any = [], _redDisList = []
     for(let i = 1; i <= 6; i++) {
-      const list = await getRepository(Balls)
+      const list = await getBlogRepository(Balls)
         .createQueryBuilder('ball')
         .select(`COUNT(ball.red${i})`, 'total')
         .addSelect(`red${i}`)
@@ -151,7 +152,7 @@ export default class DoubleColorBallController {
       }
     })
     let blues:any = []
-    const list = await getRepository(Balls)
+    const list = await getBlogRepository(Balls)
       .createQueryBuilder('ball')
       .select('COUNT(ball.blue)', 'total')
       .addSelect('blue')

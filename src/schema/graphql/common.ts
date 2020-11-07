@@ -13,6 +13,45 @@ import {
   GraphQLFieldConfigArgumentMap
 } from 'graphql';
 import {Context} from '@core/koa'
+import UserCtrl, {UsersLoader} from '../../controllers/UserController'
+import { User } from '@src/entities/mysql/user';
+
+const CreatorType = new GraphQLObjectType({
+  name: 'creator',
+  fields: {
+    id: {
+      type: GraphQLString,
+      resolve(obj: User) {
+        console.log('CreatorType>>>>>>>>>>>>>>>>>>>>')
+        return obj.id
+      }
+    },
+    username: {
+      type: GraphQLString,
+      resolve(obj: User) {
+        return obj.username
+      }
+    },
+    nickName: {
+      type: GraphQLString,
+      resolve(obj: User) {
+        return obj.nickName
+      }
+    }
+  }
+})
+
+export const creatorFields: Thunk<GraphQLFieldConfigMap<User, Context>> = {
+  creator: {
+    type: CreatorType,
+    resolve: async (obj, args, ctx, info) => {
+      // const creator = await UserCtrl.getById(obj.createdBy)
+      // console.log(obj.createdBy, '这里使用dataloader----')
+      const creator = await UsersLoader.load(obj.createdBy)
+      return creator
+    }
+  }
+}
 
 export const PageDataType = new GraphQLObjectType({
   name: 'pageData',
