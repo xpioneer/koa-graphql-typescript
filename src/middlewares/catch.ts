@@ -21,9 +21,9 @@ export default async (ctx: Koa.Context, next: () => Promise<any>) => {
       LogCtrl.APIlogger(ctx, { time: Date.now() - start }) // api log
     }
   } catch (err) {
-    let stack = err.stack
-    console.log('catch', err, err.status, err.message);
+    let stack = (err || {}).stack
     try {
+      console.log('catch', err, err.status, err.message);
       let status: number = err.status || 500;
       LogCtrl.ERRlogger(ctx, {
         status: status,

@@ -1,10 +1,10 @@
 
-import { IResponseData, IReturnPage } from '@src/models/ResponseData';
+import { ResponseData, ReturnPage } from '@src/models/ResponseData';
 import {Context as KoaContext} from 'koa'
 
 export interface Context extends KoaContext {
   // post fields
-  fields?: IAnyObject
+  fields?: AnyObject
 
   // session
   session?: object
@@ -16,8 +16,8 @@ export interface Context extends KoaContext {
   }
 
   // response
-  Json?: <T = any>(res: T | IResponseData<T> | (() => T)) => IResponseData<T>
-  Pages?: <T = any>(res: IReturnPage<T>) => IResponseData<T>
+  Json?: <T = any>(res: T | ResponseData<T> | (() => T)) => ResponseData<T>
+  Pages?: <T = any>(res: ReturnPage<T>) => ResponseData<T[]>
 }
 
 

@@ -1,6 +1,6 @@
 
 // 分页信息
-export class PageInfo{
+export class PageInfo {
   page: number = 1;
   total: number = 0;
   pageSize: number = 10;
@@ -8,7 +8,7 @@ export class PageInfo{
   count: number = 0;
 }
 
-export interface IPageInfo{
+export interface IPageInfo {
   page: number
   total: number
   pageSize: number 
