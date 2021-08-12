@@ -13,9 +13,9 @@ import {
   Source,
 } from 'graphql';
 import {Context} from '@core/koa'
-import * as Moment from 'moment'
 import ArticleTypeCtrl from '../../controllers/ArticleTypeController'
 import { metaFields, pageArgsFields } from './common'
+import { formatDate } from '../../utils/tools/formatDate';
 
 // articleType
 export const articleTypeObjectType = new GraphQLObjectType({
@@ -34,7 +34,7 @@ export const articleTypeObjectType = new GraphQLObjectType({
       type: GraphQLString,
       resolve(obj, args, ctx, info){
         const createdAt = Number(obj.createdAt) || Date.now()
-        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
+        return formatDate(createdAt)
       }
     },
     createdBy: {
@@ -59,7 +59,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: articleTypeObjectType,
     args: {
       id: {
-        name: 'id',
+        // name: 'id',
         type: new GraphQLNonNull(GraphQLString)
       }
     },

@@ -3,12 +3,6 @@ import { Stock } from '../entities/mysql/shares/stock'
 import { getSharesManager, getSharesRepository } from '../database/dbUtils';
 import { EMarket, EBLock } from '../models/Stocks'
 
-enum IConditions {
-  like = 'Like',
-  equal = 'Equal'
-}
-
-
 
 class StockService {
 

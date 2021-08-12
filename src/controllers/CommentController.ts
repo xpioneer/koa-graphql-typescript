@@ -2,7 +2,7 @@ import { Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { Comment } from '../entities/mysql/comment'
 import { Guid } from "../utils/tools";
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 
 export default class CommentController {
@@ -30,7 +30,7 @@ export default class CommentController {
       options.where['description'] = Like(`%${args.description}%`)
     }
     if(args.createdAt) {
-      const date = args.createdAt.map((c: string) => (Moment(c)).valueOf())
+      const date = args.createdAt.map((c: any) => +toDate(c))
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {

@@ -13,10 +13,10 @@ import {
   GraphQLNonNull,
 } from 'graphql';
 import {Context} from '@core/koa'
-import * as Moment from 'moment'
 import UserCtrl from '../../controllers/UserController'
 import { metaFields, pageArgsFields } from './common'
 import { User } from '@src/entities/mysql/user';
+import { formatDate } from '../../utils/tools/formatDate';
 
 // user
 export const userObjectType = new GraphQLObjectType<User>({
@@ -45,7 +45,7 @@ export const userObjectType = new GraphQLObjectType<User>({
       type: GraphQLString,
       resolve(obj, args, ctx, info){
         const createdAt = Number(obj.createdAt) || Date.now()
-        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
+        return formatDate(createdAt)
       }
     },
     createdBy: {
@@ -85,7 +85,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: userObjectType,
     args: {
       id: {
-        name: 'id',
+        // name: 'id',
         type: GraphQLNonNull(GraphQLString)
       }
     },

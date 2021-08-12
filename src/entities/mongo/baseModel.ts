@@ -1,5 +1,5 @@
 import {Entity, Column, ObjectIdColumn, VersionColumn, CreateDateColumn, Generated} from "typeorm";
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 
 @Entity()
 export class BaseEntity {
@@ -11,7 +11,7 @@ export class BaseEntity {
   createdBy?: string;
 
   @Column({
-    default: Moment().format('YYYY/MM/DD hh:mm:ss.SSS')
+    default: +new Date
   })
   createdAt: string | null;
 

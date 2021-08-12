@@ -2,7 +2,7 @@ import { Equal, Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { GJRecord } from '../entities/mysql/shares/GJRecord'
 import { Guid } from "../utils/tools";
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 import { getSharesManager, getSharesRepository } from '../database/dbUtils';
 
 
@@ -40,7 +40,7 @@ class SharesController {
       options.where['tag'] = Like(`%${args.tag}%`)
     }
     if(args.createdAt) {
-      const date = args.createdAt.map((c: string) => (Moment(c)).valueOf())
+      const date = args.createdAt.map((c: any) => +toDate(c))
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {

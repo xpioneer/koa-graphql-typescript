@@ -1,5 +1,4 @@
 import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equal} from "typeorm";
-import * as Moment from 'moment'
 import { Context } from '@core/koa'
 import { Baidu, Tmall } from "../constants";
 

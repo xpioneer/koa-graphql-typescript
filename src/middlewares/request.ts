@@ -11,7 +11,6 @@ interface IOrder {
 }
 
 // xpoineer
-// import moment from 'moment';
 
 // const setCreatedAt = (filter) => {
 //   let arr = [];

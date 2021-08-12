@@ -2,7 +2,7 @@ import { Like, Between, Equal, FindManyOptions, In} from "typeorm";
 import { Context } from '@core/koa'
 import { User } from '../entities/mysql/user'
 import { Guid, cryptoPwd } from "../utils/tools"
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 // import DataLoader from 'dataloader'
 const DataLoader = require('dataloader')
@@ -57,7 +57,7 @@ export default class UserController {
       options.where['userType'] = Equal(args.userType)
     }
     if(args.createdAt) {
-      const date = args.createdAt.map((c: string) => (Moment(c)).valueOf())
+      const date = args.createdAt.map((c: any) => +toDate(c))
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {

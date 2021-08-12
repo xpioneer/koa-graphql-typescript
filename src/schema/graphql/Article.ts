@@ -14,11 +14,12 @@ import {
   GraphQLInputObjectType,
 } from 'graphql';
 import {Context} from '@core/koa'
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 import ArticleCtrl from '../../controllers/ArticleController'
 import ArticleTypeCtrl from '../../controllers/ArticleTypeController'
 import { metaFields, pageArgsFields } from './common'
 import { articleTypeObjectType } from './ArticleType'
+import { formatDate } from '../../utils/tools/formatDate';
 
 const ArticleInputType = new GraphQLInputObjectType({
   name: 'articleInput',
@@ -83,7 +84,7 @@ const ArticleObjectType = new GraphQLObjectType({
       type: GraphQLString,
       resolve(obj, args, ctx, info){
         const createdAt = Number(obj.createdAt) || Date.now()
-        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
+        return formatDate(createdAt)
       }
     },
     createdBy: {
@@ -109,7 +110,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: ArticleObjectType,
     args: {
       id: {
-        name: 'id',
+        // name: 'id',
         type: GraphQLNonNull(GraphQLString)
       }
     },

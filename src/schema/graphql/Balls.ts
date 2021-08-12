@@ -14,9 +14,11 @@ import {
   GraphQLInputObjectType,
 } from 'graphql';
 import {Context} from '@core/koa'
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 import DoubleBallCtrl from '../../controllers/DoubleColorBallController'
 import { metaFields, pageArgsFields } from './common'
+import { formatDate } from '../../utils/tools/formatDate';
+import { DateFormat } from '../../types/base';
 
 const BallChartType = new GraphQLObjectType({
   name: 'ballChartType',
@@ -142,14 +144,14 @@ const DoubleColorBallType = new GraphQLObjectType({
       type: GraphQLString,
       resolve(obj, args, ctx, info){
         const drawDate = Number(obj.drawDate) || Date.now()
-        return Moment(drawDate).format('YYYY-MM-DD')
+        return formatDate(drawDate, DateFormat.Date)
       }
     },
     createdAt: {
       type: GraphQLString,
       resolve(obj, args, ctx, info){
         const createdAt = Number(obj.createdAt) || Date.now()
-        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
+        return formatDate(createdAt)
       }
     },
     createdBy: {
@@ -175,7 +177,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: DoubleColorBallType,
     args: {
       id: {
-        name: 'id',
+        // name: 'id',
         type: GraphQLNonNull(GraphQLString)
       }
     },
@@ -253,7 +255,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     description: 'update ball',
     args: {
       id: {
-        name: 'id',
+        // name: 'id',
         type: new GraphQLNonNull(GraphQLString)
       }
     },

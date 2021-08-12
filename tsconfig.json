@@ -12,15 +12,9 @@
     "suppressImplicitAnyIndexErrors": true,
     "lib": ["esnext"],
     "outDir": "./release/",
-    "typeRoots": [
-      "./node_modules/@types/",
-      "./src/@types/"
-    ],
     "baseUrl": ".",
     "paths": {
-      "@conf/*": ["conf/*"],
       "@src/*": ["src/*"],
-      "@controllers/*": ["src/controllers/*"],
       "@core/*": ["src/core/*"],
       "@models/*": ["src/models/*"],
       "@entities/*": ["src/entities/*"],

@@ -2,7 +2,7 @@ import { Like, FindManyOptions, Between} from "typeorm";
 import { Context } from '@core/koa'
 import { Tag } from '../entities/mysql/tag'
 import { Guid } from "../utils/tools";
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 import { JWT_KEY } from '../constants'
 import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 
@@ -32,7 +32,7 @@ export default class TagController {
       options.where['name'] = Like(`%${args.name}%`)
     }
     if(args.createdAt) {
-      const date = args.createdAt.map((c: string) => (Moment(c)).valueOf())
+      const date = args.createdAt.map((c: any) => +toDate(c))
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {

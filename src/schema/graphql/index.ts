@@ -21,7 +21,7 @@ const demo: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: GraphQLInt,
     args: {
       id: {
-        name: 'id',
+        // name: 'id',
         type: GraphQLInt // 参数不为空
       }
     },

@@ -13,9 +13,10 @@ import {
   Source,
 } from 'graphql';
 import {Context} from '@core/koa'
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 import CommentCtrl from '../../controllers/CommentController'
 import { metaFields, pageArgsFields } from './common'
+import { formatDate } from '../../utils/tools/formatDate';
 
 // comment
 export const commentObjectType = new GraphQLObjectType({
@@ -43,7 +44,7 @@ export const commentObjectType = new GraphQLObjectType({
       type: GraphQLString,
       resolve(obj, args, ctx, info){
         const createdAt = Number(obj.createdAt) || Date.now()
-        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
+        return formatDate(createdAt)
       }
     },
     createdBy: {
@@ -68,7 +69,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: commentObjectType,
     args: {
       id: {
-        name: 'id',
+        // name: 'id',
         type: new GraphQLNonNull(GraphQLString)
       }
     },
@@ -83,7 +84,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     args: {
       ...pageArgsFields,
       description: {
-        name: 'description',
+        // name: 'description',
         type: GraphQLString
       }
     },

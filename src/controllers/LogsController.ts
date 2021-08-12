@@ -1,10 +1,11 @@
-import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equal} from "typeorm";
-import * as Moment from 'moment'
+import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equal} from 'typeorm';
 import { Context } from '@core/koa'
 import { API } from '../entities/mongo/api'
 import { Errors } from '../entities/mongo/errors'
-import { Guid } from "../utils/tools";
+import { Guid } from '../utils/tools';
 import { CONNECT_MONGO } from '../database/dbUtils'
+import { formatDate } from '../utils/tools';
+import { DateFormat } from '../types/base';
 
 
 export default class LogsController {
@@ -78,7 +79,7 @@ export default class LogsController {
       model.resHeaders = ctx.response.header
       model.resData = ctx.body
       model.protocol = ctx.protocol;
-      model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
+      model.createdAt = formatDate(new Date, DateFormat.DateTimeS)
       model.createdBy = ctx.state['CUR_USER'] ? ctx.state['CUR_USER'].id : model.ip
 
       model.method = method
@@ -113,7 +114,7 @@ export default class LogsController {
     model.resHeaders = ctx.response.header
     model.resData = ctx.body
     model.protocol = ctx.protocol;
-    model.createdAt = Moment(Date.now()).format('YYYY/MM/DD HH:mm:ss.SSS')
+    model.createdAt = formatDate(new Date, DateFormat.DateTimeS)
     model.createdBy = ctx.state['CUR_USER'] ? ctx.state['CUR_USER'].id : model.ip
 
     model.status = options.status

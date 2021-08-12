@@ -13,9 +13,10 @@ import {
   Source,
 } from 'graphql';
 import {Context} from '@core/koa'
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 import TagCtrl from '../../controllers/TagController'
 import { metaFields, pageArgsFields, creatorFields } from './common'
+import { formatDate } from '../../utils/tools/formatDate';
 
 // tag
 const tagObjectType = new GraphQLObjectType({
@@ -34,7 +35,7 @@ const tagObjectType = new GraphQLObjectType({
       type: GraphQLString,
       resolve(obj, args, ctx, info){
         const createdAt = Number(obj.createdAt) || Date.now()
-        return Moment(createdAt).format('YYYY-MM-DD HH:mm:ss')
+        return formatDate(createdAt)
       }
     },
     createdBy: {
@@ -60,7 +61,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: tagObjectType,
     args: {
       id: {
-        name: 'id',
+        // name: 'id',
         type: GraphQLString
       }
     },
@@ -75,7 +76,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     args: {
       ...pageArgsFields,
       name: {
-        name: 'name',
+        // name: 'name',
         type: GraphQLString
       }
     },

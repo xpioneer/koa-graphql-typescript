@@ -5,7 +5,7 @@ export interface Options {
   secret: string | Buffer
   key?: string
   debug?: boolean
-  encoding?: string
+  encoding?: BufferEncoding
   passthrough?: boolean
   tokenKey?: string
   unless?: RegExp[][]

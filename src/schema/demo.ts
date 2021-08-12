@@ -8,7 +8,7 @@ import {
   GraphQLScalarType
 } from 'graphql';
 import * as Koa from '@core/koa'
-import * as Moment from 'moment'
+import { toDate } from 'date-fns'
 
 let count = 0;
 
