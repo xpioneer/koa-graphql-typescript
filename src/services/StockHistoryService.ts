@@ -1,24 +1,27 @@
-import { Equal, Like, Between, FindManyOptions} from "typeorm";
-import { Context } from '@core/koa'
-import { History } from '../entities/mysql/shares/stockHistory'
-import { Guid } from "../utils/tools";
-import { getSharesManager, getSharesRepository } from '../database/dbUtils';
+import { StockHistory } from '../entities/mysql/shares/stockHistory'
+import StockService from './StockService'
+import StockHistoryDao from '../daos/StockHistoryDao'
+import { formatDate } from "../utils/tools";
+import { DateFormat } from "../types/base";
 
 
 
 class StockHistoryService {
 
-  async pages(offset = 1, size = 10, stockId: number, code?: string, name?: string) {
-    const options: FindManyOptions<History> = {
-      skip: (offset > 0 ? (offset - 1) : 0) * size,
-      take: size,
-      order: { timestamp: 'DESC' },
-      where: {
-        stockId: Equal(stockId)
-      }
+  async pages(offset = 1, size = 10, code: string): Promise<[StockHistory[], number]> {
+    const stock = await StockService.getByCode(code)
+    if(stock) {
+      const [list, total] = await StockHistoryDao.pages(offset, size, stock.id)
+      return [
+        list.map(item => {
+          item.tradeAt = formatDate(+item.timestamp, DateFormat.Date)
+          return item
+        }),
+        total
+      ]
+    } else {
+      return [[], 0]
     }
-    const pages = await getSharesRepository(History).findAndCount(options)
-    return pages
   }
 }
 

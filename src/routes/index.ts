@@ -8,6 +8,8 @@ import LogsCtrl from '../controllers/LogsController'
 import ServerAPI from '../controllers/ServerAPIController'
 import DoubleColorBallController from '../controllers/DoubleColorBallController'
 import SharesCtrl from '../controllers/SharesController'
+import StockCtrl from '../controllers/StockController'
+import StockHistoryCtrl from '../controllers/StockHistoryController'
 
 const _PROD_ = process.env.NODE_ENV === 'production'
 
@@ -25,6 +27,8 @@ router
   .get('/api/log-errors', LogsCtrl.errorsPages)
   .post('/api/batchShares', SharesCtrl.batchInsert)
   .post('/api/upload', FileCtrl.upload)
+  .get('/api/stocks', StockCtrl.pages1)
+  .get('/api/stockhistory', StockHistoryCtrl.pages)
   .get('/graphql', KoaGraphql({
     schema: RootSchema,
     graphql: _PROD_ ? false : true

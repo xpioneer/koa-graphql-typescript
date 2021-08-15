@@ -1,4 +1,3 @@
-import { Equal, Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@core/koa'
 import { StockHistory, History, KeyofHistory } from '../entities/mysql/shares/stockHistory'
 import { Guid } from "../utils/tools";
@@ -92,25 +91,6 @@ class SharesController {
     }
   }
 
-  static async insert(args: Partial<StockHistory>) {
-    let model = new StockHistory()
-    model.uuid = Guid()
-    model.tradeAt = args.tradeAt
-    model.open = args.open
-    model.close = args.close
-    model.high = args.high
-    model.low = args.low
-    model.total = args.total
-    model.totalAmt = args.totalAmt
-    model.amplitude = args.amplitude
-    model.rasingRatio = args.rasingRatio
-    model.rasingPrice = args.rasingPrice
-    model.exchangeRatio = args.exchangeRatio
-    const result = await getSharesManager().save(model)
-    console.log(result.id)
-    return result.id
-  }
-
   static async add(data: History) {
     let model = new History()
     model.stockId = data.stockId
@@ -169,24 +149,24 @@ class SharesController {
   async pages(ctx: Context) {
     const { code, page = 1, pageSize = 10 } = ctx.query
     if(!code) {
-      ctx.Json({msg: 'code参数缺失', status: 400})
+      throw new Error('code参数缺失')
     }
-    const [list, total] = await StockService.pages(page, pageSize, code)
+    const [list, total] = await StockHistoryService.pages(Number(page), Number(pageSize), code)
     ctx.Pages({list, total})
   }
 
   async updateHistory(ctx: Context) {
     const { code } = ctx.fields
     const stock = await StockService.getByCode(code)
-    const [list, total] = await StockHistoryService.pages(1, 10, stock.id)
-    let lastestDate = 0
-    if(total > 0) {
-      lastestDate = list[total - 1].timestamp
-      const today = new Date
-      // const 
-    } else {
-      // 
-    }
+    // const [list, total] = await StockHistoryService.pages(1, 10, stock.id)
+    // let lastestDate = 0
+    // if(total > 0) {
+    //   lastestDate = list[total - 1].timestamp
+    //   const today = new Date
+    //   // const 
+    // } else {
+    //   // 
+    // }
     return stock
   }
 }

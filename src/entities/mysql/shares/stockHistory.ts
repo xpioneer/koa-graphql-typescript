@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import { Entity, Column, PrimaryColumn} from "typeorm";
+import { Stock } from './stock';
 
 export type KeyofHistory = keyof History
 
@@ -84,48 +85,7 @@ export class History {
   net_volume_hk: number
 }
 
-@Entity('stock_history_5')
-export class StockHistory {
-  @PrimaryColumn({ unique: true })
-  id: number
 
-  @Column()
-  uuid: string
-
-  @Column()
-  stockId: number
-
-  @Column()
-  open: number
-
-  @Column()
-  close: number
-
-  @Column()
-  low: number
-
-  @Column()
-  high: number
-
-  @Column()
-  rasingPrice: number
-
-  @Column()
-  rasingRatio: number
-
-  @Column()
-  total: number
-
-  @Column()
-  totalAmt: number
-
-  @Column()
-  exchangeRatio: number
-
-  @Column()
-  amplitude: number
-
-  @Column()
-  tradeAt: number
-
+export type StockHistory = History & Stock & {
+  tradeAt: string
 }
