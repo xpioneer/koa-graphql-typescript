@@ -4,8 +4,7 @@
 
 # dependencies
 /node_modules
-conf/db.conf.ts
-conf/api.conf.ts
+conf
 
 # misc
 .DS_Store
