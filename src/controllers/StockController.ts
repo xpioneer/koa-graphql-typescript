@@ -53,10 +53,16 @@ const requestApi = async(code: string) => {
 
 class StockController {
 
-  async getByCode(code: string) {
-    const stock = await getSharesRepository(Stock).findOne({code})
-    return stock
+  async getStock(ctx: Context) {
+    const {id} = ctx.params
+    const stockDetail = await StockService.getCode(id)
+    ctx.Json({data: stockDetail})
   }
+
+  // async getByCode(code: string) {
+  //   const stock = await getSharesRepository(Stock).findOne({code})
+  //   return stock
+  // }
 
   async pages1(ctx: Context) {
     const { page = 1, pageSize = 10, code, name, market, block } = ctx.query

@@ -1,7 +1,7 @@
-import * as Koa from 'koa'
+import { Context } from '@core/koa'
 import LogCtrl from '../controllers/LogsController'
 
-export default async (ctx: Koa.Context, next: () => Promise<any>) => {
+export default async (ctx: Context, next: () => Promise<any>) => {
   // console.log('ctx-----------', ctx.header)
   const start = Date.now()
   try {

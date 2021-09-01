@@ -28,6 +28,7 @@ router
   .post('/api/batchShares', SharesCtrl.batchInsert)
   .post('/api/upload', FileCtrl.upload)
   .get('/api/stocks', StockCtrl.pages1)
+  .get('/api/stocks/:id', StockCtrl.getStock)
   .get('/api/stockhistory', StockHistoryCtrl.pages)
   .get('/graphql', KoaGraphql({
     schema: RootSchema,

@@ -15,6 +15,8 @@ export interface Context extends KoaContext {
     limit: number
   }
 
+  params: AnyObject
+
   // response
   Json?: <T = any>(res: T | ResponseData<T> | (() => T)) => ResponseData<T>
   Pages?: <T = any>(res: ReturnPage<T>) => ResponseData<T[]>

@@ -1,18 +1,29 @@
 import { Equal, Like, Between, FindManyOptions} from "typeorm";
-import { StockHistory } from '../entities/mysql/shares/stockHistory'
+import { StockHistory, History } from '../entities/mysql/shares/stockHistory'
 import { getSharesManager, getSharesRepository } from '../database/dbUtils';
 
 
 
 class StockHistoryDao {
 
+  async getLastestTrade(stockId: number) {
+    const lastestTrade = await getSharesRepository(History).findOne({
+      select: ['timestamp'],
+      where: {
+        stockId: Equal(stockId)
+      },
+      order: {
+        timestamp: 'DESC'
+      }
+    })
+    return lastestTrade
+  }
+
   async pages(offset = 1, size = 10, stockId: number): Promise<[StockHistory[], number]> {
     let sqlList = `
       Select sh.*, s.code, s.name From stock_history_new sh Left Join stocks s On sh.stockId = s.id
       Where 1 = 1`
-    let sqlTotal = `
-      Select count(sh.id) total From stock_history_new sh Left Join stocks s On sh.stockId = s.id
-      Where 1 = 1`
+    let sqlTotal = `Select count(sh.id) total From stock_history_new sh Where 1 = 1`
     
     const parameters = []
 

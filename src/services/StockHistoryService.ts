@@ -8,6 +8,11 @@ import { DateFormat } from "../types/base";
 
 class StockHistoryService {
 
+  async getLastestTrade(stockId: number) {
+    const lastestTrade = await StockHistoryDao.getLastestTrade(stockId)
+    return lastestTrade
+  }
+
   async pages(offset = 1, size = 10, code: string): Promise<[StockHistory[], number]> {
     const stock = await StockService.getByCode(code)
     if(stock) {

@@ -8,6 +8,17 @@ import { getSharesManager, getSharesRepository } from '../database/dbUtils';
 
 class StockDao {
 
+
+  async getCode(id: number) {
+    const stock = await getSharesRepository(Stock).findOne({id})
+    return stock
+  }
+
+  async getCodeByIds(ids: number[]) {
+    const stock = await getSharesRepository(Stock).findByIds(ids)
+    return stock
+  }
+
   async getByCode(code: string) {
     const stock = await getSharesRepository(Stock).findOne({code})
     return stock
