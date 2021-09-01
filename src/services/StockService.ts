@@ -7,6 +7,11 @@ import StockHistoryDao from '../daos/StockHistoryDao'
 
 class StockService {
 
+  async getByIds(ids: number[]) {
+    const stocks = await StockDao.getByIds(ids);
+    return stocks
+  }
+
   async getCode(id: number) {
     const stock = await StockDao.getCode(id);
     const lastestTrade = await StockHistoryDao.getLastestTrade(stock.id)

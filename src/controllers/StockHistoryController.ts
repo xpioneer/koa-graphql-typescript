@@ -148,9 +148,9 @@ class SharesController {
 
   async pages(ctx: Context) {
     const { code, page = 1, pageSize = 10 } = ctx.query
-    if(!code) {
-      throw new Error('code参数缺失')
-    }
+    // if(!code) {
+    //   throw new Error('code参数缺失')
+    // }
     const [list, total] = await StockHistoryService.pages(Number(page), Number(pageSize), code)
     ctx.Pages({list, total})
   }

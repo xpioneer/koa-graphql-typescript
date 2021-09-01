@@ -14,9 +14,11 @@ class StockDao {
     return stock
   }
 
-  async getCodeByIds(ids: number[]) {
-    const stock = await getSharesRepository(Stock).findByIds(ids)
-    return stock
+  async getByIds(ids: number[]) {
+    const stocks = await getSharesRepository(Stock).findByIds(ids, {
+      select: ['id', 'code', 'name']
+    })
+    return stocks
   }
 
   async getByCode(code: string) {
