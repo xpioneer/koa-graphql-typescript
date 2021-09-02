@@ -14,6 +14,13 @@ class StockDao {
     return stock
   }
 
+  async getById(id: number) {
+    const stock = await getSharesRepository(Stock).findOne(id, {
+      select: ['id', 'code', 'name']
+    })
+    return stock
+  }
+
   async getByIds(ids: number[]) {
     const stocks = await getSharesRepository(Stock).findByIds(ids, {
       select: ['id', 'code', 'name']
@@ -24,6 +31,20 @@ class StockDao {
   async getByCode(code: string) {
     const stock = await getSharesRepository(Stock).findOne({code})
     return stock
+  }
+
+  async getStockList(value: string, pageSize = 10) {
+    const list = await getSharesRepository(Stock).find({
+      where: [
+        { code: Like(`%${value}%`) },
+        { name: Like(`%${value}%`) }
+      ],
+      order: {
+        code: 'DESC'
+      },
+      take: pageSize
+    })
+    return list
   }
 
   async pages(offset = 1, size = 10, code?: string, name?: string, market?: EMarket, block?: EBLock) {

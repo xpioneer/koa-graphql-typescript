@@ -20,44 +20,36 @@ class StockHistoryDao {
   }
 
   async pages(offset = 1, size = 10, stockId?: number): Promise<[StockHistory[], number]> {
-    let sqlList = `Select
-      id,
-      stockId,
-      volume,
-      open,
-      high,
-      low,
-      close,
-      chg,
-      percent,
-      turnoverrate,
-      amount,
-      pe,
-      pb,
-      ps,
-      pcf,
-      market_capital From stock_history_new sh`
-    let sqlTotal = `Select count(sh.id) total From stock_history_new sh`
-    
-    const parameters = []
-
-    if(stockId) {
-      const whereAnd = `
-        And sh.stockId = ?
-      `
-      sqlList += whereAnd
-      sqlTotal += whereAnd
-      parameters.push(stockId)
-    }
-    sqlList += `
-      Order By sh.timestamp Desc
-      Limit ?,?;`
-    
-    parameters.push((offset > 0 ? (offset - 1) : 0) * size, size)
-
-    const list = await getSharesManager().query(sqlList, parameters)
-    const totalRow = await getSharesManager().query(sqlTotal, parameters)
-    return [list, totalRow[0].total]
+    const [list, total] = await getSharesRepository(History).findAndCount({
+      select: [
+        'id',
+        'stockId',
+        'volume',
+        'open',
+        'high',
+        'low',
+        'close',
+        'chg',
+        'percent',
+        'turnoverrate',
+        'amount',
+        'pe',
+        'pb',
+        'ps',
+        'pcf',
+        'market_capital',
+        'timestamp'
+      ],
+      where: {
+        stockId: Equal(stockId)
+      },
+      order: {
+        timestamp: 'DESC'
+      },
+      skip: (offset > 0 ? (offset - 1) : 0) * size,
+      take: size
+    })
+    return [list as StockHistory[], total]
   }
 }
 

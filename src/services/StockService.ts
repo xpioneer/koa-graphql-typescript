@@ -7,6 +7,11 @@ import StockHistoryDao from '../daos/StockHistoryDao'
 
 class StockService {
 
+  async getById(id: number) {
+    const stock = await StockDao.getById(id);
+    return stock
+  }
+
   async getByIds(ids: number[]) {
     const stocks = await StockDao.getByIds(ids);
     return stocks
@@ -24,6 +29,11 @@ class StockService {
   async getByCode(code: string) {
     const stock = await StockDao.getByCode(code);
     return stock
+  }
+
+  async getStockList(value: string, pageSize = 10) {
+    const list = await StockDao.getStockList(value)
+    return list
   }
 
   async pages(offset = 1, size = 10, code?: string, name?: string, market?: EMarket, block?: EBLock) {

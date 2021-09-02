@@ -14,10 +14,22 @@ class StockHistoryService {
     return lastestTrade
   }
 
-  async pages(offset = 1, size = 10, code: string): Promise<[StockHistory[], number]> {
-    // const stock = await StockService.getByCode(code)
-    // if(stock) {
+  async pages(offset = 1, size = 10, stockId: number): Promise<[StockHistory[], number]> {
+    if(stockId) {
+      const stock = await StockService.getById(stockId)
+      const [list, total] = await StockHistoryDao.pages(offset, size, stockId)
+      return [
+        list.map(item => {
+          item.tradeAt = formatDate(+item.timestamp, DateFormat.Date)
+          item.name = stock.name
+          item.code = stock.code
+          return item
+        }),
+        total
+      ]
+    } else {
       const [list, total] = await StockHistoryDao.pages(offset, size)
+      // set code,name; format timestamp
       const ids = list.map(item => item.stockId).reduce<number[]>((pre, cur) => {
         if(!pre.includes(cur)) {
           pre.push(cur)
@@ -38,9 +50,7 @@ class StockHistoryService {
         }),
         total
       ]
-    // } else {
-    //   return [[], 0]
-    // }
+    }
   }
 }
 

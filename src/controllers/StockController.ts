@@ -65,9 +65,14 @@ class StockController {
   // }
 
   async pages1(ctx: Context) {
-    const { page = 1, pageSize = 10, code, name, market, block } = ctx.query
-    const [list, total] = await StockService.pages(page, pageSize, code, name, market, block)
-    ctx.Pages({ list, total })
+    const { page = 1, pageSize = 10, code, name, market, block, noPage } = ctx.query
+    if(!!noPage) {
+      const list= await StockService.getStockList(code, pageSize)
+      ctx.Json({ data: list })
+    } else {
+      const [list, total] = await StockService.pages(page, pageSize, code, name, market, block)
+      ctx.Pages({ list, total })
+    }
   }
 
   async pages(delta = 0, size = 10) {
