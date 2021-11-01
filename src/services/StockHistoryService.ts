@@ -52,6 +52,10 @@ class StockHistoryService {
       ]
     }
   }
+
+  async getTotal() {
+    return await StockHistoryDao.getTotal()
+  }
 }
 
 export default new StockHistoryService

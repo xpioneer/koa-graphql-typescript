@@ -40,6 +40,11 @@ class StockService {
     const pages = await StockDao.pages(offset, size, code, name, market, block);
     return pages
   }
+
+  async getBlocksCount() {
+    const counts = await StockDao.getBlocksCount()
+    return counts
+  }
 }
 
 export default new StockService

@@ -30,6 +30,8 @@ router
   .get('/api/stocks', StockCtrl.pages1)
   .get('/api/stocks/:id', StockCtrl.getStock)
   .get('/api/stockhistory', StockHistoryCtrl.pages)
+  .get('/api/stockhistory/total', StockHistoryCtrl.getTotal)
+  .get('/api/stock/chartCount', StockCtrl.getBlocksCount)
   .get('/graphql', KoaGraphql({
     schema: RootSchema,
     graphql: _PROD_ ? false : true

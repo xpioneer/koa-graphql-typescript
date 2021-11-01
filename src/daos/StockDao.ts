@@ -2,7 +2,7 @@ import { Equal, Like, Between, FindManyOptions, FindConditions} from "typeorm";
 import { Context } from '@core/koa'
 import { Stock } from '../entities/mysql/shares/stock'
 import { EMarket, EBLock } from '../models/Stocks'
-import { getSharesManager, getSharesRepository } from '../database/dbUtils';
+import { getSharesManager, getSharesRepository, createSharesQueryBuilder } from '../database/dbUtils';
 
 
 
@@ -69,6 +69,12 @@ class StockDao {
     }
     const pages = await getSharesRepository(Stock).findAndCount(options)
     return pages
+  }
+
+  async getBlocksCount(): Promise<{total: number, block: EBLock}> {
+    const counts = await createSharesQueryBuilder(Stock, 'groupByBlocks')
+      .select('count(*) as total, block').groupBy('block').execute()
+    return counts
   }
 }
 

@@ -1,10 +1,11 @@
-import { Equal, Like, Between, FindManyOptions} from "typeorm";
+import { Equal, Like, Between, LessThanOrEqual, FindManyOptions} from "typeorm";
 import { StockHistory, History } from '../entities/mysql/shares/stockHistory'
 import { getSharesManager, getSharesRepository } from '../database/dbUtils';
-
-
+import Store, { RedisStore } from "../utils/session/store";
 
 class StockHistoryDao {
+
+  maxCount = -1
 
   async getLastestTrade(stockId: number) {
     const lastestTrade = await getSharesRepository(History).findOne({
@@ -50,6 +51,25 @@ class StockHistoryDao {
       take: size
     })
     return [list as StockHistory[], total]
+  }
+
+  async _getTotal() {
+    const before = Date.now()
+    return getSharesRepository(History).count().then(count => {
+      console.log('get total: ', count)
+      this.maxCount = count
+      return this.maxCount
+    }).then(() => {
+      console.log(`time:${Date.now() - before}ms`)
+    })
+  }
+
+  async getTotal() {
+    if(this.maxCount > 0) {
+      return this.maxCount
+    } else {
+      return await this._getTotal()
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import {getManager, getRepository, Entity, ObjectType, EntitySchema, getMongoManager} from "typeorm";
+import {getManager, getRepository, ObjectType, EntitySchema, getMongoManager, createQueryBuilder} from "typeorm";
 
 type TConnectName = 'Blog' | 'Shares' | 'Mongo'
 
@@ -41,4 +41,4 @@ export const getSharesManager = () => getManager(CONNECT_SHARES)
 export const getSharesRepository = <Entity>(entity: ObjectType<Entity> | EntitySchema<Entity> | string) => getRepository(entity, CONNECT_SHARES)
 
 
-
+export const createSharesQueryBuilder = <Entity>(entity: ObjectType<Entity> | string, alias = 'queryBuilder') => createQueryBuilder(entity, alias, CONNECT_SHARES)

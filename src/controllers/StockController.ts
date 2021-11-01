@@ -142,6 +142,11 @@ class StockController {
     return result
   }
 
+  async getBlocksCount(ctx: Context) {
+    const counts = await StockService.getBlocksCount()
+    ctx.Json({ data: counts })
+  }
+
 }
 
 export default new StockController

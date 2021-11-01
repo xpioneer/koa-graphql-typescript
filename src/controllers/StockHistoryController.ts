@@ -169,6 +169,11 @@ class SharesController {
     // }
     return stock
   }
+
+  async getTotal(ctx: Context) {
+    const total = await StockHistoryService.getTotal()
+    ctx.Json(total)
+  }
 }
 
 export default new SharesController

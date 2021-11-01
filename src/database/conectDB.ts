@@ -1,29 +1,31 @@
-import 'reflect-metadata'
+// import 'reflect-metadata'
 import { createConnection, createConnections, ConnectionOptions } from "typeorm";
-import { BlogConf, SharesConf, MongoConf } from '../../conf/db.conf'
+import { MysqlConf, MongoConf } from '../../conf/db.conf'
 import { Entities, ShareEntities } from '../entities/mysql'
 import { MongoEntities } from '../entities/mongo'
 import { CONNECT_BLOG, CONNECT_MONGO, CONNECT_SHARES } from './dbUtils';
+import stockHistoryDao from '../daos/StockHistoryDao'
 
 const _PROD_ = process.env.NODE_ENV === 'production'
 
 const connectDB = (): Promise<void> => {
   const connectOptions = [
-    {name: CONNECT_BLOG, entities: Entities, database: BlogConf.database},
-    {name: CONNECT_SHARES, entities: ShareEntities, database: SharesConf.database}
+    {name: CONNECT_BLOG, entities: Entities, database: CONNECT_BLOG},
+    {name: CONNECT_SHARES, entities: ShareEntities, database: CONNECT_SHARES}
   ].map<ConnectionOptions>(db => {
     return {
       ...db,
       type     : 'mysql',
-      host     : BlogConf.host,
-      port     : BlogConf.port,
-      username : BlogConf.username,
-      password : BlogConf.password,
+      host     : MysqlConf.host,
+      port     : MysqlConf.port,
+      username : MysqlConf.username,
+      password : MysqlConf.password,
       logging  : _PROD_ ? false : true,
     }
   })
   return createConnections(connectOptions).then((connect) => {
-    console.log(`${connectOptions.length} mysql connected successfully!`)
+    console.log(`${connectOptions.map(c => c.name).join()} ${connectOptions.length} mysql connected successfully!`)
+    stockHistoryDao._getTotal()
   }).catch((err) => {
     console.log('mysql failed to connect!', err)
   })
