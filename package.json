@@ -32,7 +32,7 @@
     "mysql2": "^1.6.1",
     "reflect-metadata": "^0.1.12",
     "remove": "^0.1.5",
-    "typeorm": "^0.2.9"
+    "typeorm": "^0.2.25"
   },
   "devDependencies": {
     "@types/graphql": "^14.5.0",
