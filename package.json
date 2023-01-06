@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@types/ioredis": "^4.0.3",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "dataloader": "^2.0.0",
     "date-fns": "^2.23.0",
     "graphql": "^15.5.1",
