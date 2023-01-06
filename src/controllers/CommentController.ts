@@ -1,5 +1,5 @@
 import { Like, Between, FindManyOptions} from "typeorm";
-import { Context } from '@core/koa'
+import { Context } from '@/core/koa'
 import { Comment } from '../entities/mysql/comment'
 import { Guid } from "../utils/tools";
 import { toDate } from 'date-fns'

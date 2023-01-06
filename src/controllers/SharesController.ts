@@ -1,5 +1,5 @@
 import { Equal, Like, Between, FindManyOptions} from "typeorm";
-import { Context } from '@core/koa'
+import { Context } from '@/core/koa'
 import { GJRecord } from '../entities/mysql/shares/GJRecord'
 import { Guid } from "../utils/tools";
 import { toDate } from 'date-fns'

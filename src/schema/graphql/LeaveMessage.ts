@@ -12,7 +12,7 @@ import {
   GraphQLFieldConfigMap,
   Source,
 } from 'graphql';
-import {Context} from '@core/koa'
+import {Context} from '@/core/koa'
 import { toDate } from 'date-fns'
 import LeaveMsgCtrl from '../../controllers/LeaveMessageController'
 import { metaFields, pageArgsFields } from './common'

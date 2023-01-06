@@ -1,4 +1,4 @@
-// import * as Koa from '@core/koa'
+// import * as Koa from 'core/koa'
 // import * as Cookies from "cookies";
 import Store, { RedisStore } from "./store";
 

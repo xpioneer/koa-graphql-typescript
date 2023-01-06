@@ -1,5 +1,5 @@
-import * as Koa from '@core/koa'
-import { ResponseData, ReturnPage } from '../models/ResponseData'
+import * as Koa from '@/core/koa'
+import { ResponseData, ReturnPage } from '@/models/ResponseData'
 
 
 const json = (ctx: Koa.Context) => <T = any>(res?:  T | ResponseData | (() => T)): ResponseData<T> => {

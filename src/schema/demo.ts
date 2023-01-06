@@ -7,7 +7,7 @@ import {
   GraphQLType,
   GraphQLScalarType
 } from 'graphql';
-import * as Koa from '@core/koa'
+import * as Koa from '@/core/koa'
 import { toDate } from 'date-fns'
 
 let count = 0;

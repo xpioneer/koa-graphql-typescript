@@ -14,15 +14,14 @@
     "outDir": "./release/",
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["src/*"],
-      "@core/*": ["src/core/*"],
-      "@models/*": ["src/models/*"],
-      "@entities/*": ["src/entities/*"],
-      "@utils/*": ["src/utils/*"]
+      "@/*": ["src/*"]
     }
   },
   "compileOnSave": false,
   "exclude": [
     "node_modules"
-  ]
+  ],
+  "ts-node": {
+    "require": ["tsconfig-paths/register"]
+  }
 }

@@ -1,6 +1,7 @@
 import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equal} from "typeorm";
-import { Context } from '@core/koa'
+import { Context } from '@/core/koa'
 import { Baidu, Tmall } from "../constants";
+import { Delay } from '@/utils/tools'
 
 
 
@@ -26,6 +27,7 @@ export default class LogsController {
 
   static async test(ctx: Context) {
     console.log('ctx.path: ', ctx.path.length, ctx.params)
+    await Delay(5000)
     ctx.body = ctx.params.id.length
   }
 

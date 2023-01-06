@@ -6,7 +6,7 @@ import {
   GraphQLFieldConfigMap,
   Source
 } from 'graphql';
-import {Context} from '@core/koa'
+import {Context} from '@/core/koa'
 import Article from './Article'
 import ArticleType from './ArticleType'
 import Comment from './Comment'

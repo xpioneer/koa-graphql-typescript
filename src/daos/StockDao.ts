@@ -1,8 +1,8 @@
 import { Equal, Like, Between, FindManyOptions, FindConditions} from "typeorm";
-import { Context } from '@core/koa'
-import { Stock } from '../entities/mysql/shares/stock'
-import { EMarket, EBLock } from '../models/Stocks'
-import { getSharesManager, getSharesRepository, createSharesQueryBuilder } from '../database/dbUtils';
+import { Context } from '@/core/koa'
+import { Stock } from '@/entities/mysql/shares/stock'
+import { EMarket, EBLock } from '@/models/Stocks'
+import { getSharesManager, getSharesRepository, createSharesQueryBuilder } from '@/database/dbUtils';
 
 
 

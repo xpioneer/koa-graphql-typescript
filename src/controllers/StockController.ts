@@ -1,10 +1,10 @@
 import { Equal, Like, Between, FindManyOptions} from "typeorm";
-import { Context } from '@core/koa'
-import { Stock } from '../entities/mysql/shares/stock'
-import { Guid } from "../utils/tools";
-import { getSharesManager, getSharesRepository } from '../database/dbUtils';
-import $http from '../utils/http'
-import StockService from '../services/StockService'
+import { Context } from '@/core/koa'
+import { Stock } from '@/entities/mysql/shares/stock'
+import { Guid } from "@/utils/tools";
+import { getSharesManager, getSharesRepository } from '@/database/dbUtils';
+import $http from '@/utils/http'
+import StockService from '@/services/StockService'
 import { Stock_Name_Origin, Stock_Name_API_Host, Stock_Name_API_Url, UA } from '../../conf/api.conf'
 
 interface IStockKLineResponse {

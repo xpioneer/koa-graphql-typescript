@@ -12,7 +12,7 @@ import {
   GraphQLFieldConfigMap,
   Source,
 } from 'graphql';
-import {Context} from '@core/koa'
+import {Context} from '@/core/koa'
 import ArticleTypeCtrl from '../../controllers/ArticleTypeController'
 import { metaFields, pageArgsFields } from './common'
 import { formatDate } from '../../utils/tools/formatDate';

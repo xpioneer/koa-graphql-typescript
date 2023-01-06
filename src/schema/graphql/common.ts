@@ -12,9 +12,9 @@ import {
   Source,
   GraphQLFieldConfigArgumentMap
 } from 'graphql';
-import {Context} from '@core/koa'
-import UserCtrl, {UsersLoader} from '../../controllers/UserController'
-import { User } from '@src/entities/mysql/user';
+import {Context} from '@/core/koa'
+import UserCtrl, {UsersLoader} from '@/controllers/UserController'
+import { User } from '../../entities/mysql/user';
 
 const CreatorType = new GraphQLObjectType({
   name: 'creator',

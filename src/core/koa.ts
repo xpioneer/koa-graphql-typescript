@@ -1,5 +1,5 @@
 
-import { ResponseData, ReturnPage } from '@src/models/ResponseData';
+import { ResponseData, ReturnPage } from '@/models/ResponseData';
 import {Context as KoaContext} from 'koa'
 
 export interface Context extends KoaContext {

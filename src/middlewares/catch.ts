@@ -1,4 +1,4 @@
-import { Context } from '@core/koa'
+import { Context } from '@/core/koa'
 import LogCtrl from '../controllers/LogsController'
 
 export default async (ctx: Context, next: () => Promise<any>) => {

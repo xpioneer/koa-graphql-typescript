@@ -1,5 +1,5 @@
 import { Equal, Like, Between, FindManyOptions} from "typeorm";
-import { Context } from '@core/koa'
+import { Context } from '@/core/koa'
 import { Balls } from '../entities/mysql/balls'
 import { Guid } from "../utils/tools";
 import { getBlogManager, getBlogRepository } from '../database/dbUtils';

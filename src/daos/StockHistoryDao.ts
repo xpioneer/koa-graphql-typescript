@@ -1,7 +1,7 @@
 import { Equal, Like, Between, LessThanOrEqual, FindManyOptions} from "typeorm";
-import { StockHistory, History } from '../entities/mysql/shares/stockHistory'
-import { getSharesManager, getSharesRepository } from '../database/dbUtils';
-import Store, { RedisStore } from "../utils/session/store";
+import { StockHistory, History } from '@/entities/mysql/shares/stockHistory'
+import { getSharesManager, getSharesRepository } from '@/database/dbUtils';
+import Store, { RedisStore } from "@/utils/session/store";
 
 class StockHistoryDao {
 

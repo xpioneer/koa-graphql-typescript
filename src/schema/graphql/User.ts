@@ -12,10 +12,10 @@ import {
   Source,
   GraphQLNonNull,
 } from 'graphql';
-import {Context} from '@core/koa'
-import UserCtrl from '../../controllers/UserController'
+import {Context} from '@/core/koa'
+import UserCtrl from '@/controllers/UserController'
 import { metaFields, pageArgsFields } from './common'
-import { User } from '@src/entities/mysql/user';
+import { User } from '@/entities/mysql/user';
 import { formatDate } from '../../utils/tools/formatDate';
 
 // user

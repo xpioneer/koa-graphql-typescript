@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { Context } from '@core/koa'
+import { Context } from '@/core/koa'
 
 const getFile = (ctx: Context) => {
 

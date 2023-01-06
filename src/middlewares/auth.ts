@@ -1,4 +1,4 @@
-import { Context } from '@core/koa'
+import { Context } from '@/core/koa'
 import Store from "../utils/session/store";
 import { JWT_KEY, NO_AUTH_URLS } from '../constants'
 

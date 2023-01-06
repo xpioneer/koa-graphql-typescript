@@ -1,4 +1,4 @@
-import { Context } from '@core/koa'
+import { Context } from '@/core/koa'
 import $http from '../utils/http'
 
 

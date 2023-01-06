@@ -1,9 +1,9 @@
 import { Like, Between, Equal, FindManyOptions, In} from "typeorm";
-import { Context } from '@core/koa'
-import { User } from '../entities/mysql/user'
+import { Context } from '@/core/koa'
+import { User } from '@/entities/mysql/user'
 import { Guid, cryptoPwd } from "../utils/tools"
 import { toDate } from 'date-fns'
-import { getBlogManager, getBlogRepository } from '../database/dbUtils';
+import { getBlogManager, getBlogRepository } from '@/database/dbUtils';
 // import DataLoader from 'dataloader'
 const DataLoader = require('dataloader')
 
