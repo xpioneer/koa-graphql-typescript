@@ -38,11 +38,18 @@ class Application {
 
 	// start app
 	public start(port: number) {
-		this.app.listen(port, (): void => {
-			console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
-			connectDB() // db start after server running
-			connectMongo() // connect mongodb
+		// change to the databases priority startup
+		Promise.all([connectDB(), connectMongo()]).then(r => {
+			console.log('all databases have been started.')
+			this.app.listen(port, () => {
+				console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
+			})
 		})
+		// this.app.listen(port, (): void => {
+		// 	console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
+		// 	connectDB() // db start after server running
+		// 	connectMongo() // connect mongodb
+		// })
 	}
 }
 

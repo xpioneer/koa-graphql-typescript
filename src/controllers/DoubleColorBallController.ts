@@ -7,7 +7,11 @@ import { getBlogManager, getBlogRepository } from '../database/dbUtils';
 export default class DoubleColorBallController {
 
   static async getById(id: string = '') {
-    const result = await getBlogRepository(Balls).findOne({id})
+    const result = await getBlogRepository(Balls).findOne({
+      where: {
+        id: Equal(id)
+      }
+    })
     console.log(result, 'getById')
     return result
   }
@@ -66,7 +70,11 @@ export default class DoubleColorBallController {
   }
 
   static async insert(args: any, ctx: Context) {
-    const ball = await getBlogRepository(Balls).findOne({issue: args.issue})
+    const ball = await getBlogRepository(Balls).findOne({
+      where: {
+        issue: Equal(args.issue)
+      }
+    })
     if(ball) {
       ctx.throw(500, '该期号已存在')
     }
@@ -97,7 +105,11 @@ export default class DoubleColorBallController {
   }
 
   static async update(args: any, ctx: Context) {
-    const ball = await getBlogRepository(Balls).findOne({id: args.id})
+    const ball = await getBlogRepository(Balls).findOne({
+      where: {
+        id: Equal(args.id)
+      }
+    })
     if(!ball) {
       ctx.throw(500, '该期不存在')
     }

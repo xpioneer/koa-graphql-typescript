@@ -15,7 +15,11 @@ class SharesController {
 
 
   async getById(id: string = '') {
-    const article = await getSharesRepository(GJRecord).findOne({id})
+    const article = await getSharesRepository(GJRecord).findOne({
+      where: {
+        id
+      }
+    })
     // console.log('article: ', article)
     return article
   }

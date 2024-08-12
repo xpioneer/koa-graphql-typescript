@@ -3,19 +3,28 @@ import { Context } from '@/core/koa'
 import { Article } from '../entities/mysql/article'
 import { Guid } from "../utils/tools";
 import { toDate } from 'date-fns'
-import { getBlogManager, getBlogRepository } from '../database/dbUtils';
+import { getBlogManager, getBlogRepository, useBlogRepository } from '../database/dbUtils';
 
+
+// const articleRepository = useBlogRepository()
 
 export default class ArticleController {
 
   static async getAll(args: any) {
     console.log(args)
+    // const articleRepository = useRepository<Article>()
+    // const a = articleRepository(Article).find({comment: '123'})
     return await getBlogManager().find(Article);
+    // return await articleRepository(Article).find()
   }
 
 
   static async getById(id: string = '') {
-    const article = await getBlogRepository(Article).findOne({id})
+    const article = await getBlogRepository(Article).findOne({
+      where: {
+        id: Equal(id)
+      }
+    })
     // console.log('article: ', article)
     return article
   }

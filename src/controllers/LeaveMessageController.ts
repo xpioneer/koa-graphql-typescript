@@ -1,4 +1,9 @@
-import { Like, Between, FindManyOptions} from "typeorm";
+import {
+  Like,
+  Between,
+  FindManyOptions,
+  Equal
+} from "typeorm";
 import { Context } from '@/core/koa'
 import { LeaveMessage } from '../entities/mysql/leaveMessage'
 import { Guid } from "../utils/tools";
@@ -15,7 +20,11 @@ export default class LeaveMessageController {
 
   static async getById(id: string = '') {
     // getManager().findOne()
-    const leaveMsg = await getBlogRepository(LeaveMessage).findOne({id})
+    const leaveMsg = await getBlogRepository(LeaveMessage).findOne({
+      where: {
+        id: Equal(id)
+      }
+    })
     return leaveMsg
   }
 

@@ -15,7 +15,11 @@ export default class TagController {
 
 
   static async getById(id: string = '') {
-    const tag = await getBlogRepository(Tag).findOne({id})
+    const tag = await getBlogRepository(Tag).findOne({
+      where: {
+        id
+      }
+    })
     return tag
   }
 

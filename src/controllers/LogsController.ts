@@ -1,22 +1,34 @@
+import * as Koa from 'koa'
 import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equal} from 'typeorm';
-import { Context } from '@/core/koa'
+// import { Context } from '@/core/koa'
 import { API } from '../entities/mongo/api'
 import { Errors } from '../entities/mongo/errors'
 import { Guid } from '../utils/tools';
-import { CONNECT_MONGO } from '../database/dbUtils'
+import { CONNECT_MONGO, useMongoRepository } from '../database/dbUtils'
 import { formatDate } from '../utils/tools';
 import { DateFormat } from '../types/base';
 
 
+// const mongoRepos = useMongoRepository()
+
 export default class LogsController {
+
+  constructor(){
+
+  }
 
 
   static async getById(id: string = '') {
-    const api = await getMongoRepository(API, CONNECT_MONGO).findOne({id})
+    const api = await getMongoRepository(API, CONNECT_MONGO).findOne({
+      where: {
+        id,
+      }
+    })
+    // const api = await mongoRepos(API).findOne({where: {id: Equal(id)}})
     return api
   }
 
-  static async apiPages(ctx: Context) {
+  static async apiPages(ctx: Koa.Context) {
     const params = ctx.getParams
     const query = ctx.query
     
@@ -39,7 +51,7 @@ export default class LogsController {
     ctx.Pages({list, total})
   }
 
-  static async errorsPages(ctx: Context) {
+  static async errorsPages(ctx: Koa.Context) {
     const params = ctx.getParams
     const query = ctx.query
     
@@ -63,18 +75,18 @@ export default class LogsController {
   }
 
   // api log insert
-  static async APIlogger (ctx: Context, options: any): Promise<void> {
+  static async APIlogger (ctx: Koa.Context, options: any): Promise<void> {
     if(!/^\/api\/log-(api|errors)$/.test(ctx.path)) {
       const guid = Guid()
       const model = new API()
       const method = ctx.method
       model.id = guid
-      model.ip = ctx.header['x-real-ip'] || ctx.req.connection.remoteAddress,
+      model.ip = ctx.header['x-real-ip'] as string || ctx.req.socket.remoteAddress,
       model.path = ctx.path
       model.url = ctx.url
       model.status = ctx.status
       model.origin = ctx.origin
-      model.hostname = ctx.header['x-host'];
+      model.hostname = ctx.header['x-host'] as string;
       model.headers = ctx.header
       model.resHeaders = ctx.response.header
       model.resData = ctx.body
@@ -100,17 +112,17 @@ export default class LogsController {
   }
 
   // errors log insert
-  static async ERRlogger (ctx: Context, options: any): Promise<void> {
+  static async ERRlogger (ctx: Koa.Context, options: any): Promise<void> {
     const guid = Guid()
     const model = new Errors()
     const method = ctx.method
     model.id = guid
-    model.ip = ctx.header['x-real-ip'] || ctx.req.connection.remoteAddress,
+    model.ip = ctx.header['x-real-ip'] as string || ctx.req.socket.remoteAddress,
     model.path = ctx.path
     model.url = ctx.url
     model.origin = ctx.origin
-    model.hostname = ctx.header['x-host'];
-    model.headers = ctx.header
+    model.hostname = ctx.header['x-host'] as string;
+    model.headers = String(ctx.header)
     model.resHeaders = ctx.response.header
     model.resData = ctx.body
     model.protocol = ctx.protocol;

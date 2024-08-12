@@ -29,10 +29,10 @@
     "koa-jwt": "^3.5.1",
     "koa-router": "^7.4.0",
     "mongodb": "^3.1.8",
-    "mysql2": "^1.6.1",
-    "reflect-metadata": "^0.1.12",
+    "mysql2": "^3.11.0",
+    "reflect-metadata": "^0.2.2",
     "remove": "^0.1.5",
-    "typeorm": "^0.2.9"
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@types/graphql": "^14.5.0",

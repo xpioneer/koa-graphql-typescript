@@ -31,12 +31,13 @@ const page = (ctx: Koa.Context) => <T = any>(data: ReturnPage<T>): ResponseData<
     if (typeof data === 'object' && data !== null) {
       const { list, total = 0 } = data
       const count = list.length || 0
+      const _pageSize = +ctx.query.pageSize, page = +ctx.query.page
       resData.data = list;
-      let pageSize = ctx.query.pageSize ? ctx.query.pageSize*1 : 10;
+      let pageSize = _pageSize ? _pageSize : 10;
       resData.meta = {
         total: total,
         count: count,
-        page: ctx.query.page ? ctx.query.page*1 : 1,
+        page: page ? page * 1 : 1,
         pageSize: pageSize,
         totalPage: Math.ceil(total/pageSize)
       };

@@ -1,10 +1,12 @@
 
 import { ResponseData, ReturnPage } from '@/models/ResponseData';
-import {Context as KoaContext} from 'koa'
+import * as Koa from 'koa'
 
-export interface Context extends KoaContext {
+export interface Context extends Koa.Context {
   // post fields
   fields?: AnyObject
+
+  body: any
 
   // session
   session?: object
