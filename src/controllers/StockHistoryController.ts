@@ -46,7 +46,7 @@ class SharesController {
     try {
       // 数据库查数据
       console.time('a')
-      const _stocks = await StockCtrl.getList(page, 10)
+      const _stocks = await StockCtrl.getList(+page, 10)
       const stocks = _stocks.map(s => {
         delete s.uuid
         s.code = `${s.market === 1 ? 'SH' : 'SZ'}${s.code}`
@@ -151,7 +151,7 @@ class SharesController {
     // if(!code) {
     //   throw new Error('code参数缺失')
     // }
-    const [list, total] = await StockHistoryService.pages(Number(page), Number(pageSize), stockId)
+    const [list, total] = await StockHistoryService.pages(Number(page), Number(pageSize), +stockId)
     ctx.Pages({list, total})
   }
 

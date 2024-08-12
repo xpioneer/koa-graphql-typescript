@@ -30,7 +30,8 @@ export default class UserController {
   }
 
   static async getById(id: string = '') {
-    const article = await getBlogRepository(User).findOne({id}, {
+    const article = await getBlogRepository(User).findOne({
+      where: { id: Equal(id) },
       select: ['id', 'username', 'nickName', 'userType', 'createdAt', 'sex', 'remark']
     })
     return article

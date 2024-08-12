@@ -1,4 +1,11 @@
-import { Equal, Like, Between, FindManyOptions, FindConditions} from "typeorm";
+import {
+  Equal,
+  Like,
+  Between,
+  FindManyOptions,
+  FindOptions,
+  In,
+} from "typeorm";
 import { Context } from '@/core/koa'
 import { Stock } from '@/entities/mysql/shares/stock'
 import { EMarket, EBLock } from '@/models/Stocks'
@@ -10,26 +17,38 @@ class StockDao {
 
 
   async getCode(id: number) {
-    const stock = await getSharesRepository(Stock).findOne({id})
+    const stock = await getSharesRepository(Stock).findOne({
+      where: {
+        id
+      }
+    })
     return stock
   }
 
   async getById(id: number) {
-    const stock = await getSharesRepository(Stock).findOne(id, {
+    const stock = await getSharesRepository(Stock).findOne({
+      where: {
+        id
+      },
       select: ['id', 'code', 'name']
     })
     return stock
   }
 
   async getByIds(ids: number[]) {
-    const stocks = await getSharesRepository(Stock).findByIds(ids, {
-      select: ['id', 'code', 'name']
+    const stocks = await getSharesRepository(Stock).find({
+      where: {
+        id: In(ids)
+      }
     })
+    // const stocks = await getSharesRepository(Stock).findByIds(ids, {
+    //   select: ['id', 'code', 'name']
+    // })
     return stocks
   }
 
   async getByCode(code: string) {
-    const stock = await getSharesRepository(Stock).findOne({code})
+    const stock = await getSharesRepository(Stock).findOneBy({code: Equal(code)})
     return stock
   }
 
@@ -48,7 +67,7 @@ class StockDao {
   }
 
   async pages(offset = 1, size = 10, code?: string, name?: string, market?: EMarket, block?: EBLock) {
-    const where: FindConditions<Stock> = {}
+    const where: FindManyOptions<Stock>['where'] = {}
     if(code) {
       where.code = Like(`%${code}%`)
     }
@@ -65,7 +84,7 @@ class StockDao {
       skip: (offset > 0 ? (offset - 1) : 0) * size,
       take: size,
       order: { id: 'ASC'},
-      where
+      where: {}
     }
     const pages = await getSharesRepository(Stock).findAndCount(options)
     return pages

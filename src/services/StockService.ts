@@ -1,4 +1,9 @@
-import { Equal, Like, Between, FindManyOptions, FindConditions } from "typeorm";
+import {
+  Equal,
+  Like,
+  Between,
+  FindManyOptions
+} from "typeorm";
 import { Stock, StockDetail } from '../entities/mysql/shares/stock'
 import { EMarket, EBLock } from '../models/Stocks'
 import StockDao from '../daos/StockDao'

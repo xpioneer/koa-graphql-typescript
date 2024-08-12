@@ -1,4 +1,4 @@
-import { Like, Between, FindManyOptions} from "typeorm";
+import { Like, Between, FindManyOptions, Equal} from "typeorm";
 import { Context } from '@/core/koa'
 import { Comment } from '../entities/mysql/comment'
 import { Guid } from "../utils/tools";
@@ -13,7 +13,11 @@ export default class CommentController {
 
 
   static async getById(id: string = '') {
-    const article = await getBlogRepository(Comment).findOne({id})
+    const article = await getBlogRepository(Comment).findOne({
+      where: {
+        id: Equal(id)
+      }
+    })
     return article
   }
 

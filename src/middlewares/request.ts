@@ -35,14 +35,16 @@ const getParams = (ctx: Koa.Context) => {
   const data: any = {};
   let query = ctx.query;
   if (query && Object.keys(query).length>0) {
-    data['limit'] = (query.pageSize ? query.pageSize : 10) * 1;
-    let page = (query.page ? query.page : 1) - 1;//offset start 0(如果不存在则只返回一条)
-    let offset = (query.page < 1 ? 0 : page) * data['limit'];
+    const pageSize = +query.pageSize, _page = +query.page
+    data['limit'] = (pageSize ? pageSize : 10) * 1;
+    let page = (_page ? _page : 1) - 1;//offset start 0(如果不存在则只返回一条)
+    let offset = (_page < 1 ? 0 : page) * data['limit'];
     data['offset'] = offset * 1;
     /*filter*/
-    if (query['filter'] && query['filter'].length > 0) {
+    const _filter = query.filter as any[]
+    if (_filter && _filter.length > 0) {
       data['where'] = {};
-      for (let filter of query['filter']) {
+      for (let filter of _filter) {
         if (filter.col === '_orFilter_') {
           data['where']['$or'] = filter.val;
         } else {
@@ -76,7 +78,7 @@ const getParams = (ctx: Koa.Context) => {
     /*order*/
     if (query['orderBy'] && query['orderBy'].length>0) {
       data['order'] = [];
-      let orders = query['orderBy'].map((o: IOrder): string[] => {
+      let orders = (query['orderBy'] as any[]).map((o: IOrder): string[] => {
         return [o.col, o.dir];
       });
       data['order'] = orders;

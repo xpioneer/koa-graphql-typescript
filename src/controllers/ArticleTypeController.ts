@@ -1,4 +1,9 @@
-import { Like, Between, FindManyOptions} from "typeorm";
+import {
+  Like,
+  Between,
+  FindManyOptions,
+  Equal
+} from "typeorm";
 import { Context } from '@/core/koa'
 import { ArticleType } from '../entities/mysql/articleType'
 import { Guid } from "../utils/tools";
@@ -15,7 +20,11 @@ export default class ArticleController {
 
   static async getById(id: string = '') {
     // getManager().findOne()
-    const articleType = await getBlogRepository(ArticleType).findOne({id})
+    const articleType = await getBlogRepository(ArticleType).findOne({
+      where: {
+        id: Equal(id)
+      }
+    })
     return articleType
   }
 

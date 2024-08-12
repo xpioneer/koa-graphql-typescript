@@ -1,21 +1,52 @@
-import {getManager, getRepository, ObjectType, EntitySchema, getMongoManager, createQueryBuilder} from "typeorm";
+import {
+  getManager,
+  getRepository,
+  ObjectType,
+  EntitySchema,
+  getMongoManager,
+  createQueryBuilder,
+  DataSource,
+} from "typeorm";
 
-type TConnectName = 'Blog' | 'Shares' | 'Mongo'
+
+let DataSources: DataSource[] = []
+let MongoSource: DataSource = null
+
+export const setDataSource = (dataSources: DataSource[]) => {
+  DataSources = dataSources
+}
+
+export const setMongoDataSource = (dataSource: DataSource) => {
+  MongoSource = dataSource
+}
+
+export const useBlogRepository = () => {
+  // return DataSources.map(d => d.getRepository)
+  return DataSources[0].getRepository
+}
+
+export const useSharesRepository = () => {
+  return DataSources[1].getRepository
+}
+
+export const useMongoRepository = () => {
+  return MongoSource.getMongoRepository
+}
 
 /**
  * blog
  */
-export const CONNECT_BLOG: TConnectName = 'Blog'
+export const CONNECT_BLOG: string = 'Blog'
 
 /**
  * shares
  */
-export const CONNECT_SHARES: TConnectName = 'Shares'
+export const CONNECT_SHARES: string = 'Shares'
 
 /**
  * mongo
  */
-export const CONNECT_MONGO: TConnectName = 'Mongo'
+export const CONNECT_MONGO: string = 'Mongo'
 
 /**
  * blog manager
