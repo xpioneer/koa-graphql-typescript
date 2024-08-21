@@ -43,7 +43,7 @@ CREATE TABLE `gj_trade` (
   `deleteAt` bigint(20) DEFAULT NULL,
   `deleteBy` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -80,7 +80,7 @@ CREATE TABLE `stock_history_new` (
   `hold_ratio_hk` float DEFAULT NULL COMMENT 'hold_ratio_hk',
   `net_volume_hk` bigint(20) DEFAULT NULL COMMENT 'net_volume_hk',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -98,7 +98,7 @@ CREATE TABLE `stocks` (
   `block` int(11) DEFAULT NULL COMMENT '板块',
   `amount` int(11) DEFAULT NULL COMMENT '单手交易数量',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 

@@ -22,6 +22,7 @@ export default (opts: Options) => {
       await next()
     } else {
       let token = ctx.header['authorization']
+      console.log(ctx.header, 'ctx.header>>>>')
 
       if(!token) {
         ctx.throw(401, debug ? 'Token not found' : 'Authentication Error')

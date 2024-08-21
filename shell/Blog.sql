@@ -47,7 +47,7 @@ CREATE TABLE `article` (
   `deletedAt` bigint(20) DEFAULT NULL COMMENT '删除时间',
   `version` int(11) NOT NULL DEFAULT '0' COMMENT '版本',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -68,7 +68,7 @@ CREATE TABLE `articleTag` (
   `deletedBy` varchar(32) DEFAULT NULL,
   `version` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -90,7 +90,7 @@ CREATE TABLE `articleType` (
   `deletedAt` bigint(20) DEFAULT NULL,
   `version` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -119,7 +119,7 @@ CREATE TABLE `comment` (
   `deletedAt1` datetime DEFAULT NULL,
   `version` int(11) DEFAULT '0' COMMENT '版本',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -154,7 +154,7 @@ CREATE TABLE `doubleColorBall` (
   `deletedAt` bigint(20) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -178,7 +178,7 @@ CREATE TABLE `leaveMessage` (
   `deletedAt` bigint(20) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -234,7 +234,7 @@ CREATE TABLE `system_log` (
   `deleted_at` bigint(20) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -258,7 +258,7 @@ CREATE TABLE `tag` (
   `deletedAt` bigint(20) DEFAULT NULL,
   `version` bigint(20) DEFAULT '0' COMMENT '版本',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 
@@ -284,7 +284,7 @@ CREATE TABLE `user` (
   `deletedAt` bigint(20) DEFAULT NULL,
   `version` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 

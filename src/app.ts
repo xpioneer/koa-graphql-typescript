@@ -40,7 +40,7 @@ class Application {
 	public start(port: number) {
 		// change to the databases priority startup
 		Promise.all([connectDB(), connectMongo()]).then(r => {
-			console.log('all databases have been started.')
+			console.log('All databases are connected.')
 			this.app.listen(port, () => {
 				console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
 			})

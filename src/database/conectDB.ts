@@ -21,7 +21,7 @@ const connectDB = () => {
       username : MysqlConf.username,
       password : MysqlConf.password,
       logging  : _PROD_ ? false : true,
-      driver   : require('mysql2/promise'),
+      // driver   : require('mysql2/promise'),
     }
   })
   const connectDBs = connectOptions.map(c => new DataSource(c).initialize())

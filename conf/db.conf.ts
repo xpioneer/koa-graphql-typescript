@@ -3,7 +3,7 @@ export const MysqlConf = {
   host: 'localhost',
   port: 3306,
   username: 'root',
-  password: 'Mysql-pwd-1231',
+  password: 'Mysql-pwd-123',
 }
 
 // mongodb config
