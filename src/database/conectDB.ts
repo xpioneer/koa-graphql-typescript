@@ -26,12 +26,12 @@ const connectDB = () => {
     }
   })
   const connectDBs = connectOptions.map(c => new DataSource(c).initialize())
-  return Promise.all(connectDBs).then((connect) => {
+  return Promise.all(connectDBs).then((datasource) => {
     console.log(`${connectOptions.map(c => c.name).join()} ${connectOptions.length} mysql connected successfully!`)
     console.log(`connencted at ${format(new Date, 'yyyy-MM-dd HH:mm:ss:SSS')}`)
     // stockHistoryDao._getTotal()
-    setDataSource(connect)
-    return connect
+    setDataSource(datasource)
+    return Promise.resolve(datasource)
   }).catch((err) => {
     console.log('mysql failed to connect!', err)
     return Promise.reject(err)
@@ -54,7 +54,7 @@ const connectMongo = () => {
     console.log('mongo connected successfully!')
     // DataSources.mongo = datasource
     setMongoDataSource(datasource)
-    return datasource
+    return Promise.resolve(datasource)
   }).catch((err) => {
     console.log('mongo connect fail!', err)
     return Promise.reject(err)

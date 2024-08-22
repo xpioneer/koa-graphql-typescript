@@ -14,7 +14,6 @@ export class Application {
 	constructor(port = 8200){
 		this.app = new Koa()
 		this.connectDBs().then(() => {
-			console.log('...', Date.now())
 			this.init()
 		}).then(() => {
 			this.start(port)
