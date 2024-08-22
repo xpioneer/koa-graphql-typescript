@@ -6,18 +6,18 @@ import Store from "@/utils/session/store";
 import { JWT_SECRET, EXP_TIME } from '../constants'
 import { sign } from '../core/jwt/sign'
 import { cryptoPwd } from "../utils/tools"
-import { getBlogManager } from '../database/dbUtils';
+import { useBlogRepository } from '../database/dbUtils';
 
 
-export default class AccountController {
+class AccountController {
   
   //POST
-  static async login(ctx: Context) {
+  async login(ctx: Context) {
     const inputs: any = ctx.fields;
     let username = inputs.username;
-    let password = inputs.password;
+    let password = inputs.pwd;
     if ((username && username.length > 0) && (password && password.length > 5)) {
-      const result = await getBlogManager().findOne(User, {
+      const result = await useBlogRepository(User).findOne({
         select: ['id', 'username', 'nickName', 'sex', 'userType'],
         where: {
           username: username,
@@ -40,11 +40,36 @@ export default class AccountController {
   }
 
   //POST
-  static async logout(ctx: Context) {
+  async logout(ctx: Context) {
     const tokens = ctx.header['authorization']
     const token = tokens.split(' ')[1]
     await Store.destroy(token)
     ctx.Json({ data: 1, msg: '退出成功！' });
   }
 
+
+  //POST
+  async register(ctx: Context) {
+    const inputs = ctx.fields;
+    let username = inputs.username;
+    let password = inputs.password;
+    if ((username && username.length > 0) && (password && password.length > 5)) {
+      const result = await useBlogRepository(User).create()
+      if(result) {
+        const token = sign({ ...result, exp: EXP_TIME }, JWT_SECRET)
+        await Store.set('true', {
+          sid: token,
+          maxAge: EXP_TIME // millisecond
+        })
+        ctx.Json({ data: token });
+      } else {
+        ctx.throw(400, '用户名或密码错误！');
+      }
+    } else {
+      ctx.throw(400, '用户名或密码错误！');
+    }
+  }
+
 }
+
+export default new AccountController

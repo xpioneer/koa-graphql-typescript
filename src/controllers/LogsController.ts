@@ -6,6 +6,7 @@ import {
   FindManyOptions,
   Equal,
   MongoRepository,
+  DataSource,
 } from 'typeorm';
 // import { Context } from '@/core/koa'
 import { API } from '../entities/mongo/api'
@@ -15,29 +16,35 @@ import { CONNECT_MONGO, useMongoRepository } from '../database/dbUtils'
 import { formatDate } from '../utils/tools';
 import { DateFormat } from '../types/base';
 
+// export const DataSources: Record<'mongo', DataSource> = {
+//   mongo: null
+// }
 
 // const mongoRepos = useMongoRepository()
 
-export default class LogsController {
+class LogsController {
   
   mongoDB: MongoRepository<API>
 
   constructor(){
-    this.mongoDB = useMongoRepository()(API)
+
   }
 
+  init() {
+    return this.mongoDB = useMongoRepository(API)
+  }
 
-  static async getById(id: string = '') {
-    const api = await getMongoRepository(API, CONNECT_MONGO).findOne({
+  async getById(id: string = '') {
+    const api = await useMongoRepository(API).findOne({
       where: {
-        id,
+        id: Equal(id),
       }
     })
     // const api = await mongoRepos(API).findOne({where: {id: Equal(id)}})
     return api
   }
 
-  static async apiPages(ctx: Koa.Context) {
+  async apiPages(ctx: Koa.Context) {
     const params = ctx.getParams
     const query = ctx.query
     
@@ -61,12 +68,12 @@ export default class LogsController {
       }
       // options.where['url'] = query.url
     }
-    const pages = await getMongoRepository('API', CONNECT_MONGO).findAndCount(options)
+    const pages = await useMongoRepository(API).findAndCount(options)
     const [list, total] = pages
     ctx.Pages({list, total})
   }
 
-  static async errorsPages(ctx: Koa.Context) {
+  async errorsPages(ctx: Koa.Context) {
     const params = ctx.getParams
     const query = ctx.query
     
@@ -90,13 +97,13 @@ export default class LogsController {
       }
       // options.where['url'] = query.url
     }
-    const pages = await getMongoRepository('Errors', CONNECT_MONGO).findAndCount(options)
+    const pages = await useMongoRepository(Errors).findAndCount(options)
     const list = pages[0], total = pages[1]
     ctx.Pages({list, total})
   }
 
   // api log insert
-  static async APIlogger (ctx: Koa.Context, options: any): Promise<void> {
+  async APIlogger (ctx: Koa.Context, options: any): Promise<void> {
     if(!/^\/api\/log-(api|errors)$/.test(ctx.path)) {
       const guid = Guid()
       const model = new API()
@@ -127,17 +134,14 @@ export default class LogsController {
       }
 
       model.time = options.time  // deal time
-      const mongoRepos = useMongoRepository()
-      console.log('loggin....>>>>', model)
-      const result = await mongoRepos(API).save(model)
-      console.log('result....>>>>', result)
+      const result = await useMongoRepository(API).save(model)
       // const result = await getMongoManager(CONNECT_MONGO).save(model)
     }
 
   }
 
   // errors log insert
-  static async ERRlogger (ctx: Koa.Context, options: any): Promise<void> {
+  async ERRlogger (ctx: Koa.Context, options: any): Promise<void> {
     const guid = Guid()
     const model = new Errors()
     const method = ctx.method
@@ -147,7 +151,7 @@ export default class LogsController {
     model.url = ctx.url
     model.origin = ctx.origin
     model.hostname = ctx.header['x-host'] as string;
-    model.headers = String(ctx.header)
+    model.headers = ctx.header
     model.resHeaders = ctx.response.header
     model.resData = ctx.body
     model.protocol = ctx.protocol;
@@ -170,9 +174,9 @@ export default class LogsController {
     }
 
     model.time = options.time  // deal time
-    const mongoRepos = useMongoRepository()
-    const result = await mongoRepos(Errors).save(model)
-    // const result = await getMongoRepository(Errors, CONNECT_MONGO).save(model)
+    const result = await useMongoRepository(Errors).save(model)
   }
 
 }
+
+export default new LogsController()

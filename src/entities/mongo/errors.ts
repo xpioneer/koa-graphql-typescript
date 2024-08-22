@@ -25,7 +25,7 @@ export class Errors extends BaseEntity{
   hostname: string
   
   @Column()
-  headers: string
+  headers: any
 
   @Column()
   resHeaders: any

@@ -19,6 +19,7 @@ router
   .post('/api/testInsert', DoubleColorBallController.batchInsert)
   .post('/api/login', AccountCtrl.login)
   .post('/api/logout', AccountCtrl.logout)
+  .post('/api/register', AccountCtrl.register)
   .get('/view/:site', DemoCtrl.views)
   .post('/api/compose', DemoCtrl.compose)
   .get('/api/test/:id', DemoCtrl.test)

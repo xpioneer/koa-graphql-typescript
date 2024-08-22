@@ -28,7 +28,7 @@
     "koa": "^2.5.3",
     "koa-jwt": "^3.5.1",
     "koa-router": "^7.4.0",
-    "mongodb": "^3.1.8",
+    "mongodb": "^6.8.0",
     "mysql2": "^3.11.0",
     "reflect-metadata": "^0.2.2",
     "remove": "^0.1.5",

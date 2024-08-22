@@ -34,6 +34,7 @@ const connectDB = () => {
     return connect
   }).catch((err) => {
     console.log('mysql failed to connect!', err)
+    return Promise.reject(err)
   })
 }
 
@@ -43,17 +44,20 @@ const connectMongo = () => {
     type     : 'mongodb',
     host     : MongoConf.host,
     port     : MongoConf.port,
-    // username : MongoConf.username,
-    // password : MongoConf.password,
+    username : MongoConf.username,
+    password : MongoConf.password,
     database : MongoConf.database,
     entities : MongoEntities,
+    authSource: MongoConf.username,
     // logging  : _PROD_ ? false : true,
-  }).initialize().then((connect) => {
+  }).initialize().then((datasource) => {
     console.log('mongo connected successfully!')
-    setMongoDataSource(connect)
-    return connect
+    // DataSources.mongo = datasource
+    setMongoDataSource(datasource)
+    return datasource
   }).catch((err) => {
     console.log('mongo connect fail!', err)
+    return Promise.reject(err)
   })
 }
 

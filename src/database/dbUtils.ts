@@ -6,6 +6,7 @@ import {
   getMongoManager,
   createQueryBuilder,
   DataSource,
+  EntityTarget,
 } from "typeorm";
 import { format } from 'date-fns'
 
@@ -24,29 +25,27 @@ export const setMongoDataSource = (dataSource: DataSource) => {
   MongoSource = dataSource
 }
 
-export const useBlogRepository = () => {
+export const useBlogRepository = <Entity>(target: EntityTarget<Entity>) => {
   const BlogDataSource = DataSources[0]
   if(BlogDataSource === undefined) {
     throw setError(useBlogRepository.name);
   }
-  // return DataSources.map(d => d.getRepository)
-  return BlogDataSource.getRepository
+  return BlogDataSource.getRepository(target)
 }
 
-export const useSharesRepository = () => {
+export const useSharesRepository = <Entity>(target: EntityTarget<Entity>) => {
   const SharesDataSource = DataSources[0]
   if(SharesDataSource === undefined) {
     throw setError(useSharesRepository.name);
   }
-  return SharesDataSource.getRepository
+  return SharesDataSource.getRepository(target)
 }
 
-export const useMongoRepository = () => {
-  console.log(Date.now(), 'mongo>>>>', MongoSource, useMongoRepository.name)
+export const useMongoRepository = <Entity>(target: EntityTarget<Entity>) => {
   if(!MongoSource) {
     throw setError(useMongoRepository.name);
   }
-  return MongoSource.getMongoRepository
+  return MongoSource.getMongoRepository(target)
 }
 
 /**
