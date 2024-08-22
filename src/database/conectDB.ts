@@ -1,5 +1,6 @@
 // import 'reflect-metadata'
 import { DataSource, DataSourceOptions } from "typeorm";
+import { format } from 'date-fns'
 import { MysqlConf, MongoConf } from '../../conf/db.conf'
 import { Entities, ShareEntities } from '../entities/mysql'
 import { MongoEntities } from '../entities/mongo'
@@ -27,6 +28,7 @@ const connectDB = () => {
   const connectDBs = connectOptions.map(c => new DataSource(c).initialize())
   return Promise.all(connectDBs).then((connect) => {
     console.log(`${connectOptions.map(c => c.name).join()} ${connectOptions.length} mysql connected successfully!`)
+    console.log(`connencted at ${format(new Date, 'yyyy-MM-dd HH:mm:ss:SSS')}`)
     // stockHistoryDao._getTotal()
     setDataSource(connect)
     return connect

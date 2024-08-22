@@ -13,6 +13,7 @@ export const EXP_TIME = _PROD_ ?  1000 * 60 * 60 : 1000 * 60 * 60 * 4
 // don't need auth url
 export const NO_AUTH_URLS = [
   [/\/api\/login/,  /^post$/i],
+  [/\/api\/register/,  /^post$/i],
   [/\/graphql/, /^get$/i],
   [/\/view/,  /^get$/i]
 ]

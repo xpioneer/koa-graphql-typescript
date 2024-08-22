@@ -8,12 +8,22 @@ import {connectDB, connectMongo} from './database/conectDB'
 
 const _DEV_ = process.env.NODE_ENV === 'development'
 
-class Application {
+export class Application {
 	private app: Koa
 	
-	constructor(){
+	constructor(port = 8200){
 		this.app = new Koa()
-		this.init()
+		this.connectDBs().then(() => {
+			this.init()
+		}).then(() => {
+			this.start(port)
+		})
+	}
+
+	private connectDBs() {
+		return Promise.all([connectDB(), connectMongo()]).then(r => {
+			console.log('All databases are connected.')
+		})
 	}
 
 	// init middlewares
@@ -39,11 +49,8 @@ class Application {
 	// start app
 	public start(port: number) {
 		// change to the databases priority startup
-		Promise.all([connectDB(), connectMongo()]).then(r => {
-			console.log('All databases are connected.')
-			this.app.listen(port, () => {
-				console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
-			})
+		this.app.listen(port, () => {
+			console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
 		})
 		// this.app.listen(port, (): void => {
 		// 	console.log(`Koa server has started, running with: http://127.0.0.1:${port}. `)
@@ -52,5 +59,3 @@ class Application {
 		// })
 	}
 }
-
-export default new Application()

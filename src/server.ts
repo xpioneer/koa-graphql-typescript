@@ -1,4 +1,6 @@
-import App from './app'
+import { Application } from './app'
 import { PORT } from '../conf/server.conf'
 
-App.start(PORT)
+const App = new Application(PORT)
+
+// App.start(PORT)

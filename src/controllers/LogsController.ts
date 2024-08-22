@@ -1,5 +1,12 @@
 import * as Koa from 'koa'
-import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equal} from 'typeorm';
+import {
+  getMongoManager, getMongoRepository,
+  Like,
+  Between,
+  FindManyOptions,
+  Equal,
+  MongoRepository,
+} from 'typeorm';
 // import { Context } from '@/core/koa'
 import { API } from '../entities/mongo/api'
 import { Errors } from '../entities/mongo/errors'
@@ -12,9 +19,11 @@ import { DateFormat } from '../types/base';
 // const mongoRepos = useMongoRepository()
 
 export default class LogsController {
+  
+  mongoDB: MongoRepository<API>
 
   constructor(){
-
+    this.mongoDB = useMongoRepository()(API)
   }
 
 
@@ -41,10 +50,16 @@ export default class LogsController {
       where: {}
     }
     if(query.path) {
-      options.where['path'] = query.path
+      options.where = {
+        path: query.path as string
+      }
+      // options.where['path'] = query.path
     }
     if(query.url) {
-      options.where['url'] = query.url
+      options.where = {
+        url: query.url as string
+      }
+      // options.where['url'] = query.url
     }
     const pages = await getMongoRepository('API', CONNECT_MONGO).findAndCount(options)
     const [list, total] = pages
@@ -64,10 +79,16 @@ export default class LogsController {
       where: {}
     }
     if(query.path) {
-      options.where['path'] = query.path
+      options.where = {
+        path: query.path as string
+      }
+      // options.where['path'] = query.path
     }
     if(query.url) {
-      options.where['url'] = query.url
+      options.where = {
+        url: query.url as string
+      }
+      // options.where['url'] = query.url
     }
     const pages = await getMongoRepository('Errors', CONNECT_MONGO).findAndCount(options)
     const list = pages[0], total = pages[1]
@@ -106,7 +127,11 @@ export default class LogsController {
       }
 
       model.time = options.time  // deal time
-      const result = await getMongoManager(CONNECT_MONGO).save(model)
+      const mongoRepos = useMongoRepository()
+      console.log('loggin....>>>>', model)
+      const result = await mongoRepos(API).save(model)
+      console.log('result....>>>>', result)
+      // const result = await getMongoManager(CONNECT_MONGO).save(model)
     }
 
   }
@@ -145,7 +170,9 @@ export default class LogsController {
     }
 
     model.time = options.time  // deal time
-    const result = await getMongoRepository(Errors, CONNECT_MONGO).save(model)
+    const mongoRepos = useMongoRepository()
+    const result = await mongoRepos(Errors).save(model)
+    // const result = await getMongoRepository(Errors, CONNECT_MONGO).save(model)
   }
 
 }

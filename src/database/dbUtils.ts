@@ -7,7 +7,11 @@ import {
   createQueryBuilder,
   DataSource,
 } from "typeorm";
+import { format } from 'date-fns'
 
+const setError = (name: string) => {
+  return new Error(`[${name}] must be used after database connected. throw at ${format(new Date, 'yyyy-MM-dd HH:mm:ss:SSS')}`)
+}
 
 let DataSources: DataSource[] = []
 let MongoSource: DataSource = null
@@ -21,15 +25,27 @@ export const setMongoDataSource = (dataSource: DataSource) => {
 }
 
 export const useBlogRepository = () => {
+  const BlogDataSource = DataSources[0]
+  if(BlogDataSource === undefined) {
+    throw setError(useBlogRepository.name);
+  }
   // return DataSources.map(d => d.getRepository)
-  return DataSources[0].getRepository
+  return BlogDataSource.getRepository
 }
 
 export const useSharesRepository = () => {
-  return DataSources[1].getRepository
+  const SharesDataSource = DataSources[0]
+  if(SharesDataSource === undefined) {
+    throw setError(useSharesRepository.name);
+  }
+  return SharesDataSource.getRepository
 }
 
 export const useMongoRepository = () => {
+  console.log(Date.now(), 'mongo>>>>', MongoSource, useMongoRepository.name)
+  if(!MongoSource) {
+    throw setError(useMongoRepository.name);
+  }
   return MongoSource.getMongoRepository
 }
 
