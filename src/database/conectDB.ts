@@ -52,7 +52,6 @@ const connectMongo = () => {
     // logging  : _PROD_ ? false : true,
   }).initialize().then((datasource) => {
     console.log('mongo connected successfully!')
-    // DataSources.mongo = datasource
     setMongoDataSource(datasource)
     return Promise.resolve(datasource)
   }).catch((err) => {

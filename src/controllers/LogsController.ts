@@ -23,15 +23,39 @@ import { DateFormat } from '../types/base';
 // const mongoRepos = useMongoRepository()
 
 class LogsController {
-  
-  mongoDB: MongoRepository<API>
 
-  constructor(){
-
+  private dataRedaction(ctx: Koa.Context, model: API | Errors) {
+    const RedactionUrl = /^\/api\/(login|register)$/
+    const method = ctx.method
+    model.method = method
+    if(method === 'GET') {
+      model.params = ctx.querystring
+    } else if(/^P(U|OS)T$/.test(method)){
+      if(RedactionUrl.test(ctx.path)){
+        let params = ctx.fields;
+        params['password'] = '******';
+      }
+      model.params = ctx.fields
+    }
   }
 
-  init() {
-    return this.mongoDB = useMongoRepository(API)
+  private setCommonData(ctx: Koa.Context, model: API | Errors) {
+    const guid = Guid()
+    model.id = guid
+    model.ip = ctx.header['x-real-ip'] as string || ctx.req.socket.remoteAddress,
+    model.path = ctx.path
+    model.url = ctx.url
+    model.status = ctx.status
+    model.origin = ctx.origin
+    model.hostname = ctx.header['x-host'] as string;
+    model.headers = ctx.header
+    model.resHeaders = ctx.response.header
+    model.resData = ctx.body
+    model.protocol = ctx.protocol;
+    model.createdAt = formatDate(new Date, DateFormat.DateTimeS)
+    model.createdBy = ctx.state['CUR_USER'] ? ctx.state['CUR_USER'].id : model.ip
+
+    this.dataRedaction(ctx, model)
   }
 
   async getById(id: string = '') {
@@ -40,7 +64,6 @@ class LogsController {
         id: Equal(id),
       }
     })
-    // const api = await mongoRepos(API).findOne({where: {id: Equal(id)}})
     return api
   }
 
@@ -105,73 +128,24 @@ class LogsController {
   // api log insert
   async APIlogger (ctx: Koa.Context, options: any): Promise<void> {
     if(!/^\/api\/log-(api|errors)$/.test(ctx.path)) {
-      const guid = Guid()
       const model = new API()
-      const method = ctx.method
-      model.id = guid
-      model.ip = ctx.header['x-real-ip'] as string || ctx.req.socket.remoteAddress,
-      model.path = ctx.path
-      model.url = ctx.url
-      model.status = ctx.status
-      model.origin = ctx.origin
-      model.hostname = ctx.header['x-host'] as string;
-      model.headers = ctx.header
-      model.resHeaders = ctx.response.header
-      model.resData = ctx.body
-      model.protocol = ctx.protocol;
-      model.createdAt = formatDate(new Date, DateFormat.DateTimeS)
-      model.createdBy = ctx.state['CUR_USER'] ? ctx.state['CUR_USER'].id : model.ip
-
-      model.method = method
-      if(method === 'GET') {
-        model.params = ctx.querystring
-      } else if(/^P(U|OS)T$/.test(method)){
-        if(/^\/api\/login$/.test(ctx.path)){
-          let params = ctx.fields;
-          params['password'] = '******';
-        }
-        model.params = ctx.fields
-      }
+      this.setCommonData(ctx, model)
 
       model.time = options.time  // deal time
       const result = await useMongoRepository(API).save(model)
-      // const result = await getMongoManager(CONNECT_MONGO).save(model)
     }
 
   }
 
   // errors log insert
   async ERRlogger (ctx: Koa.Context, options: any): Promise<void> {
-    const guid = Guid()
     const model = new Errors()
-    const method = ctx.method
-    model.id = guid
-    model.ip = ctx.header['x-real-ip'] as string || ctx.req.socket.remoteAddress,
-    model.path = ctx.path
-    model.url = ctx.url
-    model.origin = ctx.origin
-    model.hostname = ctx.header['x-host'] as string;
-    model.headers = ctx.header
-    model.resHeaders = ctx.response.header
-    model.resData = ctx.body
-    model.protocol = ctx.protocol;
-    model.createdAt = formatDate(new Date, DateFormat.DateTimeS)
-    model.createdBy = ctx.state['CUR_USER'] ? ctx.state['CUR_USER'].id : model.ip
+    this.setCommonData(ctx, model)
 
+    // errors special data
     model.status = options.status
     model.errors = options.errors
     model.msg = options.msg
-
-    model.method = method
-    if(method === 'GET') {
-      model.params = ctx.querystring
-    } else if(/^P(U|OS)T$/.test(method)){
-      if(/^\/api\/login$/.test(ctx.path)){
-        let params = ctx.fields;
-        params['password'] = '******';
-      }
-      model.params = ctx.fields
-    }
 
     model.time = options.time  // deal time
     const result = await useMongoRepository(Errors).save(model)

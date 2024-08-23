@@ -6,3 +6,11 @@ export enum DateFormat {
   DateM = 'yyyy-MM-dd HH:mm',
   Date = 'yyyy-MM-dd',
 }
+
+
+export enum UserType {
+  root,
+  admin,
+  normal,
+  test = 9,
+}
