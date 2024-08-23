@@ -36,16 +36,16 @@ export class StockDetail extends Stock {
     this.market = arg.market
     this.block = arg.block
     this.amount = arg.amount
-    this.lastestTradeAt = 0
+    // this.lastestTradeAt = 0
   }
 
 
-  private lastestTradeAt = 0
+  private _lastestTradeAt = 0
 
-  get _lastestTradeAt() {
-    return this.lastestTradeAt
+  get lastestTradeAt() {
+    return this._lastestTradeAt
   }
-  set _lastestTradeAt(val) {
-    this.lastestTradeAt = +val
+  set lastestTradeAt(val) {
+    this._lastestTradeAt = +val
   }
 }

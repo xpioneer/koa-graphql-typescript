@@ -34,7 +34,7 @@ export const useBlogRepository = <Entity>(target: EntityTarget<Entity>) => {
 }
 
 export const useSharesRepository = <Entity>(target: EntityTarget<Entity>) => {
-  const SharesDataSource = DataSources[0]
+  const SharesDataSource = DataSources[1]
   if(SharesDataSource === undefined) {
     throw setError(useSharesRepository.name);
   }

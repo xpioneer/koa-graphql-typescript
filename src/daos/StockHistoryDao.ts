@@ -1,6 +1,6 @@
 import { Equal, Like, Between, LessThanOrEqual, FindManyOptions} from "typeorm";
 import { StockHistory, History } from '@/entities/mysql/shares/stockHistory'
-import { getSharesManager, getSharesRepository } from '@/database/dbUtils';
+import { useSharesRepository, getSharesRepository } from '@/database/dbUtils';
 import Store, { RedisStore } from "@/utils/session/store";
 
 class StockHistoryDao {
@@ -8,7 +8,7 @@ class StockHistoryDao {
   maxCount = -1
 
   async getLastestTrade(stockId: number) {
-    const lastestTrade = await getSharesRepository(History).findOne({
+    const lastestTrade = await useSharesRepository(History).findOne({
       select: ['timestamp'],
       where: {
         stockId: Equal(stockId)
@@ -21,7 +21,7 @@ class StockHistoryDao {
   }
 
   async pages(offset = 1, size = 10, stockId?: number): Promise<[StockHistory[], number]> {
-    const [list, total] = await getSharesRepository(History).findAndCount({
+    const [list, total] = await useSharesRepository(History).findAndCount({
       select: [
         'id',
         'stockId',
@@ -55,7 +55,7 @@ class StockHistoryDao {
 
   async _getTotal() {
     const before = Date.now()
-    return getSharesRepository(History).count().then(count => {
+    return useSharesRepository(History).count().then(count => {
       console.log('get total: ', count)
       this.maxCount = count
       return this.maxCount

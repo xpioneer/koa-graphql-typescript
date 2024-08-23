@@ -27,7 +27,7 @@ class StockService {
     const lastestTrade = await StockHistoryDao.getLastestTrade(stock.id)
     const detail = new StockDetail(stock)
     console.log(detail, '---------')
-    detail._lastestTradeAt = lastestTrade ? lastestTrade.timestamp : null
+    detail.lastestTradeAt = lastestTrade ? lastestTrade.timestamp : null
     return detail
   }
 

@@ -9,7 +9,10 @@ import {
 import { Context } from '@/core/koa'
 import { Stock } from '@/entities/mysql/shares/stock'
 import { EMarket, EBLock } from '@/models/Stocks'
-import { getSharesManager, getSharesRepository, createSharesQueryBuilder } from '@/database/dbUtils';
+import {
+  useSharesRepository,
+  getSharesManager, getSharesRepository, createSharesQueryBuilder
+} from '@/database/dbUtils';
 
 
 
@@ -17,7 +20,7 @@ class StockDao {
 
 
   async getCode(id: number) {
-    const stock = await getSharesRepository(Stock).findOne({
+    const stock = await useSharesRepository(Stock).findOne({
       where: {
         id
       }
@@ -26,7 +29,7 @@ class StockDao {
   }
 
   async getById(id: number) {
-    const stock = await getSharesRepository(Stock).findOne({
+    const stock = await useSharesRepository(Stock).findOne({
       where: {
         id
       },
@@ -36,34 +39,35 @@ class StockDao {
   }
 
   async getByIds(ids: number[]) {
-    const stocks = await getSharesRepository(Stock).find({
+    const stocks = await useSharesRepository(Stock).find({
       where: {
         id: In(ids)
       }
     })
-    // const stocks = await getSharesRepository(Stock).findByIds(ids, {
+    // const stocks = await useSharesRepository(Stock).findByIds(ids, {
     //   select: ['id', 'code', 'name']
     // })
     return stocks
   }
 
   async getByCode(code: string) {
-    const stock = await getSharesRepository(Stock).findOneBy({code: Equal(code)})
+    const stock = await useSharesRepository(Stock).findOneBy({code: Equal(code)})
     return stock
   }
 
   async getStockList(value: string, pageSize = 10) {
-    const list = await getSharesRepository(Stock).find({
-      where: [
-        { code: Like(`%${value}%`) },
-        { name: Like(`%${value}%`) }
-      ],
-      order: {
-        code: 'DESC'
-      },
-      take: pageSize
-    })
-    return list
+    // const list = await useSharesRepository(Stock).find({
+    //   where: [
+    //     { code: Like(`%${value}%`) },
+    //     { name: Like(`%${value}%`) }
+    //   ],
+    //   order: {
+    //     code: 'DESC'
+    //   },
+    //   take: pageSize
+    // })
+    // return list
+    return Promise.resolve([])
   }
 
   async pages(offset = 1, size = 10, code?: string, name?: string, market?: EMarket, block?: EBLock) {
@@ -86,13 +90,17 @@ class StockDao {
       order: { id: 'ASC'},
       where: {}
     }
-    const pages = await getSharesRepository(Stock).findAndCount(options)
+    const pages = await useSharesRepository(Stock).findAndCount(options)
     return pages
   }
 
   async getBlocksCount(): Promise<{total: number, block: EBLock}> {
-    const counts = await createSharesQueryBuilder(Stock, 'groupByBlocks')
-      .select('count(*) as total, block').groupBy('block').execute()
+    const counts = await useSharesRepository(Stock)
+      .createQueryBuilder('groupByBlocks')
+      .select('count(*) as total, block')
+      .groupBy('block').execute()
+    // const counts = await createSharesQueryBuilder(Stock, 'groupByBlocks')
+    //   .select('count(*) as total, block').groupBy('block').execute()
     return counts
   }
 }
