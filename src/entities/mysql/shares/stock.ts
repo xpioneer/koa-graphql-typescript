@@ -39,13 +39,14 @@ export class StockDetail extends Stock {
     // this.lastestTradeAt = 0
   }
 
+  lastestTradeAt = 0
 
-  private _lastestTradeAt = 0
+  // private _lastestTradeAt = 0
 
-  get lastestTradeAt() {
-    return this._lastestTradeAt
-  }
-  set lastestTradeAt(val) {
-    this._lastestTradeAt = +val
-  }
+  // get lastestTradeAt() {
+  //   return this._lastestTradeAt
+  // }
+  // set lastestTradeAt(val) {
+  //   this._lastestTradeAt = +val
+  // }
 }
