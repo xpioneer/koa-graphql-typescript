@@ -2,12 +2,12 @@ import { Equal, Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@/core/koa'
 import { Balls } from '../entities/mysql/balls'
 import { Guid } from "../utils/tools";
-import { getBlogManager, getBlogRepository } from '../database/dbUtils';
+import { useBlogRepository } from '../database/dbUtils';
 
-export default class DoubleColorBallController {
+class DoubleColorBallController {
 
-  static async getById(id: string = '') {
-    const result = await getBlogRepository(Balls).findOne({
+  async getById(id: string = '') {
+    const result = await useBlogRepository(Balls).findOne({
       where: {
         id: Equal(id)
       }
@@ -16,8 +16,8 @@ export default class DoubleColorBallController {
     return result
   }
 
-  static async deleteById(id: string = '', ctx: Context) {
-    const result = await getBlogRepository(Balls).update({id}, {
+  async deleteById(id: string = '', ctx: Context) {
+    const result = await useBlogRepository(Balls).update({id}, {
       deletedAt: Date.now(),
       deletedBy: ctx.state['CUR_USER'].id,
     })
@@ -29,7 +29,7 @@ export default class DoubleColorBallController {
     }
   }
 
-  static async pages(args: any) {
+  async pages(args: any) {
     // console.log(args)
     delete args.order.createdAt // delete createdAt
     const options: FindManyOptions<Balls> = {
@@ -53,24 +53,24 @@ export default class DoubleColorBallController {
     }
     console.log(options, '----options')
 
-    const pages = await getBlogRepository(Balls).findAndCount(options)
+    const pages = await useBlogRepository(Balls).findAndCount(options)
     return pages
   }
 
   /***
    * batch insert(test)
    */
-  static async batchInsert(ctx: Context) {
+  async batchInsert(ctx: Context) {
     const list = ctx.fields as object[]
     console.log(list, '----9999', ctx.state)
     for(let i = list.length - 1; i >= 0; i --) {
-      await DoubleColorBallController.insert(list[i], ctx)
+      await this.insert(list[i], ctx)
     }
     ctx.Json({ data: 999 })
   }
 
-  static async insert(args: any, ctx: Context) {
-    const ball = await getBlogRepository(Balls).findOne({
+  async insert(args: any, ctx: Context) {
+    const ball = await useBlogRepository(Balls).findOne({
       where: {
         issue: Equal(args.issue)
       }
@@ -100,12 +100,12 @@ export default class DoubleColorBallController {
     model.createdAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getBlogRepository(Balls).save(model)
+    const result = await useBlogRepository(Balls).save(model)
     return result
   }
 
-  static async update(args: any, ctx: Context) {
-    const ball = await getBlogRepository(Balls).findOne({
+  async update(args: any, ctx: Context) {
+    const ball = await useBlogRepository(Balls).findOne({
       where: {
         id: Equal(args.id)
       }
@@ -132,7 +132,7 @@ export default class DoubleColorBallController {
     model.drawDate = new Date(args.drawDate).getTime()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getBlogRepository(Balls).update({id: args.id}, model)
+    const result = await useBlogRepository(Balls).update({id: args.id}, model)
     if(result.raw.affectedRows) {
       return true
     } else {
@@ -140,10 +140,10 @@ export default class DoubleColorBallController {
     }
   }
 
-  static async allBallCount() {
+  async allBallCount() {
     let redList:any = [], _redDisList = []
     for(let i = 1; i <= 6; i++) {
-      const list = await getBlogRepository(Balls)
+      const list = await useBlogRepository(Balls)
         .createQueryBuilder('ball')
         .select(`COUNT(ball.red${i})`, 'total')
         .addSelect(`red${i}`)
@@ -164,7 +164,7 @@ export default class DoubleColorBallController {
       }
     })
     let blues:any = []
-    const list = await getBlogRepository(Balls)
+    const list = await useBlogRepository(Balls)
       .createQueryBuilder('ball')
       .select('COUNT(ball.blue)', 'total')
       .addSelect('blue')
@@ -190,3 +190,5 @@ export default class DoubleColorBallController {
   }
 
 }
+
+export default new DoubleColorBallController

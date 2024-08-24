@@ -11,7 +11,6 @@ import { Stock } from '@/entities/mysql/shares/stock'
 import { EMarket, EBLock } from '@/models/Stocks'
 import {
   useSharesRepository,
-  getSharesManager, getSharesRepository, createSharesQueryBuilder
 } from '@/database/dbUtils';
 
 
@@ -56,18 +55,17 @@ class StockDao {
   }
 
   async getStockList(value: string, pageSize = 10) {
-    // const list = await useSharesRepository(Stock).find({
-    //   where: [
-    //     { code: Like(`%${value}%`) },
-    //     { name: Like(`%${value}%`) }
-    //   ],
-    //   order: {
-    //     code: 'DESC'
-    //   },
-    //   take: pageSize
-    // })
-    // return list
-    return Promise.resolve([])
+    const list = await useSharesRepository(Stock).find({
+      where: [
+        { code: Like(`%${value}%`) },
+        { name: Like(`%${value}%`) }
+      ],
+      order: {
+        code: 'DESC'
+      },
+      take: pageSize
+    })
+    return list
   }
 
   async pages(offset = 1, size = 10, code?: string, name?: string, market?: EMarket, block?: EBLock) {

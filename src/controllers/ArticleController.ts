@@ -3,24 +3,21 @@ import { Context } from '@/core/koa'
 import { Article } from '../entities/mysql/article'
 import { Guid } from "../utils/tools";
 import { toDate } from 'date-fns'
-import { getBlogManager, getBlogRepository, useBlogRepository } from '../database/dbUtils';
+import { useBlogRepository } from '../database/dbUtils';
 
 
 // const articleRepository = useBlogRepository()
 
-export default class ArticleController {
+class ArticleController {
 
-  static async getAll(args: any) {
+  async getAll(args: any) {
     console.log(args)
-    // const articleRepository = useRepository<Article>()
-    // const a = articleRepository(Article).find({comment: '123'})
-    return await getBlogManager().find(Article);
-    // return await articleRepository(Article).find()
+    return await useBlogRepository(Article).findAndCount();
   }
 
 
-  static async getById(id: string = '') {
-    const article = await getBlogRepository(Article).findOne({
+  async getById(id: string = '') {
+    const article = await useBlogRepository(Article).findOne({
       where: {
         id: Equal(id)
       }
@@ -29,7 +26,7 @@ export default class ArticleController {
     return article
   }
 
-  static async pages(args: any) {
+  async pages(args: any) {
     console.log(args, 'query args ===================')
     const options: FindManyOptions<Article> = {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
@@ -57,7 +54,7 @@ export default class ArticleController {
     }
     console.log(options, '----options')
 
-    const pages = await getBlogRepository(Article).findAndCount(options)
+    const pages = await useBlogRepository(Article).findAndCount(options)
       // .createQueryBuilder()
       // .where({
       //   // title: Like(args.title)
@@ -71,7 +68,7 @@ export default class ArticleController {
     return pages
   }
 
-  static async insert(args: any, ctx: Context) {
+  async insert(args: any, ctx: Context) {
     let model = new Article()
     model.id = Guid()
     model.title = args.title
@@ -84,11 +81,11 @@ export default class ArticleController {
     model.createdAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getBlogRepository(Article).save(model)
+    const result = await useBlogRepository(Article).save(model)
     return result
   }
 
-  static async update(args: any, ctx: Context) {
+  async update(args: any, ctx: Context) {
     const article = new Article
     article.id = args.id
     article.title = args.title
@@ -99,8 +96,10 @@ export default class ArticleController {
     article.tag = args.tag
     article.updatedAt = Date.now()
     article.updatedBy = ctx.state['CUR_USER'].id
-    const result = await getBlogRepository(Article).save(article)
+    const result = await useBlogRepository(Article).update(article.id, article)
     return result
   }
 
 }
+
+export default new ArticleController

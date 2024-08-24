@@ -5,7 +5,7 @@ import Store, { RedisStore } from "@/utils/session/store";
 
 class StockHistoryDao {
 
-  maxCount = -1
+  private maxCount = -1
 
   async getLastestTrade(stockId: number) {
     const lastestTrade = await useSharesRepository(History).findOne({
@@ -53,15 +53,15 @@ class StockHistoryDao {
     return [list as StockHistory[], total]
   }
 
-  async _getTotal() {
-    const before = Date.now()
-    return useSharesRepository(History).count().then(count => {
+  private async _getTotal() {
+    const start = Date.now()
+    const count = await useSharesRepository(History).count().then(count => {
       console.log('get total: ', count)
       this.maxCount = count
       return this.maxCount
-    }).then(() => {
-      console.log(`time:${Date.now() - before}ms`)
     })
+    console.log(`time:${Date.now() - start}ms`)
+    return count
   }
 
   async getTotal() {
