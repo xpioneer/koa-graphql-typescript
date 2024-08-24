@@ -2,33 +2,35 @@ import {
   Like,
   Between,
   FindManyOptions,
-  Equal
+  Equal,
+  LessThan,
+  MoreThan
 } from "typeorm";
 import { Context } from '@/core/koa'
 import { ArticleType } from '../entities/mysql/articleType'
 import { Guid } from "../utils/tools";
-import { toDate } from 'date-fns'
-import { getBlogManager, getBlogRepository } from '../database/dbUtils';
+import { endOfDay, startOfDay } from 'date-fns'
+import { useBlogRepository } from '../database/dbUtils';
 
 
-export default class ArticleController {
+class ArticleTypeController {
 
-  static async getAll(args: any) {
-    return await getBlogManager().find(ArticleType);
+  async getAll(args: any) {
+    return await useBlogRepository(ArticleType).findAndCount();
   }
 
 
-  static async getById(id: string = '') {
-    // getManager().findOne()
-    const articleType = await getBlogRepository(ArticleType).findOne({
+  async getById(id: string = '') {
+    const articleType = await useBlogRepository(ArticleType).findOne({
       where: {
         id: Equal(id)
-      }
+      },
+      select: ['id', 'name', 'remark', 'createdAt', 'updatedAt']
     })
     return articleType
   }
 
-  static async pages(args: any) {
+  async pages(args: any) {
     const options: FindManyOptions<ArticleType> = {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
       take: args.pageSize,
@@ -41,24 +43,18 @@ export default class ArticleController {
       options.where['name'] = Like(`%${args.name}%`)
     }
     if(args.createdAt) {
-      const date = args.createdAt.map((c: any) => +toDate(c))
+      const date = (args.createdAt as string[]).map((d, i) => i > 0 ? +endOfDay(new Date(d)) : +startOfDay(new Date(d)))
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
-    console.log(options, '----options')
-    const pages = await getBlogRepository('articleType').findAndCount(options)
-      // .createQueryBuilder()
-      // .orderBy({createdAt: 'DESC'})
-      // .offset(args.page < 2 ? 0 : (args.page - 1) * args.pageSize)
-      // .limit(args.pageSize)
-      // .getManyAndCount()
-    // console.log(pages[0].length, pages[1])
+    console.log(args, '----options')
+    const pages = await useBlogRepository(ArticleType).findAndCount(options)
     return pages
   }
 
-  static async insert(args: any, ctx: Context) {
+  async insert(args: any, ctx: Context) {
     let model = new ArticleType()
     model.id = Guid()
     model.name = args.name
@@ -67,20 +63,28 @@ export default class ArticleController {
     model.createdBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
-    const result = await getBlogRepository(ArticleType).save(model)
+    const result = await useBlogRepository(ArticleType).save(model)
     return result
   }
   
-  static async update(args: any, ctx: Context) {
+  async save(args: any, ctx: Context) {
     let model = new ArticleType()
-    // model.id = args.id
+    model.id = Guid()
+    if(args.id) {
+      model.id = args.id
+    } else {
+      model.createdAt = Date.now()
+      model.createdBy = ctx.state['CUR_USER'].id
+    }
     model.name = args.name
     model.remark = args.remark
     model.updatedAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
-    const result = await getBlogRepository(ArticleType).update(args.id, model)
+    const result = await useBlogRepository(ArticleType).save(model)
     console.log('result:', result)
     return result
   }
 
 }
+
+export default new ArticleTypeController

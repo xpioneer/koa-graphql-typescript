@@ -41,6 +41,16 @@ const tagObjectType = new GraphQLObjectType({
     createdBy: {
       type: GraphQLString
     },
+    updatedAt: {
+      type: GraphQLString,
+      resolve(obj, args, ctx, info){
+        const updatedAt = Number(obj.updatedAt) || Date.now()
+        return formatDate(updatedAt)
+      }
+    },
+    updatedBy: {
+      type: GraphQLString
+    },
     ...creatorFields
   }
 })
@@ -111,7 +121,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: tagObjectType,
     args: {
       id: {
-        type: new GraphQLNonNull(GraphQLString)
+        type: GraphQLString
       },
       name: {
         type: new GraphQLNonNull(GraphQLString)
@@ -121,7 +131,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      const result = await TagCtrl.update(args, ctx)
+      const result = await TagCtrl.save(args, ctx)
       return result
     }
   }

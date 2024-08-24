@@ -16,6 +16,7 @@ import {Context} from '@/core/koa'
 import ArticleTypeCtrl from '../../controllers/ArticleTypeController'
 import { metaFields, pageArgsFields } from './common'
 import { formatDate } from '../../utils/tools/formatDate';
+import { ArticleType } from '@/entities/mysql/articleType';
 
 // articleType
 export const articleTypeObjectType = new GraphQLObjectType({
@@ -39,7 +40,17 @@ export const articleTypeObjectType = new GraphQLObjectType({
     },
     createdBy: {
       type: GraphQLString
-    }
+    },
+    updatedAt: {
+      type: GraphQLString,
+      resolve(obj, args, ctx, info){
+        const updatedAt = Number(obj.updatedAt) || Date.now()
+        return formatDate(updatedAt)
+      }
+    },
+    updatedBy: {
+      type: GraphQLString
+    },
   }
 })
 
@@ -54,7 +65,7 @@ const ArticleTypePagesType = new GraphQLObjectType({
   }
 })
 
-const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
+const query: Thunk<GraphQLFieldConfigMap<Source, Context<ArticleType>>> = {
   articleType: {
     type: articleTypeObjectType,
     args: {
@@ -66,6 +77,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     resolve: async (obj, args, ctx, info) => {
       const {id} = args;
       const articleType = await ArticleTypeCtrl.getById(id)
+      console.log(articleType, 'articleType>>>>>>')
       return articleType
     }
   },
@@ -111,7 +123,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     description: 'edit articleType',
     args: {
       id: {
-        type: new GraphQLNonNull(GraphQLString)
+        type: GraphQLString // need to attention
       },
       name: {
         type: new GraphQLNonNull(GraphQLString)
@@ -121,7 +133,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      const result = await ArticleTypeCtrl.update(args, ctx)
+      const result = await ArticleTypeCtrl.save(args, ctx)
       return result
     }
   }
