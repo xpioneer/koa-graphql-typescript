@@ -2,18 +2,18 @@ import { Like, Between, FindManyOptions, Equal} from "typeorm";
 import { Context } from '@/core/koa'
 import { Comment } from '../entities/mysql/comment'
 import { Guid } from "../utils/tools";
-import { toDate } from 'date-fns'
-import { getBlogManager, getBlogRepository } from '../database/dbUtils';
+import { endOfDay, startOfDay } from 'date-fns'
+import { useBlogRepository } from '../database/dbUtils';
 
-export default class CommentController {
+class CommentController {
 
-  static async getAll(args: any) {
-    return await getBlogManager().find(Comment);
+  getAll(args: any) {
+    return useBlogRepository(Comment).findAndCount();
   }
 
 
-  static async getById(id: string = '') {
-    const article = await getBlogRepository(Comment).findOne({
+  getById(id = '') {
+    const article = useBlogRepository(Comment).findOne({
       where: {
         id: Equal(id)
       }
@@ -21,27 +21,32 @@ export default class CommentController {
     return article
   }
 
-  static async pages(args: any) {
+  pages(args: any) {
     const options: FindManyOptions<Comment> = {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
       take: args.pageSize,
       order: {},
       where: {
         deletedAt: null
-      }
+      },
+      select: ['id', 'description', 'articleId', 'client', 'createdAt', 'createdBy', 'updatedAt']
     }
     if(args.description) {
       options.where['description'] = Like(`%${args.description}%`)
     }
     if(args.createdAt) {
-      const date = args.createdAt.map((c: any) => +toDate(c))
+      const date = (args.createdAt as string[]).map(
+        (d, i) => i > 0 ? +endOfDay(new Date(d)) : +startOfDay(new Date(d))
+      )
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
-    const pages = await getBlogRepository('comment').findAndCount(options)
+    const pages = useBlogRepository(Comment).findAndCount(options)
     return pages
   }
 
 }
+
+export default new CommentController

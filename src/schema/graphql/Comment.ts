@@ -49,7 +49,17 @@ export const commentObjectType = new GraphQLObjectType({
     },
     createdBy: {
       type: GraphQLString
-    }
+    },
+    updatedAt: {
+      type: GraphQLString,
+      resolve(obj, args, ctx, info){
+        const updatedAt = Number(obj.updatedAt) || Date.now()
+        return formatDate(updatedAt)
+      }
+    },
+    updatedBy: {
+      type: GraphQLString
+    },
   }
 })
 

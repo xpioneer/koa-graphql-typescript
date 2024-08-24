@@ -2,25 +2,25 @@ import { Like, Between, Equal, FindManyOptions, In} from "typeorm";
 import { Context } from '@/core/koa'
 import { User } from '@/entities/mysql/user'
 import { Guid, cryptoPwd } from "../utils/tools"
-import { toDate } from 'date-fns'
-import { getBlogManager, getBlogRepository } from '@/database/dbUtils';
+import { endOfDay, startOfDay } from 'date-fns'
+import { useBlogRepository } from '@/database/dbUtils';
 // import DataLoader from 'dataloader'
 const DataLoader = require('dataloader')
 
 export const UsersLoader = new DataLoader(async(ids: string[]) => {
   console.log(ids, 'UsersLoader----------------ids')
-  const users = await UserController.findAllUsers(ids)
+  const users = await (new UserController).findAllUsers(ids)
   return users
 })
 
-export default class UserController {
+class UserController {
 
-  static async getAll(args: any) {
-    return await getBlogManager().find(User);
+  async getAll(args: any) {
+    return await useBlogRepository(User).find();
   }
 
-  static async findAllUsers(ids: string[]) {
-    const [list, total] = await getBlogManager().getRepository(User).findAndCount({
+  async findAllUsers(ids: string[]) {
+    const [list, total] = await useBlogRepository(User).findAndCount({
       where: {
         id: In(ids)
       }
@@ -29,15 +29,15 @@ export default class UserController {
     return list
   }
 
-  static async getById(id: string = '') {
-    const article = await getBlogRepository(User).findOne({
+  async getById(id = '') {
+    const article = await useBlogRepository(User).findOne({
       where: { id: Equal(id) },
       select: ['id', 'username', 'nickName', 'userType', 'createdAt', 'sex', 'remark']
     })
     return article
   }
 
-  static async pages(args: any) {
+  async pages(args: any) {
     console.log(args, 'query args ===================')
     const options: FindManyOptions<User> = {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
@@ -58,17 +58,19 @@ export default class UserController {
       options.where['userType'] = Equal(args.userType)
     }
     if(args.createdAt) {
-      const date = args.createdAt.map((c: any) => +toDate(c))
+      const date = (args.createdAt as string[]).map(
+        (d, i) => i > 0 ? +endOfDay(new Date(d)) : +startOfDay(new Date(d))
+      )
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
-    const pages = await getBlogRepository(User).findAndCount(options)
+    const pages = await useBlogRepository(User).findAndCount(options)
     return pages
   }
 
-  static async insert(args: any, ctx: Context) {
+  async insert(args: any, ctx: Context) {
     let username = args.username;
     let password = args.password;
     if(!(username && username.length > 2)) {
@@ -89,11 +91,11 @@ export default class UserController {
     model.createdAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getBlogRepository(User).save(model)
+    const result = await useBlogRepository(User).save(model)
     return result
   }
 
-  static async update(args: any, ctx: Context) {
+  async update(args: any, ctx: Context) {
     let username = args.username;
     let password = args.password;
     if(!(username && username.length > 2)) {
@@ -115,8 +117,10 @@ export default class UserController {
     }
     user.updatedBy = ctx.state['CUR_USER'].id
     user.updatedAt = Date.now()
-    const result = await getBlogRepository(User).save(user)
+    const result = await useBlogRepository(User).save(user)
     return result
   }
 
 }
+
+export default new UserController
