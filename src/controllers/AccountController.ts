@@ -2,7 +2,7 @@ import * as Crypto from 'crypto';
 import {getManager, getRepository, Like, Equal} from "typeorm";
 import { Context } from '@/core/koa'
 import { User } from '@/entities/mysql/user'
-import Store from "@/utils/session/store";
+import { store as Store } from "@/utils/session";
 import { JWT_SECRET, EXP_TIME } from '../constants'
 import { sign } from '../core/jwt/sign'
 import { cryptoPwd, formatDate, Guid } from "../utils/tools"

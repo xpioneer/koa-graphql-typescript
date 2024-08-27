@@ -1,5 +1,5 @@
 import { Context } from '@/core/koa'
-import Store from "../utils/session/store";
+import { store } from "@/utils/session";
 import { JWT_KEY, NO_AUTH_URLS } from '../constants'
 
 // const store = new Store
@@ -11,7 +11,7 @@ export default async(ctx: Context, next: () => Promise<any>) => {
     await next()
   } else {
     const token: string = ctx.header['authorization'].split(' ')[1] || '' // after jwt, token must exist
-    const authorized = await Store.get(token)
+    const authorized = await store.get(token)
     if(authorized) { // redis exist jwt token
       const fields: any = ctx.fields
       const USER_TYPE = ctx.state[JWT_KEY].userType

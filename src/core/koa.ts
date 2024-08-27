@@ -2,7 +2,7 @@
 import { ResponseData, ReturnPage } from '@/models/ResponseData';
 import * as Koa from 'koa'
 
-export interface Context<T = any> extends Koa.Context {
+export interface Context<T = any, P = any> extends Koa.Context {
   // post fields
   fields?: T
 

@@ -2,10 +2,10 @@ import { Equal, Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@/core/koa'
 import { Stock } from '@/entities/mysql/shares/stock'
 import { Guid } from "@/utils/tools";
-import { getSharesManager, getSharesRepository } from '@/database/dbUtils';
+import { useSharesRepository } from '@/database/dbUtils';
 import $http from '@/utils/http'
 import StockService from '@/services/StockService'
-import { Stock_Name_Origin, Stock_Name_API_Host, Stock_Name_API_Url, UA } from '../../conf/api.conf'
+import { Stock_Name_Origin, Stock_Name_API_Host, Stock_Name_API_Url, UA } from 'conf/api.conf'
 
 interface IStockKLineResponse {
   code: string
@@ -82,7 +82,7 @@ class StockController {
       order: { id: 'ASC'},
       where: {}
     }
-    const pages = await getSharesRepository(Stock).findAndCount(options)
+    const pages = await useSharesRepository(Stock).findAndCount(options)
     return pages
   }
 
@@ -93,7 +93,7 @@ class StockController {
       order: { id: 'ASC'},
       where: {}
     }
-    const stocks = await getSharesRepository(Stock).find(options)
+    const stocks = await useSharesRepository(Stock).find(options)
     return stocks
   }
 
@@ -125,7 +125,7 @@ class StockController {
     model.market = 2
     model.block = 2
     model.amount = 100
-    const result = await getSharesManager().save(model)
+    const result = await useSharesRepository(Stock).save(model)
     ctx.Json({data: result})
   }
 
@@ -138,7 +138,7 @@ class StockController {
     model.market = 1
     model.block = 3
     model.amount = 200
-    const result = await getSharesManager().save(model)
+    const result = await useSharesRepository(Stock).save(model)
     return result
   }
 

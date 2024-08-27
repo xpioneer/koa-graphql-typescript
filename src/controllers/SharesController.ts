@@ -2,20 +2,22 @@ import { Equal, Like, Between, FindManyOptions} from "typeorm";
 import { Context } from '@/core/koa'
 import { GJRecord } from '../entities/mysql/shares/GJRecord'
 import { Guid } from "../utils/tools";
-import { toDate } from 'date-fns'
-import { getSharesManager, getSharesRepository } from '../database/dbUtils';
+import { endOfDay, startOfDay } from 'date-fns'
+import { useSharesRepository } from '../database/dbUtils';
+
+type AnyObject<T = any> = Record<string, T>
 
 
 class SharesController {
 
   async getAll(args: any) {
     console.log(args)
-    return await getSharesManager().find(GJRecord);
+    return await useSharesRepository(GJRecord).find();
   }
 
 
-  async getById(id: string = '') {
-    const article = await getSharesRepository(GJRecord).findOne({
+  async getById(id = '') {
+    const article = await useSharesRepository(GJRecord).findOne({
       where: {
         id
       }
@@ -24,7 +26,7 @@ class SharesController {
     return article
   }
 
-  async pages(args: any) {
+  async pages(args: AnyObject) {
     console.log(args, 'query args ===================')
     const options: FindManyOptions<GJRecord> = {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
@@ -44,7 +46,9 @@ class SharesController {
       options.where['tag'] = Like(`%${args.tag}%`)
     }
     if(args.createdAt) {
-      const date = args.createdAt.map((c: any) => +toDate(c))
+      const date = (args.createdAt as string[]).map(
+        (d, i) => i > 0 ? +endOfDay(new Date(d)) : +startOfDay(new Date(d))
+      )
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {
@@ -52,7 +56,7 @@ class SharesController {
     }
     console.log(options, '----options')
 
-    const pages = await getSharesRepository(GJRecord).findAndCount(options)
+    const pages = await useSharesRepository(GJRecord).findAndCount(options)
       // .createQueryBuilder()
       // .where({
       //   // title: Like(args.title)
@@ -73,7 +77,7 @@ class SharesController {
     // ctx.Json<null>({ msg: ''})
   }
 
-  async insert(args: any, ctx: Context) {
+  async insert(args: AnyObject, ctx: Context) {
     let model = new GJRecord()
     model.id = Guid()
     model.tradeAt = args.tradeAt
@@ -88,11 +92,11 @@ class SharesController {
     model.createdAt = Date.now()
     model.updatedBy = ctx.state['CUR_USER'].id
     model.updatedAt = Date.now()
-    const result = await getSharesRepository(GJRecord).save(model)
+    const result = await useSharesRepository(GJRecord).save(model)
     return result
   }
 
-  async update(args: any, ctx: Context) {
+  async update(args: AnyObject, ctx: Context) {
     const record = new GJRecord
     record.id = args.id
     record.tradeAt = args.tradeAt
@@ -105,7 +109,7 @@ class SharesController {
     record.direction = args.direction
     record.updatedAt = Date.now()
     record.updatedBy = ctx.state['CUR_USER'].id
-    const result = await getSharesRepository(GJRecord).save(record)
+    const result = await useSharesRepository(GJRecord).save(record)
     return result
   }
 

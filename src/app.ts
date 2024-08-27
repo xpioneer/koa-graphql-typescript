@@ -4,7 +4,11 @@ import * as KoaLogger from 'koa-logger'
 import { Context } from '@/core/koa'
 import Catch from './middlewares/catch'
 import Middlewares from './middlewares/index'
-import {connectDB, connectMongo} from './database/conectDB'
+import {
+	connectDB,
+	connectMongo,
+	connectRedis,
+} from './database/conectDB'
 
 const _DEV_ = process.env.NODE_ENV === 'development'
 
@@ -18,12 +22,12 @@ export class Application {
 		}).then(() => {
 			this.start(port)
 		}).catch(e => {
-			console.log('Server setup failed!')
+			console.error('Server setup failed!', e)
 		})
 	}
 
 	private connectDBs() {
-		return Promise.all([connectDB(), connectMongo()]).then(r => {
+		return Promise.all([connectDB(), connectMongo(), connectRedis()]).then(r => {
 			console.log('All databases are connected.')
 		})
 	}

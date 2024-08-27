@@ -20,5 +20,6 @@ export const RedisConf = {
   host: 'localhost',
   port: 6379,
   username: 'default',
-  password: 'Redis-pwd-123'
+  password: 'Redis-pwd-123',
+  lazyConnect: true,
 }

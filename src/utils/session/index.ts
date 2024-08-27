@@ -1,10 +1,13 @@
 // import * as Koa from 'core/koa'
 // import * as Cookies from "cookies";
-import Store, { RedisStore } from "./store";
+import { Context } from "@/core/koa";
+import { RedisStore } from "./store";
+
+export const store = new RedisStore;
 
 class SessionOptions {
   key: string = 'SESSION_ID'
-  store: RedisStore
+  store = store
   signed: boolean
   maxAge: number
 }
@@ -13,10 +16,10 @@ class SessionOptions {
 const Session = (opts: SessionOptions = new SessionOptions) => {
   const { key, store } = opts;
 
-  return async (ctx: any, next: () => Promise<any>) => {
+  return async (ctx: Context, next: () => Promise<any>) => {
     let id = ctx.cookies.get(key, opts);
     if (id) {
-      ctx.session = await opts.store.get(id);
+      ctx.session = await store.get(id);
       if (typeof ctx.session !== "object" || ctx.session == null) {
         ctx.session = {};
         id = undefined; // clear old id

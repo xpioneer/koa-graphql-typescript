@@ -19,12 +19,11 @@
     "test": "NODE_ENV=development node ./release/conf/server.js"
   },
   "dependencies": {
-    "@types/ioredis": "^4.0.3",
     "axios": "^0.21.1",
     "dataloader": "^2.0.0",
     "date-fns": "^2.23.0",
     "graphql": "^15.5.1",
-    "ioredis": "^4.2.0",
+    "ioredis": "^5.4.1",
     "koa": "^2.15.3",
     "koa-jwt": "^3.5.1",
     "koa-router": "^7.4.0",

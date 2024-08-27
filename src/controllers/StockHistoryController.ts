@@ -1,7 +1,7 @@
 import { Context } from '@/core/koa'
 import { StockHistory, History, KeyofHistory } from '../entities/mysql/shares/stockHistory'
 import { Guid } from "../utils/tools";
-import { getSharesManager, getSharesRepository } from '../database/dbUtils';
+import { useSharesRepository } from '../database/dbUtils';
 import $http from '../utils/http'
 import StockCtrl from './StockController'
 import StockService  from '../services/StockService'
@@ -118,7 +118,7 @@ class SharesController {
     model.hold_volume_hk = data.hold_volume_hk
     model.hold_ratio_hk = data.hold_ratio_hk
     model.net_volume_hk = data.net_volume_hk
-    const result = await getSharesManager().save(model)
+    const result = await useSharesRepository(History).save(model)
     return result.id
   }
 
@@ -128,7 +128,7 @@ class SharesController {
     cols.forEach((c: KeyofHistory, i) => {
       return model[c] = list[i]
     })
-    const result = await getSharesManager().save(model)
+    const result = await useSharesRepository(History).save(model)
     return result.id
   }
 
@@ -142,7 +142,7 @@ class SharesController {
       })
       _list.push(model)
     })
-    const result = await getSharesManager().save(_list)
+    const result = await useSharesRepository(History).save(_list)
     return result.map(r => r.id)
   }
 

@@ -37,7 +37,9 @@ class TagController {
       options.where['name'] = Like(`%${args.name}%`)
     }
     if(args.createdAt) {
-      const date = (args.createdAt as string[]).map((d, i) => i > 0 ? +endOfDay(new Date(d)) : +startOfDay(new Date(d)))
+      const date = (args.createdAt as string[]).map(
+        (d, i) => i > 0 ? +endOfDay(new Date(d)) : +startOfDay(new Date(d))
+      )
       options.where['createdAt'] = Between(date[0], date[1])
     }
     if(args.order) {

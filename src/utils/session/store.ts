@@ -1,17 +1,11 @@
+import { useRedis } from '@/database/dbUtils';
 import { randomBytes } from 'crypto';
-import * as Redis from 'ioredis';
-import { RedisConf } from '../../../conf/db.conf'
 
 // const { Guid } = TOOLS;
 
 export class RedisStore {
-  private redis: Redis.Redis
-  
-  constructor() {
-    this.redis = new Redis(RedisConf);
-    this.redis.connect(() => {
-      console.log('redis start...')
-    })
+  private get redis() {
+    return useRedis()
   }
 
   private getID(length: number): string {
@@ -41,4 +35,3 @@ export class RedisStore {
   }
 }
 
-export default new RedisStore;
