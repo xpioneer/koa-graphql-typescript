@@ -237,6 +237,19 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       return {id: result.id}
     }
   },
+  saveBall: {
+    type: GraphQLBoolean,
+    description: 'save ball',
+    args: {
+      input: {
+        type: new GraphQLNonNull(BallInputType)
+      }
+    },
+    resolve: async (obj, args, ctx, info) => {
+      const result = await DoubleBallCtrl.save(args.input, ctx)
+      return result
+    }
+  },
   editBall: {
     type: GraphQLBoolean,
     description: 'update ball',

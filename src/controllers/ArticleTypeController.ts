@@ -5,6 +5,7 @@ import {
   Equal,
   LessThan,
   MoreThan,
+  IsNull,
   FindOptionsWhere
 } from "typeorm";
 import { Context } from 'koa'
@@ -41,7 +42,7 @@ class ArticleTypeController {
       }
     }
     const whereConditions: FindOptionsWhere<ArticleType> = {
-      deletedAt: null,
+      deletedAt: IsNull(),
     }
     if(args.name) {
       whereConditions.name = Like(`%${args.name}%`)

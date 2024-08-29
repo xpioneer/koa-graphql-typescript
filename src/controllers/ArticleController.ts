@@ -1,6 +1,6 @@
 import {
   Equal, Like, Between,
-  And,
+  And, IsNull,
   FindManyOptions, FindOptionsWhere,
 } from "typeorm";
 import { Context } from 'koa'
@@ -36,12 +36,9 @@ class ArticleController {
       skip: args.page < 2 ? 0 : (args.page - 1) * args.pageSize,
       take: args.pageSize,
       order: {},
-      where: {
-        deletedAt: null
-      }
     }
     const whereConditions: FindOptionsWhere<Article> = {
-      deletedAt: null,
+      deletedAt: IsNull(),
     }
     if(args.title) {
       whereConditions.title = Like(`%${args.title}%`)

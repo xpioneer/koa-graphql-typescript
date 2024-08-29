@@ -1,4 +1,7 @@
-import { Equal, Like, Between, FindManyOptions} from "typeorm";
+import {
+  Equal, Like, Between, FindManyOptions,
+  Not, IsNull,
+} from "typeorm";
 import { Context } from 'koa'
 import { Balls } from '../entities/mysql/balls'
 import { Guid } from "../utils/tools";
@@ -37,7 +40,7 @@ class DoubleColorBallController {
       take: args.pageSize,
       order: {'drawDate': 'DESC'},
       where: {
-        deletedAt: null
+        deletedAt: IsNull()
       }
     }
     if(args.issue) {
@@ -141,7 +144,13 @@ class DoubleColorBallController {
   }
   
   async save(args: any, ctx: Context) {
-    // 
+    if(args.id) {
+      const r = await this.update(args, ctx)
+      return true
+    } else {
+      const r = await this.insert(args, ctx)
+      return true
+    }
   }
 
   async allBallCount() {
