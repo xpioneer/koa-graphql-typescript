@@ -1,4 +1,4 @@
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import LogCtrl from '../controllers/LogsController'
 // import * as Koa from 'koa'
 
@@ -11,12 +11,14 @@ export default async (ctx: Context, next: () => Promise<any>) => {
     if (status === 404) {
       ctx.throw(404);
     }
-    if(ctx.path === '/graphql' && ctx.body.errors) {
+    const f = ctx.fields
+    const errors =(ctx.body as any).errors
+    if(ctx.path === '/graphql' && errors) {
       LogCtrl.ERRlogger(ctx, {
         status: status,
         time: Date.now() - start,
-        errors: ctx.body.errors,
-        msg: ctx.body.errors[0].message
+        errors: errors,
+        msg: errors[0].message
       }); // error log
     } else {
       LogCtrl.APIlogger(ctx, { time: Date.now() - start }) // api log

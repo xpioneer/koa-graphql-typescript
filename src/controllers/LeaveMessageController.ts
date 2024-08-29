@@ -4,7 +4,7 @@ import {
   FindManyOptions,
   Equal
 } from "typeorm";
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import { LeaveMessage } from '../entities/mysql/leaveMessage'
 import { Guid } from "../utils/tools";
 import { endOfDay, startOfDay } from 'date-fns'

@@ -1,7 +1,7 @@
 // koa
 import * as Koa from 'koa'
 import * as KoaLogger from 'koa-logger'
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import Catch from './middlewares/catch'
 import Middlewares from './middlewares/index'
 import {

@@ -12,7 +12,7 @@ import {
   Source,
   GraphQLFieldConfigArgumentMap
 } from 'graphql';
-import {Context} from '@/core/koa'
+import {Context} from 'koa'
 import UserCtrl, {UsersLoader} from '@/controllers/UserController'
 import { User } from '../../entities/mysql/user';
 

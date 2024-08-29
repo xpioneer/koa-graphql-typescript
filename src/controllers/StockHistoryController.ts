@@ -1,4 +1,4 @@
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import { StockHistory, History, KeyofHistory } from '../entities/mysql/shares/stockHistory'
 import { Guid } from "../utils/tools";
 import { useSharesRepository } from '../database/dbUtils';

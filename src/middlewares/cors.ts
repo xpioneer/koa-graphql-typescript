@@ -1,4 +1,4 @@
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import Cors from '../core/cors'
 
 const _PROD_ = process.env.NODE_ENV === 'production'

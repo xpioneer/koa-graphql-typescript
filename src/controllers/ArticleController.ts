@@ -1,5 +1,9 @@
-import { Equal, Like, Between, FindManyOptions} from "typeorm";
-import { Context } from '@/core/koa'
+import {
+  Equal, Like, Between,
+  And,
+  FindManyOptions, FindOptionsWhere,
+} from "typeorm";
+import { Context } from 'koa'
 import { Article } from '../entities/mysql/article'
 import { Guid } from "../utils/tools";
 import { toDate } from 'date-fns'
@@ -36,23 +40,26 @@ class ArticleController {
         deletedAt: null
       }
     }
+    const whereConditions: FindOptionsWhere<Article> = {
+      deletedAt: null,
+    }
     if(args.title) {
-      options.where['title'] = Like(`%${args.title}%`)
+      whereConditions.title = Like(`%${args.title}%`)
     }
     if(args.abstract) {
-      options.where['abstract'] = Like(`%${args.abstract}%`)
+      whereConditions.abstract = Like(`%${args.abstract}%`)
     }
     if(args.tag) {
-      options.where['tag'] = Like(`%${args.tag}%`)
+      whereConditions.tag = Like(`%${args.tag}%`)
     }
-    if(args.createdAt) {
+    if(args.tag) {
       const date = args.createdAt.map((c: any) => +toDate(c))
-      options.where['createdAt'] = Between(date[0], date[1])
+      whereConditions.createdAt = Between(date[0], date[1])
     }
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
-    console.log(options, '----options')
+    options.where = whereConditions
 
     const pages = await useBlogRepository(Article).findAndCount(options)
       // .createQueryBuilder()

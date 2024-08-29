@@ -1,5 +1,5 @@
 import { Equal, Like, Between, FindManyOptions} from "typeorm";
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import { Balls } from '../entities/mysql/balls'
 import { Guid } from "../utils/tools";
 import { useBlogRepository } from '../database/dbUtils';
@@ -138,6 +138,10 @@ class DoubleColorBallController {
     } else {
       return false
     }
+  }
+  
+  async save(args: any, ctx: Context) {
+    // 
   }
 
   async allBallCount() {

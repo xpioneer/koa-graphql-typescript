@@ -8,7 +8,7 @@ import {
   MongoRepository,
   DataSource,
 } from 'typeorm';
-// import { Context } from '@/core/koa'
+// import { Context } from 'koa'
 import { API } from '../entities/mongo/api'
 import { Errors } from '../entities/mongo/errors'
 import { Guid } from '../utils/tools';

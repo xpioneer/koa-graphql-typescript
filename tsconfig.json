@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -8,7 +8,7 @@
     "experimentalDecorators": true,
     "downlevelIteration": true,
     "removeComments": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "suppressImplicitAnyIndexErrors": true,
     "lib": ["esnext"],
     "outDir": "./release/",

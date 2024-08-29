@@ -7,7 +7,7 @@ import {
   GraphQLType,
   GraphQLScalarType
 } from 'graphql';
-import * as Koa from '@/core/koa'
+// import * as Koa from 'koa'
 import { toDate } from 'date-fns'
 
 let count = 0;
@@ -20,7 +20,7 @@ let schema = new GraphQLSchema({
         type: GraphQLInt,
         args: {
           id: {
-            name: 'id',
+            // name: 'id',
             type: GraphQLInt // 参数不为空
           }
         },

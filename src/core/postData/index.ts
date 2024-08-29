@@ -1,4 +1,4 @@
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 
 // only post fields(not upload file stream)
 

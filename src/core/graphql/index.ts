@@ -10,7 +10,7 @@ import {
   ExecutionResult
 } from 'graphql';
 import { Request, Response } from 'koa';
-import {Context} from '@/core/koa'
+import {Context} from 'koa'
 import { renderGraphQL } from './renderGraphQL'
 
 interface OptionsData {

@@ -6,7 +6,7 @@ import {
   FindOptions,
   In,
 } from "typeorm";
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import { Stock } from '@/entities/mysql/shares/stock'
 import { EMarket, EBLock } from '@/models/Stocks'
 import {

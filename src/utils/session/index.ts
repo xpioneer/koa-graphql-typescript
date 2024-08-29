@@ -1,6 +1,6 @@
 // import * as Koa from 'core/koa'
 // import * as Cookies from "cookies";
-import { Context } from "@/core/koa";
+import { Context } from "koa";
 import { RedisStore } from "./store";
 
 export const store = new RedisStore;

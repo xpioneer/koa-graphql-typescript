@@ -12,7 +12,7 @@ import {
   GraphQLFieldConfigMap,
   Source,
 } from 'graphql';
-import {Context} from '@/core/koa'
+import { Context } from 'koa'
 import ArticleTypeCtrl from '../../controllers/ArticleTypeController'
 import { metaFields, pageArgsFields } from './common'
 import { formatDate } from '../../utils/tools/formatDate';
@@ -65,7 +65,7 @@ const ArticleTypePagesType = new GraphQLObjectType({
   }
 })
 
-const query: Thunk<GraphQLFieldConfigMap<Source, Context<ArticleType>>> = {
+const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
   articleType: {
     type: articleTypeObjectType,
     args: {
@@ -77,7 +77,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context<ArticleType>>> = {
     resolve: async (obj, args, ctx, info) => {
       const {id} = args;
       const articleType = await ArticleTypeCtrl.getById(id)
-      console.log(articleType, 'articleType>>>>>>')
+      // console.log(articleType, 'articleType>>>>>>')
       return articleType
     }
   },

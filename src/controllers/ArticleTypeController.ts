@@ -4,9 +4,10 @@ import {
   FindManyOptions,
   Equal,
   LessThan,
-  MoreThan
+  MoreThan,
+  FindOptionsWhere
 } from "typeorm";
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import { ArticleType } from '../entities/mysql/articleType'
 import { Guid } from "../utils/tools";
 import { endOfDay, startOfDay } from 'date-fns'
@@ -39,18 +40,22 @@ class ArticleTypeController {
         deletedAt: null
       }
     }
+    const whereConditions: FindOptionsWhere<ArticleType> = {
+      deletedAt: null,
+    }
     if(args.name) {
-      options.where['name'] = Like(`%${args.name}%`)
+      whereConditions.name = Like(`%${args.name}%`)
     }
     if(args.createdAt) {
       const date = (args.createdAt as string[]).map(
         (d, i) => i > 0 ? +endOfDay(new Date(d)) : +startOfDay(new Date(d))
       )
-      options.where['createdAt'] = Between(date[0], date[1])
+      whereConditions.createdAt = Between(date[0], date[1])
     }
     if(args.order) {
       options.order = Object.assign(options.order, args.order)
     }
+    options.where = whereConditions
     console.log(args, '----options')
     const pages = await useBlogRepository(ArticleType).findAndCount(options)
     return pages

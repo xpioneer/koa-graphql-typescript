@@ -1,4 +1,4 @@
-import * as Koa from '../core/koa'
+import * as Koa from '..koa'
 import {
   graphql,
   parse,

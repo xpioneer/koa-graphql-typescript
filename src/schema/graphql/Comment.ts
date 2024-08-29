@@ -12,7 +12,7 @@ import {
   GraphQLFieldConfigMap,
   Source,
 } from 'graphql';
-import {Context} from '@/core/koa'
+import {Context} from 'koa'
 import { toDate } from 'date-fns'
 import CommentCtrl from '../../controllers/CommentController'
 import { metaFields, pageArgsFields } from './common'

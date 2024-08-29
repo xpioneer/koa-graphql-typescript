@@ -1,6 +1,7 @@
 import * as Crypto from 'crypto';
 import {getManager, getRepository, Like, Equal} from "typeorm";
-import { Context } from '@/core/koa'
+// import { Context } from 'koa'
+import { Context } from 'koa'
 import { User } from '@/entities/mysql/user'
 import { store as Store } from "@/utils/session";
 import { JWT_SECRET, EXP_TIME } from '../constants'
@@ -19,6 +20,7 @@ class AccountController {
   
   //POST
   async login(ctx: Context) {
+    console.log(ctx.state, ctx.query, ctx.fields, ctx.params, ctx.session)
     const inputs: any = ctx.fields;
     let username = inputs.username;
     let password = inputs.password;
@@ -55,7 +57,7 @@ class AccountController {
 
 
   //POST
-  async register(ctx: Context<UserLogin>) {
+  async register(ctx: Context) {
     const inputs = ctx.fields;
     let username = inputs.username;
     let password = inputs.password;

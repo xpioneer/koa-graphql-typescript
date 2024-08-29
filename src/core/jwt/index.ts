@@ -1,4 +1,4 @@
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import { verify } from './verify'
 
 export interface Options {

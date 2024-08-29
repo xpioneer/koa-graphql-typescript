@@ -13,7 +13,7 @@ import {
   Source,
   GraphQLInputObjectType,
 } from 'graphql';
-import {Context} from '@/core/koa'
+import { Context } from 'koa'
 import { toDate } from 'date-fns'
 import ArticleCtrl from '../../controllers/ArticleController'
 import ArticleTypeCtrl from '../../controllers/ArticleTypeController'

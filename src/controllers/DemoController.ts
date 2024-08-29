@@ -1,5 +1,5 @@
 import {getMongoManager, getMongoRepository, Like, Between, FindManyOptions, Equal} from "typeorm";
-import { Context } from '@/core/koa'
+import { Context } from 'koa'
 import { Baidu, Tmall } from "../constants";
 import { Delay } from '@/utils/tools'
 
