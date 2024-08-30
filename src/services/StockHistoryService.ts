@@ -56,6 +56,10 @@ class StockHistoryService {
   async getTotal() {
     return await StockHistoryDao.getTotal()
   }
+
+  async getAllTrade(stockId: number, pageSize: number) {
+    return await StockHistoryDao.getAllTrade(stockId, pageSize)
+  }
 }
 
 export default new StockHistoryService

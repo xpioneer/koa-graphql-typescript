@@ -70,6 +70,38 @@ class StockHistoryDao {
       return await this._getTotal()
     }
   }
+
+  async getAllTrade(stockId: number, pageSize = 100) {
+    const list = await useSharesRepository(History).find({
+      select: [
+        'id',
+        'stockId',
+        'volume',
+        'open',
+        'high',
+        'low',
+        'close',
+        'chg',
+        'percent',
+        'turnoverrate',
+        'amount',
+        'pe',
+        'pb',
+        'ps',
+        'pcf',
+        'market_capital',
+        'timestamp'
+      ],
+      where: {
+        stockId: Equal(stockId)
+      },
+      order: {
+        timestamp: 'ASC'
+      },
+      take: pageSize
+    })
+    return list
+  }
 }
 
 export default new StockHistoryDao

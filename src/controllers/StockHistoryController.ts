@@ -146,6 +146,17 @@ class SharesController {
     return result.map(r => r.id)
   }
 
+  async pages1(ctx: Context) {
+    const { page = 1, pageSize = 10, id, noPage } = ctx.query
+    if(!!noPage) {
+      const list= await StockHistoryService.getAllTrade(+id, +pageSize)
+      ctx.Json({ data: list })
+    } else {
+      const [list, total] = await StockHistoryService.pages(+page, +pageSize, +id)
+      ctx.Pages({ list, total })
+    }
+  }
+
   async pages(ctx: Context) {
     const { id: stockId, page = 1, pageSize = 10 } = ctx.query
     // if(!code) {
