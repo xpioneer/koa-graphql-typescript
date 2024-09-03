@@ -20,7 +20,10 @@ class ArticleController {
   }
 
 
-  async getById(id: string = '') {
+  async getById(id = '') {
+    if(!id) {
+      return null
+    }
     const article = await useBlogRepository(Article).findOne({
       where: {
         id: Equal(id)
@@ -49,7 +52,7 @@ class ArticleController {
     if(args.tag) {
       whereConditions.tag = Like(`%${args.tag}%`)
     }
-    if(args.tag) {
+    if(args.createdAt) {
       const date = args.createdAt.map((c: any) => +toDate(c))
       whereConditions.createdAt = Between(date[0], date[1])
     }
@@ -101,6 +104,27 @@ class ArticleController {
     article.updatedAt = Date.now()
     article.updatedBy = ctx.state['CUR_USER'].id
     const result = await useBlogRepository(Article).update(article.id, article)
+    return result
+  }
+
+  async save(args: any, ctx: Context) {
+    const isAdd = !args.id
+    let model = new Article()
+    model.id = args.id
+    model.title = args.title
+    model.abstract = args.abstract
+    model.description =  args.description
+    model.typeId = args.typeId
+    model.isTop = args.isTop
+    model.tag = args.tag
+    model.updatedBy = ctx.state['CUR_USER'].id
+    model.updatedAt = Date.now()
+    if(isAdd) {
+      model.id = Guid()
+      model.createdBy = ctx.state['CUR_USER'].id
+      model.createdAt = Date.now()
+    }
+    const result = await useBlogRepository(Article).save(model)
     return result
   }
 

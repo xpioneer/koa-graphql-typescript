@@ -111,7 +111,7 @@ const query: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     args: {
       id: {
         // name: 'id',
-        type: GraphQLNonNull(GraphQLString)
+        type: GraphQLString // 新增查询，后期优化
       }
     },
     resolve: async (obj, args, ctx, info) => {
@@ -164,7 +164,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     description: 'create/update article',
     args: {
       id: {
-        type: new GraphQLNonNull(GraphQLString)
+        type: GraphQLString // 注意放开了id，insert和update通用
       },
       title: {
         type: new GraphQLNonNull(GraphQLString)
@@ -186,7 +186,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      const result = await ArticleCtrl.update(args, ctx)
+      const result = await ArticleCtrl.save(args, ctx)
       return result
     }
   }
