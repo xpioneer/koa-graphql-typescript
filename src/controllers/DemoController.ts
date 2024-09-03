@@ -5,10 +5,10 @@ import { Delay } from '@/utils/tools'
 
 
 
-export default class LogsController {
+class LogsController {
 
 
-  static async views(ctx: Context) {
+  async views(ctx: Context) {
     console.log(ctx.params)
     const { site } = ctx.params
     if(site === 'baidu') {
@@ -20,15 +20,17 @@ export default class LogsController {
     }
   }
 
-  static async compose(ctx: Context) {
+  async compose(ctx: Context) {
     console.log(ctx.params)
     // 
   }
 
-  static async test(ctx: Context) {
+  async test(ctx: Context) {
     console.log('ctx.path: ', ctx.path.length, ctx.params)
     await Delay(5000)
     ctx.body = ctx.params.id.length
   }
 
 }
+
+export default new LogsController

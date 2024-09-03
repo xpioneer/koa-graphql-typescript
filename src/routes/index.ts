@@ -26,6 +26,7 @@ router
   .post('/platform/*', ServerAPI.KDJZ)
   .get('/api/log-api', LogsCtrl.apiPages)
   .get('/api/log-errors', LogsCtrl.errorsPages)
+  .get('/api/log/stats', LogsCtrl.stats)
   .post('/api/batchShares', SharesCtrl.batchInsert)
   .post('/api/upload', FileCtrl.upload)
   .get('/api/stocks', StockCtrl.pages1)

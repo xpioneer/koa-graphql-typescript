@@ -34,9 +34,9 @@ const getFile = (ctx: Context) => {
   })
 }
 
-export default class FileController {
+class FileController {
   
-  static async upload (ctx: Context) {
+  async upload (ctx: Context) {
     const file: any = await getFile(ctx)
     console.log(file, 'file')
     ctx.Json({
@@ -49,3 +49,5 @@ export default class FileController {
   }
 
 }
+
+export default new FileController

@@ -15,12 +15,7 @@ import { Guid } from '../utils/tools';
 import { CONNECT_MONGO, useMongoRepository } from '../database/dbUtils'
 import { formatDate } from '../utils/tools';
 import { DateFormat } from '../types/base';
-
-// export const DataSources: Record<'mongo', DataSource> = {
-//   mongo: null
-// }
-
-// const mongoRepos = useMongoRepository()
+import LogsService from '@/services/LogsService'
 
 class LogsController {
 
@@ -149,6 +144,11 @@ class LogsController {
 
     model.time = options.time  // deal time
     const result = await useMongoRepository(Errors).save(model)
+  }
+
+  async stats (ctx: Koa.Context) {
+    const data = await LogsService.getStats()
+    return ctx.Json(data)
   }
 
 }
