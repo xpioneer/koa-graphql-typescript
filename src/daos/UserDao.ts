@@ -6,51 +6,41 @@ import {
   FindOptions,
   In,
 } from "typeorm";
-// import { Context } from 'koa'
-import { Stock } from '@/entities/mysql/shares/stock'
-import { EMarket, EBLock } from '@/models/Stocks'
+import { Guid, cryptoPwd } from "../utils/tools"
+import { User } from '@/entities/mysql/user'
 import { useBlogRepository } from '@/database/dbUtils';
 
 
 
-class StockDao {
+class UserDao {
 
-
-  async getCode(id: number) {
-    const stock = await useBlogRepository(Stock).findOne({
-      where: {
-        id
-      }
-    })
-    return stock
-  }
-
-  async getById(id: number) {
-    const stock = await useBlogRepository(Stock).findOne({
+  async getById(id: string) {
+    const user = await useBlogRepository(User).findOne({
       where: {
         id
       },
-      select: ['id', 'code', 'name']
+      // select: ['id', 'username', 'nickName', 'remark']
     })
-    return stock
+    return user
   }
 
-  async getByIds(ids: number[]) {
-    const stocks = await useBlogRepository(Stock).find({
+  async getByUsername(username: string) {
+    const user = await useBlogRepository(User).findOne({
+      where: {
+        username
+      }
+    })
+    return user
+  }
+
+  async getByIds(ids: string[]) {
+    const users = await useBlogRepository(User).find({
       where: {
         id: In(ids)
       }
     })
-    // const stocks = await useBlogRepository(Stock).findByIds(ids, {
-    //   select: ['id', 'code', 'name']
-    // })
-    return stocks
-  }
-
-  async getByCode(code: string) {
-    const stock = await useBlogRepository(Stock).findOneBy({code: Equal(code)})
-    return stock
+    return users
   }
 }
 
-export default new StockDao
+export default new UserDao

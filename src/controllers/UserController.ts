@@ -4,6 +4,7 @@ import { User } from '@/entities/mysql/user'
 import { Guid, cryptoPwd } from "../utils/tools"
 import { endOfDay, startOfDay } from 'date-fns'
 import { useBlogRepository } from '@/database/dbUtils';
+import UserService from '@/services/UserService'
 // import DataLoader from 'dataloader'
 const DataLoader = require('dataloader')
 
@@ -29,12 +30,9 @@ class UserController {
     return list
   }
 
-  async getById(id = '') {
-    const article = await useBlogRepository(User).findOne({
-      where: { id: Equal(id) },
-      select: ['id', 'username', 'nickName', 'userType', 'createdAt', 'sex', 'remark']
-    })
-    return article
+  async getById(id = null) {
+    const user = await UserService.getById(id)
+    return user
   }
 
   async pages(args: any) {
@@ -46,7 +44,7 @@ class UserController {
       where: {
         deletedAt: null
       },
-      select: ['id', 'username', 'nickName', 'userType', 'createdAt', 'sex', 'remark']
+      select: ['id', 'username', 'nickName', 'userType', 'createdAt', 'updatedAt', 'sex', 'remark']
     }
     if(args.username) {
       options.where['username'] = Like(`%${args.username}%`)
@@ -101,13 +99,13 @@ class UserController {
     if(!(username && username.length > 2)) {
       ctx.throw(400, '用户名长度必须大于1个字符')
     }
-    if(password && password.length > 0 && password.length < 6) {
+    if(password && password.length < 6) {
       ctx.throw(400, '用户密码长度必须大于6个字符')
     }
 
     const user = new User
     user.id = args.id
-    user.username = args.username
+    // user.username = args.username
     user.nickName = args.nickName
     user.userType = args.userType
     user.sex = args.sex
@@ -119,6 +117,18 @@ class UserController {
     user.updatedAt = Date.now()
     const result = await useBlogRepository(User).save(user)
     return result
+  }
+  
+
+  async save(args: any, ctx: Context) {
+    const isEdit = !!args.id
+    if(isEdit) {
+      const user = await UserService.getById(args.id)
+      args.username = user.username
+      return this.update(args, ctx)
+    } else {
+      return this.insert(args, ctx)
+    }
   }
 
 }

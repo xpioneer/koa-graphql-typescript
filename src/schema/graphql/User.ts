@@ -13,6 +13,7 @@ import {
   GraphQLNonNull,
 } from 'graphql';
 import {Context} from 'koa'
+import { isDate } from 'date-fns'
 import UserCtrl from '@/controllers/UserController'
 import { metaFields, pageArgsFields } from './common'
 import { User } from '@/entities/mysql/user';
@@ -46,6 +47,17 @@ export const userObjectType = new GraphQLObjectType<User>({
       resolve(obj, args, ctx, info){
         const createdAt = Number(obj.createdAt) || Date.now()
         return formatDate(createdAt)
+      }
+    },
+    updatedAt: {
+      type: GraphQLString,
+      resolve(obj, args, ctx, info){
+        const updatedAt = obj.updatedAt
+        // if(isDate(updatedAt)) {
+        //   console.log(formatDate(updatedAt), 'formatDate(updatedAt)')
+        //   return formatDate(updatedAt)
+        // }
+        return updatedAt
       }
     },
     createdBy: {
@@ -154,10 +166,10 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
     type: userObjectType,
     args: {
       id: {
-        type: GraphQLNonNull(GraphQLString)
+        type: GraphQLString
       },
       username: {
-        type: GraphQLNonNull(GraphQLString)
+        type: GraphQLString
       },
       nickName: {
         type: GraphQLNonNull(GraphQLString)
@@ -176,7 +188,7 @@ const mutation: Thunk<GraphQLFieldConfigMap<Source, Context>> = {
       }
     },
     resolve: async (obj, args, ctx, info) => {
-      const result = await UserCtrl.update(args, ctx)
+      const result = await UserCtrl.save(args, ctx)
       return result
     }
   }
