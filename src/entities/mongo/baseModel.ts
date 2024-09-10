@@ -13,7 +13,7 @@ export class BaseEntity {
   @Column({
     default: +new Date
   })
-  createdAt: string | null;
+  createdAt: Date;
 
   @VersionColumn({
     default: 0

@@ -1,21 +1,20 @@
 import * as Koa from 'koa'
 import {
-  getMongoManager, getMongoRepository,
   Like,
   Between,
   FindManyOptions,
   Equal,
-  MongoRepository,
-  DataSource,
+  FindOptionsWhere,
 } from 'typeorm';
 // import { Context } from 'koa'
 import { API } from '../entities/mongo/api'
 import { Errors } from '../entities/mongo/errors'
 import { Guid } from '../utils/tools';
-import { CONNECT_MONGO, useMongoRepository } from '../database/dbUtils'
+import { useMongoRepository } from '../database/dbUtils'
 import { formatDate } from '../utils/tools';
 import { DateFormat } from '../types/base';
 import LogsService from '@/services/LogsService'
+import { endOfDay, startOfDay } from 'date-fns'
 
 class LogsController {
 
@@ -47,7 +46,7 @@ class LogsController {
     model.resHeaders = ctx.response.header
     model.resData = ctx.body
     model.protocol = ctx.protocol;
-    model.createdAt = formatDate(new Date, DateFormat.DateTimeS)
+    model.createdAt = new Date
     model.createdBy = ctx.state['CUR_USER'] ? ctx.state['CUR_USER'].id : model.ip
 
     this.dataRedaction(ctx, model)
@@ -103,18 +102,28 @@ class LogsController {
       },
       where: {}
     }
+    const whereConditions: FindOptionsWhere<Errors> = {}
     if(query.path) {
-      options.where = {
-        path: query.path as string
-      }
-      // options.where['path'] = query.path
+      whereConditions.path = Like(`%${query.path}%`)
     }
     if(query.url) {
-      options.where = {
-        url: query.url as string
-      }
-      // options.where['url'] = query.url
+      whereConditions.url = Like(`%${query.url}%`)
     }
+    if(query.msg) {
+      whereConditions.msg = Like(`%${query.msg}%`)
+    }
+    if(query['createdAt[]']) {
+      const date = (query['createdAt[]'] as string[]).map(
+        (d, i) => i > 0 ? endOfDay(new Date(d)) : startOfDay(new Date(d))
+      );
+      // (whereConditions as any).createdAt = Between(date[0], date[1])
+      (whereConditions as any).createdAt = {
+        $gte: date[0],  // 大于等于开始日期
+        $lte: date[1]     // 小于等于结束日期
+      }
+    }
+    options.where = whereConditions
+    console.log(options.where.createdAt, '----options')
     const pages = await useMongoRepository(Errors).findAndCount(options)
     const list = pages[0], total = pages[1]
     ctx.Pages({list, total})
