@@ -5,6 +5,7 @@ import { User } from './user'
 import { Tag } from './tag'
 import { LeaveMessage } from './leaveMessage'
 import { Balls } from './balls'
+import { SystemLog } from './systemLog'
 import { ShareEntities } from './shares/shareEntites'
 
 export const Entities:any[] = [
@@ -14,7 +15,8 @@ export const Entities:any[] = [
   User,
   Tag,
   LeaveMessage,
-  Balls
+  Balls,
+  SystemLog
 ]
 
 export {
