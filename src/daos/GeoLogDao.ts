@@ -1,4 +1,3 @@
-import { Context } from 'koa'
 import { SystemLog } from '@/entities/mysql/systemLog'
 import {
   useBlogRepository,
@@ -20,6 +19,21 @@ class GeoLogDao {
       .addSelect('count(s.id)', 'total')
       .groupBy('d')
       .orderBy('d', 'ASC')
+      .getRawMany()
+    return result
+  }
+
+
+  async getGeographicStats() {
+    const result = await useBlogRepository(SystemLog)
+      .createQueryBuilder('s')
+      .select('city_name_en', 'city_en')
+      .addSelect('latitude')
+      .addSelect('longitude')
+      .addSelect('count(*)', 'total')
+      .groupBy('city_en')
+      .addGroupBy('latitude')
+      .addGroupBy('longitude')
       .getRawMany()
     return result
   }

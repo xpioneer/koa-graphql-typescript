@@ -30,6 +30,7 @@ router
   .get('/api/log/stats', LogsCtrl.stats)
   .get('/api/log/geos', GeoLogCtrl.pages)
   .get('/api/log/geo/day', GeoLogCtrl.dayStats)
+  .get('/api/log/geo/stats', GeoLogCtrl.getGeographicStats)
   .post('/api/batchShares', SharesCtrl.batchInsert)
   .post('/api/upload', FileCtrl.upload)
   .get('/api/stocks', StockCtrl.pages1)

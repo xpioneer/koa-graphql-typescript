@@ -64,7 +64,8 @@ class GeoLogController {
 
 
   async getGeographicStats(ctx: Koa.Context) {
-    
+    const data = await GeoLogService.getGeographicStats()
+    return ctx.Json(data)
   }
 
 }

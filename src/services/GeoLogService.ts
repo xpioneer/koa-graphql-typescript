@@ -8,6 +8,10 @@ class GeoLogService {
   async getEveryDay() {
     return GeoLogDao.getEveryDay()
   }
+
+  async getGeographicStats() {
+    return GeoLogDao.getGeographicStats()
+  }
 }
 
 export default new GeoLogService
