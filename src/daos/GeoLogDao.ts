@@ -24,14 +24,32 @@ class GeoLogDao {
   }
 
 
-  async getGeographicStats() {
+  async getGeographicStatsByCity() {
     const result = await useBlogRepository(SystemLog)
       .createQueryBuilder('s')
-      .select('city_name_en', 'city_en')
+      .select('city_name_en', 'name_en')
       .addSelect('latitude')
       .addSelect('longitude')
       .addSelect('count(*)', 'total')
-      .groupBy('city_en')
+      .andWhere('s.latitude IS NOT NULL')
+      .andWhere('s.source = :source', { source: 'v2' })
+      .groupBy('name_en')
+      .addGroupBy('latitude')
+      .addGroupBy('longitude')
+      .getRawMany()
+    return result
+  }
+
+  async getGeographicStatsByChina() {
+    const result = await useBlogRepository(SystemLog)
+      .createQueryBuilder('s')
+      .select('city_name_en', 'name_en')
+      .addSelect('latitude')
+      .addSelect('longitude')
+      .addSelect('count(*)', 'total')
+      .andWhere('s.source = :source', { source: 'v2' })
+      .andWhere('s.country_name_en = :country', { country: 'China' })
+      .groupBy('name_en')
       .addGroupBy('latitude')
       .addGroupBy('longitude')
       .getRawMany()

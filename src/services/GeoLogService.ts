@@ -9,8 +9,12 @@ class GeoLogService {
     return GeoLogDao.getEveryDay()
   }
 
-  async getGeographicStats() {
-    return GeoLogDao.getGeographicStats()
+  async getGeographicStatsByCity() {
+    return GeoLogDao.getGeographicStatsByCity()
+  }
+
+  async getGeographicStatsByChina() {
+    return GeoLogDao.getGeographicStatsByChina()
   }
 }
 

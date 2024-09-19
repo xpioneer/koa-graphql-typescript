@@ -63,11 +63,15 @@ class GeoLogController {
   }
 
 
-  async getGeographicStats(ctx: Koa.Context) {
-    const data = await GeoLogService.getGeographicStats()
+  async getCityStats(ctx: Koa.Context) {
+    const data = await GeoLogService.getGeographicStatsByCity()
     return ctx.Json(data)
   }
 
+  async getChinaStats(ctx: Koa.Context) {
+    const data = await GeoLogService.getGeographicStatsByChina()
+    return ctx.Json(data)
+  }
 }
 
 export default new GeoLogController()
