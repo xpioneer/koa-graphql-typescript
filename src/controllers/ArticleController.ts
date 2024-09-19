@@ -52,6 +52,9 @@ class ArticleController {
     if(args.tag) {
       whereConditions.tag = Like(`%${args.tag}%`)
     }
+    if(args.typeId) {
+      whereConditions.typeId = Equal(args.typeId)
+    }
     if(args.createdAt) {
       const date = args.createdAt.map((c: any) => +toDate(c))
       whereConditions.createdAt = Between(date[0], date[1])
