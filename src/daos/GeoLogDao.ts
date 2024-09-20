@@ -55,6 +55,26 @@ class GeoLogDao {
       .getRawMany()
     return result
   }
+
+
+  async getVisitMapStats() {
+    const result = await useBlogRepository(SystemLog)
+      .createQueryBuilder('s')
+      .select('city_name_en', 'name_en')
+      .addSelect('request_ip', 'ip')
+      .addSelect('subdivisions_name_en', 'sub_name_en')
+      .addSelect('count(*)', 'total')
+      .addSelect(['latitude', 'longitude'])
+      .andWhere('s.source = :source', { source: 'v2' })
+      .andWhere('s.latitude IS NOT NULL')
+      .groupBy('name_en')
+      .addGroupBy('ip')
+      .addGroupBy('sub_name_en')
+      .addGroupBy('latitude')
+      .addGroupBy('longitude')
+      .getRawMany()
+    return result
+  }
 }
 
 export default new GeoLogDao

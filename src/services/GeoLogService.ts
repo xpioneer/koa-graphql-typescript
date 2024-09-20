@@ -16,6 +16,10 @@ class GeoLogService {
   async getGeographicStatsByChina() {
     return GeoLogDao.getGeographicStatsByChina()
   }
+
+  getVisitMapStats() {
+    return GeoLogDao.getVisitMapStats()
+  }
 }
 
 export default new GeoLogService
